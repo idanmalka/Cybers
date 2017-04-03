@@ -3,11 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:prism="http://www.codeplex.com/prism"
+        xmlns:inf="clr-namespace:Cybers.Infrustructure;assembly=Cybers.Infrustructure"
         xmlns:local="clr-namespace:Cybers"
         mc:Ignorable="d"
         Title="Shell" Height="300" Width="300">
     <Grid>
-        <ContentControl></ContentControl>
-        <ContentControl></ContentControl>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ContentControl prism:RegionManager.RegionName="{x:Static inf:RegionNames.MainContentRegion}"></ContentControl>
+        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static inf:RegionNames.BottomToolbarReegion}"></ContentControl>
     </Grid>
 </Window>

@@ -5,14 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Practices.Unity;
+using Prism.Modularity;
 using Prism.Unity;
 
 namespace Cybers
 {
-    class Bootstrapper: UnityBootstrapper
+    public class Bootstrapper: UnityBootstrapper
     {
         protected override DependencyObject CreateShell()
         {
+            Container.RegisterType<Shell>();
+            Container.RegisterType<ServicesModule.ServicesModule>();
+            Container.RegisterType<ConfigurationModule.ConfigurationModule>();
+            Container.RegisterType<AlgorithmModule.AlgorithmModule>();
             return Container.Resolve<Shell>();
         }
 
@@ -28,6 +33,20 @@ namespace Cybers
         protected override void ConfigureModuleCatalog()
         {
             base.ConfigureModuleCatalog();
+
+            AddModuleToCatalog(typeof(AlgorithmModule.AlgorithmModule), InitializationMode.OnDemand);
+            AddModuleToCatalog(typeof(ConfigurationModule.ConfigurationModule), InitializationMode.WhenAvailable);
+            AddModuleToCatalog(typeof(ServicesModule.ServicesModule), InitializationMode.WhenAvailable);
+        }
+
+        private void AddModuleToCatalog(Type type, InitializationMode mode)
+        {
+            ModuleCatalog.AddModule(new ModuleInfo()
+            {
+                ModuleName = type.Name,
+                ModuleType = type.AssemblyQualifiedName,
+                InitializationMode = mode
+            });
         }
     }
 }
