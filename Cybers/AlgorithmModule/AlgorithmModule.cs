@@ -25,7 +25,7 @@ namespace AlgorithmModule
 
         public void Initialize()
         {
-            _container.RegisterType<IAlgorithmToolbarView,IAlgorithmToolbarView>();
+            _container.RegisterType<IAlgorithmToolbarView>();
             _container.RegisterType<IAlgorithmViewModel,AlgorithmViewModel>();
             _container.RegisterType<IAlgorithmView,AlgorithmLoadingView>();
 
