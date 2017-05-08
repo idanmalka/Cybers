@@ -12,6 +12,6 @@ namespace Cybers.Infrustructure.models
         public string Country { get; set; }
         public string CountryCode { get; set; }
         public string City { get; set; }
-
+        public long Code { get; set; }
     }
 }
