@@ -20,6 +20,29 @@ namespace Cybers.Infrustructure.models
         public string Nickname { get; set; }
         private int _favCount;
         private int _followersCount;
+        private int _groups;
+        private bool _verified;
+
+        public bool Verified
+        {
+            get { return _verified; }
+            set
+            {
+                _verified = value; 
+                AddAttribute(_verified ? 1 : 0);
+            }
+        }
+
+        public int Groups
+        {
+            get { return _groups; }
+            set
+            {
+                _groups = value;
+                AddAttribute(_groups);
+            }
+        }
+
 
         public int FavCount
         {
