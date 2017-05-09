@@ -49,7 +49,7 @@ namespace ILouvainLibrary
         private double CalculateInertia(IEnumerable<User> verticies)
         {
             var gUser = CalculateCenterOfGravity(verticies);
-            return verticies.Sum(vertex => CalculateEuclideanDistance(vertex, gUser));
+            return CalculateInertia(verticies, gUser);
         }
 
         private double CalculateInertia(IEnumerable<User> verticies, User v)
