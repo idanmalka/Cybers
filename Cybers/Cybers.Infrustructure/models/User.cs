@@ -111,5 +111,8 @@ namespace Cybers.Infrustructure.models
         {
             if (propertyName != null) Attributes[propertyName] = value;
         }
+
+        public long ClusterId { get; set; }
+
     }
 }
