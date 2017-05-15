@@ -20,6 +20,27 @@ namespace ILouvainLibrary
             _graph = graph;
         }
 
+        public void Execute()
+        {
+            CreateDiscretePartition();
+            var verticies = _graph.Vertices.ToList();
+            var qqPlusAnterior = 0.0;
+            do
+            {
+                qqPlusAnterior = CalculateQQplus();
+                var dirty = false;
+                do
+                {
+                    foreach (var vertex in verticies)
+                    {
+                        vertex.ClusterId = FindNeighborClusterMaximizingQQplusGain(vertex, qqPlusAnterior, ref dirty);
+                    }
+                } while (dirty);
+            } while (CalculateQQplus() > qqPlusAnterior);
+
+            ILouvainExecutionResult = new Partition(_graph);
+        }
+
         private double CalculateEuclideanDistance(User u1, User u2)
         {
             double distance = 0;
@@ -84,7 +105,6 @@ namespace ILouvainLibrary
             return inertiaV1 * inertiaV2 / Math.Pow(twoN * inertia, 2) - euclideanDistance / (twoN * inertia);
         }
 
-
         private static bool Kroncker(long c1, long c2) => c1 == c2;
 
         private double CalculateQng()
@@ -115,7 +135,7 @@ namespace ILouvainLibrary
 
         private double CalculateQQplus() => CalculateQinertia() + CalculateQng();
 
-        private long FindNeighborClusterMaximizingQQplusGain(User vertex,double qqPlusAnertior, ref bool dirty)
+        private long FindNeighborClusterMaximizingQQplusGain(User vertex, double qqPlusAnertior, ref bool dirty)
         {
             var anteriorClusterId = vertex.ClusterId;
             var newClusterId = vertex.ClusterId;
@@ -124,7 +144,7 @@ namespace ILouvainLibrary
 
             foreach (var neighbour in _graph.AdjacentVertices(vertex))
             {
-                if (vertex.ClusterId == neighbour.ClusterId 
+                if (vertex.ClusterId == neighbour.ClusterId
                     && !checkedClusters.Contains(neighbour.ClusterId)) continue;
 
                 checkedClusters.Add(neighbour.ClusterId);
@@ -149,27 +169,6 @@ namespace ILouvainLibrary
             {
                 verticies[i].ClusterId = i;
             }
-        }
-
-        public void Execute()
-        {
-            CreateDiscretePartition();
-            var verticies = _graph.Vertices.ToList();
-            var qqPlusAnterior = 0.0;
-            do
-            {
-                qqPlusAnterior = CalculateQQplus();
-                var dirty = false;
-                do
-                {
-                    foreach (var vertex in verticies)
-                    {
-                        vertex.ClusterId = FindNeighborClusterMaximizingQQplusGain(vertex,qqPlusAnterior , ref dirty);
-                    }
-                } while (dirty);
-            } while (CalculateQQplus() > qqPlusAnterior);
-
-            ILouvainExecutionResult = new Partition(_graph);
         }
     }
 }

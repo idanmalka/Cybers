@@ -12,12 +12,14 @@ namespace Cybers.Infrustructure.models
     public class User
     {
         public Dictionary<string, long> Attributes { get; } = new Dictionary<string, long>();
+        public string Id { get; set; }
+        public string Nickname { get; set; }
+        public List<User> FriendsList { get; set; }
+
         private int _numberOfFriends;
         private TimeSpan _creationDate;
         private int _postsNumber;
         private Address _location;
-        public string Id { get; set; }
-        public string Nickname { get; set; }
         private int _favCount;
         private int _followersCount;
         private int _groups;
@@ -25,7 +27,6 @@ namespace Cybers.Infrustructure.models
 
         public bool Verified
         {
-            get => _verified;
             set
             {
                 _verified = value; 
@@ -35,74 +36,42 @@ namespace Cybers.Infrustructure.models
 
         public int Groups
         {
-            get => _groups;
-            set
-            {
-                _groups = value;
-                AddAttribute(_groups);
-            }
+            set => AddAttribute(value);
         }
 
 
         public int FavCount
         {
-            get => _favCount;
-            set
-            {
-                _favCount = value; 
-                AddAttribute(_favCount);
-            }
+            set => AddAttribute(_favCount);
         }
 
         public int FollowersCount
         {
-            get => _followersCount;
-            set
-            {
-                _followersCount = value;
-                AddAttribute(_followersCount);
-            }
+            set => AddAttribute(_followersCount);
         }
 
         public int NumberOfFriends
         {
-            get => _numberOfFriends;
-            set
-            {
-                _numberOfFriends = value;
-                AddAttribute(_numberOfFriends);
-            }
+            set => AddAttribute(_numberOfFriends);
         }
 
         public TimeSpan CreationDate
         {
-            get => _creationDate;
             set
             {
-                _creationDate = value; 
                 var now = new TimeSpan(DateTime.Today.Ticks).TotalMilliseconds;
-                AddAttribute((long) (now - _creationDate.TotalMilliseconds));
+                AddAttribute((long) (now - value.TotalMilliseconds));
             }
         }
 
         public Address Location
         {
-            get => _location;
-            set
-            {
-                _location = value; 
-                AddAttribute(_location.Code);
-            }
+            set => AddAttribute(_location.Code);
         }
 
         public int PostsNumber
         {
-            get => _postsNumber;
-            set
-            {
-                _postsNumber = value; 
-                AddAttribute(_postsNumber);
-            }
+            set => AddAttribute(_postsNumber);
         }
 
         public Url ProfileLink { get; set; }

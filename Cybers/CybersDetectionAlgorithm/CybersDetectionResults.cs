@@ -9,7 +9,7 @@ namespace CybersDetectionAlgorithm
 {
     public class CybersDetectionResults
     {
-        public Dictionary<string,int> UsersSuspicionLevel { get; set; }
+        public Dictionary<string, double> UsersSuspicionLevel { get; set; }
         public Partition Partition { get; set; }
     }
 }
