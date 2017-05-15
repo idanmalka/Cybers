@@ -12,7 +12,8 @@ namespace ILouvainLibrary
 {
     public class ILouvain
     {
-        private UndirectedGraph<User, Edge<User>> _graph;
+        private readonly UndirectedGraph<User, Edge<User>> _graph;
+        public Partition ILouvainExecutionResult { get; set; }
 
         public ILouvain(UndirectedGraph<User, Edge<User>> graph)
         {
@@ -36,11 +37,11 @@ namespace ILouvainLibrary
             var attr = verticies.First().Attributes.Keys;
             var gUser = new User();
             var size = verticies.Count();
-           
+
             foreach (var key in attr)
             {
                 var sum = verticies.Sum(vertex => vertex.Attributes[key]);
-                gUser.Attributes[key] = sum/size;
+                gUser.Attributes[key] = sum / size;
             }
 
             return gUser;
@@ -60,18 +61,16 @@ namespace ILouvainLibrary
             var count = _graph.VertexCount;
             var verticies = _graph.Vertices.ToList();
             double sum = 0;
+
             for (var i = 0; i < count; i++)
-            {
-                for (var j = i+1; j < count; j++)
+                for (var j = i + 1; j < count; j++)
                 {
                     var v1 = verticies[i];
                     var v2 = verticies[j];
                     if (Kroncker(v1.ClusterId, v2.ClusterId))
-                    {
                         sum += CalculateQinertiaInner(verticies, v1, v2);
-                    }
                 }
-            }
+
             return sum;
         }
 
@@ -80,9 +79,9 @@ namespace ILouvainLibrary
             var inertiaV1 = CalculateInertia(verticies, v1);
             var inertiaV2 = CalculateInertia(verticies, v2);
             var inertia = CalculateInertia(verticies);
-            var twoN = verticies.Count*2;
+            var twoN = verticies.Count * 2;
             var euclideanDistance = CalculateEuclideanDistance(v1, v2);
-            return inertiaV1*inertiaV2/Math.Pow(twoN*inertia, 2)-euclideanDistance/(twoN * inertia);
+            return inertiaV1 * inertiaV2 / Math.Pow(twoN * inertia, 2) - euclideanDistance / (twoN * inertia);
         }
 
 
@@ -100,26 +99,46 @@ namespace ILouvainLibrary
                 {
                     var v1 = verticies[i];
                     var v2 = verticies[j];
-                    
+
                     if (Kroncker(v1.ClusterId, v2.ClusterId))
                     {
                         var adjacent = _graph.AdjacentVertices(v1).Contains(v2) ? 1 : 0;
                         var kv1 = _graph.AdjacentDegree(v1);
                         var kv2 = _graph.AdjacentDegree(v2);
-  
-                        sum += adjacent-kv1*kv2/twoM;
+
+                        sum += adjacent - kv1 * kv2 / twoM;
                     }
                 }
             }
-            return sum/twoM;
+            return sum / twoM;
         }
 
         private double CalculateQQplus() => CalculateQinertia() + CalculateQng();
 
-        private long FindNeighborClusterMaximizingQQplusGain(User vertex)
+        private long FindNeighborClusterMaximizingQQplusGain(User vertex,double qqPlusAnertior, ref bool dirty)
         {
+            var anteriorClusterId = vertex.ClusterId;
+            var newClusterId = vertex.ClusterId;
+            var maxQQPlus = qqPlusAnertior;
+            var checkedClusters = new List<long>();
 
-            return 0;
+            foreach (var neighbour in _graph.AdjacentVertices(vertex))
+            {
+                if (vertex.ClusterId == neighbour.ClusterId 
+                    && !checkedClusters.Contains(neighbour.ClusterId)) continue;
+
+                checkedClusters.Add(neighbour.ClusterId);
+                vertex.ClusterId = neighbour.ClusterId;
+                var qqPlusNew = CalculateQQplus();
+                if (maxQQPlus < qqPlusNew)
+                {
+                    maxQQPlus = qqPlusNew;
+                    newClusterId = neighbour.ClusterId;
+                    dirty = true;
+                }
+                vertex.ClusterId = anteriorClusterId;
+            }
+            return newClusterId;
         }
 
         private void CreateDiscretePartition()
@@ -140,11 +159,17 @@ namespace ILouvainLibrary
             do
             {
                 qqPlusAnterior = CalculateQQplus();
-                foreach (var vertex in verticies)
+                var dirty = false;
+                do
                 {
-                    vertex.ClusterId = FindNeighborClusterMaximizingQQplusGain(vertex);
-                }
+                    foreach (var vertex in verticies)
+                    {
+                        vertex.ClusterId = FindNeighborClusterMaximizingQQplusGain(vertex,qqPlusAnterior , ref dirty);
+                    }
+                } while (dirty);
             } while (CalculateQQplus() > qqPlusAnterior);
+
+            ILouvainExecutionResult = new Partition(_graph);
         }
     }
 }

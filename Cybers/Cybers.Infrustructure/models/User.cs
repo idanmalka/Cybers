@@ -25,7 +25,7 @@ namespace Cybers.Infrustructure.models
 
         public bool Verified
         {
-            get { return _verified; }
+            get => _verified;
             set
             {
                 _verified = value; 
@@ -35,7 +35,7 @@ namespace Cybers.Infrustructure.models
 
         public int Groups
         {
-            get { return _groups; }
+            get => _groups;
             set
             {
                 _groups = value;
@@ -46,7 +46,7 @@ namespace Cybers.Infrustructure.models
 
         public int FavCount
         {
-            get { return _favCount; }
+            get => _favCount;
             set
             {
                 _favCount = value; 
@@ -56,7 +56,7 @@ namespace Cybers.Infrustructure.models
 
         public int FollowersCount
         {
-            get { return _followersCount; }
+            get => _followersCount;
             set
             {
                 _followersCount = value;
@@ -66,7 +66,7 @@ namespace Cybers.Infrustructure.models
 
         public int NumberOfFriends
         {
-            get { return _numberOfFriends; }
+            get => _numberOfFriends;
             set
             {
                 _numberOfFriends = value;
@@ -76,7 +76,7 @@ namespace Cybers.Infrustructure.models
 
         public TimeSpan CreationDate
         {
-            get { return _creationDate; }
+            get => _creationDate;
             set
             {
                 _creationDate = value; 
@@ -87,7 +87,7 @@ namespace Cybers.Infrustructure.models
 
         public Address Location
         {
-            get { return _location; }
+            get => _location;
             set
             {
                 _location = value; 
@@ -97,7 +97,7 @@ namespace Cybers.Infrustructure.models
 
         public int PostsNumber
         {
-            get { return _postsNumber; }
+            get => _postsNumber;
             set
             {
                 _postsNumber = value; 

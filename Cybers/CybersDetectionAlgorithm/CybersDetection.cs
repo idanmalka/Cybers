@@ -13,18 +13,20 @@ namespace CybersDetectionAlgorithm
         private IEnumerable<User> _users;
         private IEnumerable<string> _clusteringAttributes;
         private IEnumerable<string> _distributionAttributes;
+        private int _threshold;
 
         public CybersDetectionResults LatestRunResults { get; set; }
 
         public CybersDetection(IEnumerable<User> users, IEnumerable<string> clusteringAttributes,
-            IEnumerable<string> distributionAttributes)
+            IEnumerable<string> distributionAttributes,int threshold)
         {
             _users = users;
             _clusteringAttributes = clusteringAttributes;
             _distributionAttributes = distributionAttributes;
+            _threshold = threshold;
         }
 
-        public CybersDetectionResults Analyze()
+        public CybersDetectionResults Execute()
         {
             throw new NotImplementedException();
         }
