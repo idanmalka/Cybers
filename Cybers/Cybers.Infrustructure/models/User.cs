@@ -15,16 +15,12 @@ namespace Cybers.Infrustructure.models
         public string Id { get; set; }
         public string Nickname { get; set; }
         public List<User> FriendsList { get; set; }
-
-        private bool _verified;
+        public long ClusterId { get; set; }
+        public Url ProfileLink { get; set; }
 
         public bool Verified
         {
-            set
-            {
-                _verified = value; 
-                AddAttribute(_verified ? 1 : 0);
-            }
+            set => AddAttribute(value ? 1 : 0);
         }
 
         public int Groups
@@ -47,16 +43,6 @@ namespace Cybers.Infrustructure.models
         {
             set => AddAttribute(value);
         }
-
-        public TimeSpan CreationDate
-        {
-            set
-            {
-                var now = new TimeSpan(DateTime.Today.Ticks).TotalMilliseconds;
-                AddAttribute((long) (now - value.TotalMilliseconds));
-            }
-        }
-
         public Address Location
         {
             set => AddAttribute(value.Code);
@@ -67,14 +53,19 @@ namespace Cybers.Infrustructure.models
             set => AddAttribute(value);
         }
 
-        public Url ProfileLink { get; set; }
+        public TimeSpan CreationDate
+        {
+            set
+            {
+                var now = new TimeSpan(DateTime.Today.Ticks).TotalMilliseconds;
+                AddAttribute((long)(now - value.TotalMilliseconds));
+            }
+        }
+
 
         private void AddAttribute(long value = 0, [CallerMemberName] string propertyName = null)
         {
             if (propertyName != null) Attributes[propertyName] = value;
         }
-
-        public long ClusterId { get; set; }
-
     }
 }
