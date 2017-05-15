@@ -16,13 +16,6 @@ namespace Cybers.Infrustructure.models
         public string Nickname { get; set; }
         public List<User> FriendsList { get; set; }
 
-        private int _numberOfFriends;
-        private TimeSpan _creationDate;
-        private int _postsNumber;
-        private Address _location;
-        private int _favCount;
-        private int _followersCount;
-        private int _groups;
         private bool _verified;
 
         public bool Verified
@@ -42,17 +35,17 @@ namespace Cybers.Infrustructure.models
 
         public int FavCount
         {
-            set => AddAttribute(_favCount);
+            set => AddAttribute(value);
         }
 
         public int FollowersCount
         {
-            set => AddAttribute(_followersCount);
+            set => AddAttribute(value);
         }
 
         public int NumberOfFriends
         {
-            set => AddAttribute(_numberOfFriends);
+            set => AddAttribute(value);
         }
 
         public TimeSpan CreationDate
@@ -66,12 +59,12 @@ namespace Cybers.Infrustructure.models
 
         public Address Location
         {
-            set => AddAttribute(_location.Code);
+            set => AddAttribute(value.Code);
         }
 
         public int PostsNumber
         {
-            set => AddAttribute(_postsNumber);
+            set => AddAttribute(value);
         }
 
         public Url ProfileLink { get; set; }
