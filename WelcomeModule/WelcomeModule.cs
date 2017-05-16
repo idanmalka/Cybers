@@ -19,11 +19,13 @@ namespace WelcomeModule
 
         protected override void InitializeModule()
         {
+            RegionManager.RegisterViewWithRegion(RegionNames.BottomToolbarReegion, typeof(WelcomeBottomToolbarView));
             RegionManager.RegisterViewWithRegion(RegionNames.MainContentRegion, typeof(WelcomeViewModel));
         }
 
         protected override void RegisterTypes()
         {
+            Container.RegisterType<IWelcomeToolbarView, WelcomeBottomToolbarView>();
             Container.RegisterType<IWelcomeView, WelcomeView>();
             Container.RegisterType<IWelcomeViewModel, WelcomeViewModel>();
         }

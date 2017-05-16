@@ -18,9 +18,9 @@ using WelcomeModule.interfaces;
 namespace WelcomeModule.components
 {
     /// <summary>
-    /// Interaction logic for WelcomeView.xaml
+    /// Interaction logic for WelcomeBottomToolbarView.xaml
     /// </summary>
-    public partial class WelcomeView : UserControl, IWelcomeView
+    public partial class WelcomeBottomToolbarView : UserControl, IWelcomeToolbarView
     {
         public IViewModel ViewModel
         {
@@ -28,7 +28,7 @@ namespace WelcomeModule.components
             set => DataContext = value;
         }
 
-        public WelcomeView(IWelcomeViewModel viewModel)
+        public WelcomeBottomToolbarView(IWelcomeViewModel viewModel)
         {
             ViewModel = viewModel;
             InitializeComponent();

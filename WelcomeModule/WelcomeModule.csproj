@@ -77,10 +77,14 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="components\WelcomeBottomToolbarView.xaml.cs">
+      <DependentUpon>WelcomeBottomToolbarView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="components\WelcomeView.xaml.cs">
       <DependentUpon>WelcomeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="components\WelcomeViewModel.cs" />
+    <Compile Include="interfaces\IWelcomeToolbarView.cs" />
     <Compile Include="interfaces\IWelcomeView.cs" />
     <Compile Include="interfaces\IWelcomeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -109,6 +113,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="components\WelcomeBottomToolbarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="components\WelcomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
