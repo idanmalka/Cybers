@@ -7,7 +7,7 @@
         xmlns:inf="clr-namespace:Cybers.Infrustructure;assembly=Cybers.Infrustructure"
         xmlns:local="clr-namespace:Cybers"
         mc:Ignorable="d"
-        Title="Shell" Height="300" Width="300">
+        Title="Shell">
     <DockPanel LastChildFill="True">
         <ContentControl DockPanel.Dock="Bottom" prism:RegionManager.RegionName="{x:Static inf:RegionNames.BottomToolbarReegion}" Margin="5" />
         <ContentControl prism:RegionManager.RegionName="{x:Static inf:RegionNames.MainContentRegion}"/>

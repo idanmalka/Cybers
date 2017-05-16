@@ -16,6 +16,7 @@ namespace Cybers
         {
             Container.RegisterType<Shell>();
             Container.RegisterType<ServicesModule.ServicesModule>();
+            Container.RegisterType<WelcomeModule.WelcomeModule>();
             Container.RegisterType<ConfigurationModule.ConfigurationModule>();
             Container.RegisterType<AlgorithmModule.AlgorithmModule>();
             return Container.Resolve<Shell>();
@@ -36,7 +37,7 @@ namespace Cybers
 
             AddModuleToCatalog(typeof(AlgorithmModule.AlgorithmModule), InitializationMode.OnDemand);
             AddModuleToCatalog(typeof(WelcomeModule.WelcomeModule), InitializationMode.WhenAvailable);
-            AddModuleToCatalog(typeof(ConfigurationModule.ConfigurationModule), InitializationMode.WhenAvailable);
+            AddModuleToCatalog(typeof(ConfigurationModule.ConfigurationModule), InitializationMode.OnDemand);
             AddModuleToCatalog(typeof(ServicesModule.ServicesModule), InitializationMode.WhenAvailable);
         }
 
