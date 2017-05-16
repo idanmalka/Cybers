@@ -19,12 +19,20 @@
                                             Mode="PrimaryMid" DockPanel.Dock="Top">
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Detecting Cyber Users in Social Networks</TextBlock>
         </materialDesign:ColorZone>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-        </Grid>
+        <StackPanel Margin="16" HorizontalAlignment="Center">
+            <TextBlock Style="{StaticResource MaterialDesignDisplay1TextBlock}" TextWrapping="Wrap">Welcome to Detecting Cyber Users in Social Networks</TextBlock>
+            <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="32 32 32 0">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Script" VerticalAlignment="Center"/>
+                    <TextBlock Margin="8 0 0 0" FontSize="16">NEW</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button Style="{StaticResource MaterialDesignFlatButton}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Folder" VerticalAlignment="Center"/>
+                    <TextBlock Margin="8 0 0 0" FontSize="16">LOAD</TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
     </DockPanel>
 </UserControl>
