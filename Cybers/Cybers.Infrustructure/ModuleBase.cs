@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Practices.Unity;
+using Prism.Regions;
 
 namespace Cybers.Infrustructure
 {
@@ -12,7 +14,7 @@ namespace Cybers.Infrustructure
         protected IRegionManager RegionManager { get; private set; }
         protected IUnityContainer Container { get; private set; }
 
-        public ModuleBase(IUnityContainer container, IRegionManager regionManager)
+        protected ModuleBase(IUnityContainer container, IRegionManager regionManager)
         {
             Container = container;
             RegionManager = regionManager;

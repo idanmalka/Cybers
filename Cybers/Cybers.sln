@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cybers", "Cybers.csproj", "{CB50C468-BF60-40D6-B312-4D35F43A9F02}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CybersDetectionAlgorithm", "CybersDetectionAlgorithm\CybersDetectionAlgorithm.csproj", "{DC0BE86A-43D2-4F98-BF6A-5CBE6636C01C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{4107D8E2-35C2-4428-B21A-B0F93ECACE71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WelcomeModule", "..\WelcomeModule\WelcomeModule.csproj", "{B8FE96CA-979D-44DA-8E02-8C4EEBCAC2B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{4107D8E2-35C2-4428-B21A-B0F93ECACE71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4107D8E2-35C2-4428-B21A-B0F93ECACE71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4107D8E2-35C2-4428-B21A-B0F93ECACE71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8FE96CA-979D-44DA-8E02-8C4EEBCAC2B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8FE96CA-979D-44DA-8E02-8C4EEBCAC2B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8FE96CA-979D-44DA-8E02-8C4EEBCAC2B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8FE96CA-979D-44DA-8E02-8C4EEBCAC2B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +72,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{77F64E1D-766B-494F-9095-A39BF285808C} = {6843C5B1-35DA-4655-8070-A8E7329F13FD}
 		{AFB5AD23-6AB7-4266-A516-DD1E77C00377} = {6843C5B1-35DA-4655-8070-A8E7329F13FD}
+		{B8FE96CA-979D-44DA-8E02-8C4EEBCAC2B1} = {6843C5B1-35DA-4655-8070-A8E7329F13FD}
 	EndGlobalSection
 EndGlobal
