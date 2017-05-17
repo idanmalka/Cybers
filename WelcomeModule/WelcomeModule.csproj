@@ -123,6 +123,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Cybers\ConfigurationModule\ConfigurationModule.csproj">
+      <Project>{77F64E1D-766B-494F-9095-A39BF285808C}</Project>
+      <Name>ConfigurationModule</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Cybers\Cybers.Infrustructure\Cybers.Infrustructure.csproj">
       <Project>{79992E29-00A1-4791-B33B-3D9A5AAF2488}</Project>
       <Name>Cybers.Infrustructure</Name>

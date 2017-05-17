@@ -37,7 +37,7 @@ namespace Cybers
 
             AddModuleToCatalog(typeof(AlgorithmModule.AlgorithmModule), InitializationMode.OnDemand);
             AddModuleToCatalog(typeof(WelcomeModule.WelcomeModule), InitializationMode.WhenAvailable);
-            AddModuleToCatalog(typeof(ConfigurationModule.ConfigurationModule), InitializationMode.OnDemand);
+            AddModuleToCatalog(typeof(ConfigurationModule.ConfigurationModule), InitializationMode.WhenAvailable);
             AddModuleToCatalog(typeof(ServicesModule.ServicesModule), InitializationMode.WhenAvailable);
         }
 

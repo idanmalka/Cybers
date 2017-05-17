@@ -8,6 +8,7 @@ using Microsoft.Practices.Unity;
 using Prism.Regions;
 using WelcomeModule.components;
 using WelcomeModule.interfaces;
+using ConfigurationModule;
 
 namespace WelcomeModule
 {
@@ -28,6 +29,7 @@ namespace WelcomeModule
             Container.RegisterType<IWelcomeToolbarView, WelcomeBottomToolbarView>();
             Container.RegisterType<IWelcomeView, WelcomeView>();
             Container.RegisterType<IWelcomeViewModel, WelcomeViewModel>();
+            Container.RegisterTypeForNavigation<ConfigurationModule.components.ConfigurationWelcomeView>();
         }
     }
 }
