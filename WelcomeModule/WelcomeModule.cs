@@ -21,7 +21,7 @@ namespace WelcomeModule
         protected override void InitializeModule()
         {
             RegionManager.RegisterViewWithRegion(RegionNames.BottomToolbarReegion, typeof(WelcomeBottomToolbarView));
-            RegionManager.RegisterViewWithRegion(RegionNames.MainContentRegion, typeof(WelcomeView));
+            ApplicationCommands.NavigateCommand.Execute(typeof(WelcomeView));
         }
 
         protected override void RegisterTypes()
@@ -29,7 +29,7 @@ namespace WelcomeModule
             Container.RegisterType<IWelcomeToolbarView, WelcomeBottomToolbarView>();
             Container.RegisterType<IWelcomeView, WelcomeView>();
             Container.RegisterType<IWelcomeViewModel, WelcomeViewModel>();
-            Container.RegisterTypeForNavigation<ConfigurationModule.interfaces.IConfigurationView>();
+            Container.RegisterTypeForNavigation<WelcomeView>();
         }
     }
 }

@@ -16,7 +16,7 @@
     </UserControl.Resources>
     <DockPanel>
         <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                                            Mode="PrimaryMid" DockPanel.Dock="Top">
+                                            Mode="PrimaryMid" DockPanel.Dock="Top" Height="64">
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Detecting Cyber Users in Social Networks</TextBlock>
         </materialDesign:ColorZone>
         <Grid>

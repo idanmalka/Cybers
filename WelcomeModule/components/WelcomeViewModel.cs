@@ -11,14 +11,12 @@ using WelcomeModule.interfaces;
 
 namespace WelcomeModule.components
 {
-    public class WelcomeViewModel : BindableBase, IWelcomeViewModel, INavigationAware
+    public class WelcomeViewModel : BindableBase, IWelcomeViewModel
     {
-        private readonly IRegionManager _regionManager;
         public DelegateCommand<string> NavigateToConfigView { get; }
 
-        public WelcomeViewModel(IRegionManager regionManager)
+        public WelcomeViewModel()
         {
-            _regionManager = regionManager;
             NavigateToConfigView = new DelegateCommand<string>(Navigate);
         }
 
@@ -26,19 +24,8 @@ namespace WelcomeModule.components
         {
             var uriQuery = new NavigationParameters {{"Mode", value}};
             var uri = new Uri(typeof(ConfigurationModule.components.ConfigurationWelcomeView).FullName + uriQuery, UriKind.Relative);
-            _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
+            ApplicationCommands.NavigateCommand.Execute(uri);
         }
 
-        public void OnNavigatedTo(NavigationContext navigationContext)
-        {
-            
-        }
-
-        public bool IsNavigationTarget(NavigationContext navigationContext)
-        {
-            return true;
-        }
-
-        public void OnNavigatedFrom(NavigationContext navigationContext) {}
     }
 }

@@ -5,8 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ConfigurationModule.components"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"           
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -16,9 +15,9 @@
     </UserControl.Resources>
     <DockPanel>
         <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                                  Mode="PrimaryMid" DockPanel.Dock="Top">
+                                  Mode="PrimaryMid" DockPanel.Dock="Top" Height="64">
             <DockPanel>
-                <Button Command="{Binding GoBackCommand}" Style="{DynamicResource MaterialDesignFlatButton}" DockPanel.Dock="Left">
+                <Button VerticalAlignment="Center" Command="{Binding GoBackCommand}" Style="{DynamicResource MaterialDesignFlatButton}" DockPanel.Dock="Left">
                     <TextBlock Foreground="White" FontSize="16">BACK</TextBlock>
                 </Button>
                 <Button Visibility="Hidden" IsEnabled="False" Style="{DynamicResource MaterialDesignFlatButton}" DockPanel.Dock="Right">

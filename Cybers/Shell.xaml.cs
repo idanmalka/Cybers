@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cybers.Infrustructure.interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,11 +18,14 @@ namespace Cybers
     /// <summary>
     /// Interaction logic for Shell.xaml
     /// </summary>
-    public partial class Shell : Window
+    public partial class Shell : Window, IView
     {
-        public Shell()
+        public Shell(IShellViewModel viewModel)
         {
+            ViewModel = viewModel;
             InitializeComponent();
         }
+
+        public IViewModel ViewModel { get => DataContext as IViewModel; set => DataContext = value; }
     }
 }

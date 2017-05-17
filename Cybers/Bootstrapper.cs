@@ -22,6 +22,12 @@ namespace Cybers
             return Container.Resolve<Shell>();
         }
 
+        protected override void ConfigureContainer()
+        {
+            base.ConfigureContainer();
+            Container.RegisterType<IShellViewModel, ShellViewModel>();
+        }
+
         protected override void InitializeShell()
         {
             base.InitializeShell();

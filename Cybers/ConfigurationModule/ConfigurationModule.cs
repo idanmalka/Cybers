@@ -13,26 +13,23 @@ using Prism.Regions;
 
 namespace ConfigurationModule
 {
-    public class ConfigurationModule: IModule
+    public class ConfigurationModule : ModuleBase
     {
-        private readonly IUnityContainer _container;
-        private readonly IRegionManager _regionManager;
-
-        public ConfigurationModule(IUnityContainer container, IRegionManager regionManager)
+        public ConfigurationModule(IUnityContainer container, IRegionManager regionManager) : base(container, regionManager)
         {
-            _container = container;
-            _regionManager = regionManager;
         }
 
-        public void Initialize()
+        protected override void InitializeModule()
         {
-            _container.RegisterType<IConfigurationToolbarView,ConfigurationBottomToolbarView>();
-            _container.RegisterType<IConfigurationView, ConfigurationWelcomeView>();
-            _container.RegisterType<IConfigurationViewModel, ConfigurationViewModel>();
+            RegionManager.RegisterViewWithRegion(RegionNames.BottomToolbarReegion, typeof(ConfigurationBottomToolbarView));
+        }
 
-            _regionManager.RegisterViewWithRegion(RegionNames.BottomToolbarReegion, typeof(ConfigurationBottomToolbarView));
-            _regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion, typeof(ConfigurationWelcomeView));
-
+        protected override void RegisterTypes()
+        {
+            Container.RegisterType<IConfigurationToolbarView, ConfigurationBottomToolbarView>();
+            Container.RegisterType<IConfigurationView, ConfigurationWelcomeView>();
+            Container.RegisterType<IConfigurationViewModel, ConfigurationViewModel>();
+            Container.RegisterTypeForNavigation<ConfigurationWelcomeView>();
         }
     }
 }
