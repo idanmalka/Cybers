@@ -26,9 +26,7 @@ namespace Cybers
         {
             base.InitializeShell();
             Application.Current.MainWindow = Shell as Window;
-
-            if (Application.Current.MainWindow != null)
-                Application.Current.MainWindow.Show();
+            Application.Current.MainWindow?.Show();
         }
 
         protected override void ConfigureModuleCatalog()

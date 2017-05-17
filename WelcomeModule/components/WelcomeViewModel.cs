@@ -24,9 +24,9 @@ namespace WelcomeModule.components
 
         private void Navigate(string value)
         {
-            var uriQuery = new NavigationParameters {{"Mode", value}};
-            var uri = new Uri(typeof(ConfigurationModule.components.ConfigurationWelcomeView).FullName + uriQuery, UriKind.Relative);
-            _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
+            var parameters = new NavigationParameters {{"Mode", value}};
+            var uri = new Uri(typeof(ConfigurationModule.components.ConfigurationWelcomeView).FullName, UriKind.Relative);
+            _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri, parameters);
         }
 
     }
