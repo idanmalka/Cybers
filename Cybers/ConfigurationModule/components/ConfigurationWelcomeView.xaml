@@ -10,6 +10,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -27,19 +28,7 @@
             </DockPanel>
         </materialDesign:ColorZone>
     </DockPanel>
-<!--    <UserControl.Resources>-->
-<!--        <ResourceDictionary>-->
-<!--            <ResourceDictionary.MergedDictionaries>-->
-<!--                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />-->
-<!--                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />-->
-<!--                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBlock.xaml" />-->
-<!--            </ResourceDictionary.MergedDictionaries>-->
-<!--            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">-->
-<!--                <Setter Property="Margin" Value="0 8 0 8" />-->
-<!--            </Style>-->
-<!--        </ResourceDictionary>-->
-<!--    </UserControl.Resources>-->
-<!---->
+
 <!--    <StackPanel Orientation="Vertical">-->
 <!--        <materialDesign:ColorZone Mode="PrimaryDark" materialDesign:ShadowAssist.ShadowDepth="Depth1">-->
 <!--            <TextBlock HorizontalAlignment="Center" Text="{Binding MainContentTitle}" FontSize="16" Margin="5"/>-->

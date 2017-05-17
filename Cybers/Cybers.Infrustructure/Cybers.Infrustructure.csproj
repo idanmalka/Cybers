@@ -40,7 +40,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationCommands.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="interfaces\IView.cs" />
     <Compile Include="interfaces\IViewModel.cs" />

@@ -14,9 +14,11 @@ namespace WelcomeModule.components
     public class WelcomeViewModel : BindableBase, IWelcomeViewModel
     {
         public DelegateCommand<string> NavigateToConfigView { get; }
+        private readonly IRegionManager _regionManager;
 
-        public WelcomeViewModel()
+        public WelcomeViewModel(IRegionManager regionManager)
         {
+            _regionManager = regionManager;
             NavigateToConfigView = new DelegateCommand<string>(Navigate);
         }
 
@@ -24,7 +26,7 @@ namespace WelcomeModule.components
         {
             var uriQuery = new NavigationParameters {{"Mode", value}};
             var uri = new Uri(typeof(ConfigurationModule.components.ConfigurationWelcomeView).FullName + uriQuery, UriKind.Relative);
-            ApplicationCommands.NavigateCommand.Execute(uri);
+            _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
         }
 
     }

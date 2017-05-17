@@ -18,14 +18,11 @@ namespace Cybers
     /// <summary>
     /// Interaction logic for Shell.xaml
     /// </summary>
-    public partial class Shell : Window, IView
+    public partial class Shell : Window
     {
-        public Shell(IShellViewModel viewModel)
+        public Shell()
         {
-            ViewModel = viewModel;
             InitializeComponent();
         }
-
-        public IViewModel ViewModel { get => DataContext as IViewModel; set => DataContext = value; }
     }
 }
