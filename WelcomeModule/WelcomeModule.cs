@@ -29,7 +29,7 @@ namespace WelcomeModule
             Container.RegisterType<IWelcomeToolbarView, WelcomeBottomToolbarView>();
             Container.RegisterType<IWelcomeView, WelcomeView>();
             Container.RegisterType<IWelcomeViewModel, WelcomeViewModel>();
-            Container.RegisterTypeForNavigation<ConfigurationModule.components.ConfigurationWelcomeView>();
+            Container.RegisterTypeForNavigation<ConfigurationModule.interfaces.IConfigurationView>();
         }
     }
 }

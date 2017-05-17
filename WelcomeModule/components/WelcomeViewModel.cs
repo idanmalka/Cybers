@@ -11,10 +11,10 @@ using WelcomeModule.interfaces;
 
 namespace WelcomeModule.components
 {
-    public class WelcomeViewModel : BindableBase, IWelcomeViewModel
+    public class WelcomeViewModel : BindableBase, IWelcomeViewModel, INavigationAware
     {
         private readonly IRegionManager _regionManager;
-        public DelegateCommand<string> NavigateToConfigView { get; private set; }
+        public DelegateCommand<string> NavigateToConfigView { get; }
 
         public WelcomeViewModel(IRegionManager regionManager)
         {
@@ -24,8 +24,21 @@ namespace WelcomeModule.components
 
         private void Navigate(string value)
         {
-            Console.WriteLine(value);
-            _regionManager.RequestNavigate(RegionNames.MainContentRegion, typeof(ConfigurationModule.components.ConfigurationWelcomeView).FullName);
+            var uriQuery = new NavigationParameters {{"Mode", value}};
+            var uri = new Uri(typeof(ConfigurationModule.components.ConfigurationWelcomeView).FullName + uriQuery, UriKind.Relative);
+            _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
         }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext) {}
     }
 }
