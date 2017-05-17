@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ConfigurationModule.components"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"           
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:prism="http://prismlibrary.com/"
              mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -12,6 +14,9 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
+                <Setter Property="Margin" Value="0 8 0 8" />
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <DockPanel>
@@ -27,6 +32,49 @@
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Text="{Binding MainContentTitle}"/>
             </DockPanel>
         </materialDesign:ColorZone>
+        <Grid Margin="0 6 0 0" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="400" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <materialDesign:PackIcon Kind="Folder" Foreground="{Binding ElementName=NameTextBox, Path=BorderBrush}" Margin="4 10 4 0" VerticalAlignment="Center"/>
+            <TextBox Grid.Column="1" Grid.Row="0" materialDesign:HintAssist.Hint="Graph File Path" materialDesign:HintAssist.IsFloating="True">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="GotFocus">
+                        <prism:InvokeCommandAction Command="{Binding TextFieldFocusedCommand}" CommandParameter="Graph"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+            <materialDesign:PackIcon Grid.Row="1" Grid.Column="0" Kind="Folder" Foreground="{Binding ElementName=NameTextBox, Path=BorderBrush}" Margin="4 10 4 0" VerticalAlignment="Center"/>
+            <TextBox Grid.Column="1" Grid.Row="1" materialDesign:HintAssist.Hint="Algorithm Properties File Path" materialDesign:HintAssist.IsFloating="True">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="GotFocus">
+                        <prism:InvokeCommandAction Command="{Binding TextFieldFocusedCommand}" CommandParameter="Config"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+        </Grid>
+        <!--        <Grid>-->
+<!--            <Grid.RowDefinitions>-->
+<!--                <RowDefinition Height="Auto"/>-->
+<!--                <RowDefinition Height="Auto"/>-->
+<!--                <RowDefinition Height="*"/>-->
+<!--            </Grid.RowDefinitions>-->
+<!--            <Grid Margin="16">-->
+<!--                <Grid.ColumnDefinitions>-->
+<!--                    <ColumnDefinition Width="Auto"/>-->
+<!--                    <ColumnDefinition Width="32"/>-->
+<!--                </Grid.ColumnDefinitions>-->
+<!--                <TextBox materialDesign:HintAssist.Hint="Configuration File Path"/>-->
+<!--                <materialDesign:PackIcon Grid.Column="1" Kind="Folder" VerticalAlignment="Bottom" Margin="8 10" />-->
+<!--            </Grid>-->
+<!---->
+<!---->
+<!--        </Grid>-->
     </DockPanel>
 
 <!--    <StackPanel Orientation="Vertical">-->
@@ -83,6 +131,18 @@
 <!--        </TabControl>-->
 <!--    </StackPanel>-->
 </UserControl>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

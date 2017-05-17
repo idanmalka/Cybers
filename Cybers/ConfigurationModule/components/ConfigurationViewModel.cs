@@ -17,6 +17,7 @@ namespace ConfigurationModule.components
     {
         public string MainContentTitle { get; set; } = "Configuration Main Content Title";
         public string BottomToolbarTitle { get; set; } = "Configuration Bottom Toolbar Title";
+        public DelegateCommand<string> TextFieldFocusedCommand { get; private set; }
 
         private string _mode;
         public string Mode
@@ -29,12 +30,54 @@ namespace ConfigurationModule.components
             }
         }
 
+        private string _graphFilePath;
+        public string GraphFilePath
+        {
+            get => _graphFilePath;
+            set
+            {
+                _graphFilePath = value;
+                SetProperty(ref _graphFilePath, value);
+            }
+        }
+
+        private string _configFilePath;
+        public string ConfigFilePath
+        {
+            get => _configFilePath;
+            set
+            {
+                _configFilePath = value;
+                SetProperty(ref _configFilePath, value);
+            }
+        }
+
         private readonly IRegionManager _regionManager;
+        private readonly IIOService _ioService;
 
         public ConfigurationViewModel(IRegionManager regionManager)
         {
             _regionManager = regionManager;
+            _ioService = null;
             GoBackCommand = new DelegateCommand(GoBack);
+            TextFieldFocusedCommand = new DelegateCommand<string>(OpenFileBrowser);
+        }
+
+        private void OpenFileBrowser(string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value) && _ioService != null)
+            {
+                var path = _ioService.OpenFileDialog();
+                switch (value)
+                {
+                    case "Graph":
+                        GraphFilePath = path;
+                        break;
+                    case "Config":
+                        ConfigFilePath = path;
+                        break;
+                }
+            }
         }
 
         public DelegateCommand GoBackCommand { get; }

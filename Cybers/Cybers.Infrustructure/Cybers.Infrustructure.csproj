@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
+    <Compile Include="interfaces\IIOService.cs" />
     <Compile Include="interfaces\IView.cs" />
     <Compile Include="interfaces\IViewModel.cs" />
     <Compile Include="models\Address.cs" />
