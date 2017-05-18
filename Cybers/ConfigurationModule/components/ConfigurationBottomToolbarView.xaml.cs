@@ -22,17 +22,13 @@ namespace ConfigurationModule.components
     /// </summary>
     public partial class ConfigurationBottomToolbarView : UserControl, IConfigurationToolbarView
     {
-        public IViewModel ViewModel
-        {
-            get { return (IConfigurationViewModel) DataContext; }
-            set { DataContext = value; }
-        }
 
-        public ConfigurationBottomToolbarView(IConfigurationViewModel viewModel)
+
+        public ConfigurationBottomToolbarView()
         {
-            ViewModel = viewModel;
             InitializeComponent();
         }
 
+        public IViewModel ViewModel { get; set; }
     }
 }

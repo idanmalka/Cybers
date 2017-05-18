@@ -51,6 +51,7 @@
     <Compile Include="models\User.cs" />
     <Compile Include="ModuleBase.cs" />
     <Compile Include="RegionNames.cs" />
+    <Compile Include="ServiceResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="DotParser, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">

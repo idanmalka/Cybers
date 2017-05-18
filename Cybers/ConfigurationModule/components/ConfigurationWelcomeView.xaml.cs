@@ -25,7 +25,7 @@ namespace ConfigurationModule.components
     {
         public IViewModel ViewModel
         {
-            get => DataContext as IConfigurationViewModel;
+            get => DataContext as IViewModel;
             set => DataContext = value;
         }
 

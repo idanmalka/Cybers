@@ -19,64 +19,55 @@ namespace ConfigurationModule.components
         public string BottomToolbarTitle { get; set; } = "Configuration Bottom Toolbar Title";
         public DelegateCommand<string> TextFieldFocusedCommand { get; private set; }
 
-        private string _mode;
-        public string Mode
+        private bool _isNew;
+        public bool IsNew
         {
-            get => _mode;
-            set
-            {
-                _mode = value;
-                SetProperty(ref _mode, value);
-            }
+            get => _isNew;
+            set => SetProperty(ref _isNew, value);
         }
 
         private string _graphFilePath;
         public string GraphFilePath
         {
             get => _graphFilePath;
-            set
-            {
-                _graphFilePath = value;
-                SetProperty(ref _graphFilePath, value);
-            }
+            set => SetProperty(ref _graphFilePath, value);
         }
 
         private string _configFilePath;
         public string ConfigFilePath
         {
             get => _configFilePath;
-            set
-            {
-                _configFilePath = value;
-                SetProperty(ref _configFilePath, value);
-            }
+            set => SetProperty(ref _configFilePath, value);
         }
 
         private readonly IRegionManager _regionManager;
         private readonly IIOService _ioService;
 
-        public ConfigurationViewModel(IRegionManager regionManager)
+        public ConfigurationViewModel(IRegionManager regionManager, IIOService ioService)
         {
             _regionManager = regionManager;
-            _ioService = null;
+            _ioService = ioService;
             GoBackCommand = new DelegateCommand(GoBack);
             TextFieldFocusedCommand = new DelegateCommand<string>(OpenFileBrowser);
         }
 
         private void OpenFileBrowser(string value)
         {
-            if (!string.IsNullOrWhiteSpace(value) && _ioService != null)
+            if (!string.IsNullOrWhiteSpace(value))
             {
-                var path = _ioService.OpenFileDialog();
-                switch (value)
+                _ioService?.OpenFileDialog((sender, result) =>
                 {
-                    case "Graph":
-                        GraphFilePath = path;
-                        break;
-                    case "Config":
-                        ConfigFilePath = path;
-                        break;
-                }
+                    var path = result.Object;
+                    switch (value)
+                    {
+                        case "Graph":
+                            GraphFilePath = path;
+                            break;
+                        case "Config":
+                            ConfigFilePath = path;
+                            break;
+                    }
+                });
             }
         }
 
@@ -102,7 +93,7 @@ namespace ConfigurationModule.components
             var mode = navigationContext.Parameters["Mode"] as string;
             if (!string.IsNullOrWhiteSpace(mode))
             {
-                Mode = mode;
+                IsNew = mode.Equals("NEW");
             }
         }
     }

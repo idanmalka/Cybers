@@ -15,8 +15,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <DockPanel>
-        <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                                            Mode="PrimaryMid" DockPanel.Dock="Top" Height="64">
+        <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2" Mode="PrimaryMid" DockPanel.Dock="Top" Height="64">
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Detecting Cyber Users in Social Networks</TextBlock>
         </materialDesign:ColorZone>
         <Grid>
@@ -24,24 +23,24 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock HorizontalAlignment="Center" Margin="0 16 0 0" Style="{StaticResource MaterialDesignDisplay1TextBlock}" TextWrapping="Wrap">Welcome to Detecting Cyber Users in Social Networks</TextBlock>
-            <StackPanel Margin="32 0 32 0" Grid.Row="1"  VerticalAlignment="Center">
-                <Button Command="{Binding NavigateToConfigView}" CommandParameter="NEW" Style="{StaticResource MaterialDesignFlatButton}" Margin="0 0 0 8">
+            <TextBlock HorizontalAlignment="Center" Margin="32" Style="{StaticResource MaterialDesignDisplay1TextBlock}" TextWrapping="Wrap" TextAlignment="Center">Welcome to Detecting Cyber Users in Social Networks</TextBlock>
+            <StackPanel Margin="32 0 32 0" Grid.Row="0"  VerticalAlignment="Center" Grid.RowSpan="2">
+                <Button Command="{Binding NavigateToConfigView}" CommandParameter="NEW" Style="{StaticResource MaterialDesignFlatButton}" Margin="0 0 0 16">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center"/>
-                        <TextBlock Margin="8 0 0 0" FontSize="16">NEW</TextBlock>
+                        <TextBlock Margin="8 0 0 0" FontSize="18">NEW</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Command="{Binding NavigateToConfigView}" CommandParameter="LOAD" Style="{StaticResource MaterialDesignFlatButton}" Margin="0 0 0 8">
+                <Button Command="{Binding NavigateToConfigView}" CommandParameter="LOAD" Style="{StaticResource MaterialDesignFlatButton}" Margin="0 0 0 16">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Folder" VerticalAlignment="Center"/>
-                        <TextBlock Margin="8 0 0 0" FontSize="16">LOAD</TextBlock>
+                        <TextBlock Margin="8 0 0 0" FontSize="18">LOAD</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Style="{StaticResource MaterialDesignFlatButton}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Script" VerticalAlignment="Center"/>
-                        <TextBlock Margin="8 0 0 0" FontSize="16">ABOUT</TextBlock>
+                        <TextBlock Margin="8 0 0 0" FontSize="18">ABOUT</TextBlock>
                     </StackPanel>
                 </Button>
             </StackPanel>

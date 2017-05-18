@@ -10,6 +10,6 @@ namespace Cybers.Infrustructure.interfaces
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public interface IIOService
     {
-        string OpenFileDialog();
+        void OpenFileDialog(EventHandler<ServiceResult<string>> callback);
     }
 }
