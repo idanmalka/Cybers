@@ -23,7 +23,10 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <DockPanel>
+    <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button Command="{Binding NextCommand}" Style="{StaticResource MaterialDesignRaisedButton}" Margin="16 8 16 8">Next</Button>
+        </StackPanel>
         <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2"
                                   Mode="PrimaryMid" DockPanel.Dock="Top" Height="64">
             <DockPanel>

@@ -20,7 +20,7 @@ namespace WelcomeModule
 
         protected override void InitializeModule()
         {
-            RegionManager.RegisterViewWithRegion(RegionNames.BottomToolbarReegion, typeof(WelcomeBottomToolbarView));
+            RegionManager.RegisterViewWithRegion(RegionNames.BottomToolbarRegion, typeof(WelcomeBottomToolbarView));
             RegionManager.RequestNavigate(RegionNames.MainContentRegion, typeof(WelcomeView).FullName);
         }
 

@@ -21,7 +21,7 @@ namespace ConfigurationModule
 
         protected override void InitializeModule()
         {
-            RegionManager.RegisterViewWithRegion(RegionNames.BottomToolbarReegion, typeof(ConfigurationBottomToolbarView));
+            RegionManager.RegisterViewWithRegion(RegionNames.BottomToolbarRegion, typeof(ConfigurationBottomToolbarView));
         }
 
         protected override void RegisterTypes()

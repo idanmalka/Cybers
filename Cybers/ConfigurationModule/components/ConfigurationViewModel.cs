@@ -18,7 +18,8 @@ namespace ConfigurationModule.components
     {
         public string MainContentTitle { get; set; } = "Configuration Main Content Title";
         public string BottomToolbarTitle { get; set; } = "Configuration Bottom Toolbar Title";
-        public DelegateCommand<string> TextFieldFocusedCommand { get; private set; }
+        public DelegateCommand<string> TextFieldFocusedCommand { get; }
+        public DelegateCommand NextCommand { get; }
 
         private bool _isNew;
         public bool IsNew
@@ -51,9 +52,16 @@ namespace ConfigurationModule.components
             _ioService = ioService;
             DistributionThresholds = new List<int> { 5, 10, 15, 20, 25 };
             GoBackCommand = new DelegateCommand(GoBack);
+            NextCommand = new DelegateCommand(Next);
             TextFieldFocusedCommand = new DelegateCommand<string>(OpenFileBrowser);
             ItemsClustering = CreateData();
             ItemsDistribution = CreateData();
+        }
+
+        private void Next()
+        {
+            var uri = new Uri(typeof(AlgorithmModule.components.AlgorithmLoadingView).FullName, UriKind.Relative);
+            _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
         }
 
         private void OpenFileBrowser(string value)

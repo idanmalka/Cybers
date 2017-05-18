@@ -30,7 +30,7 @@ namespace AlgorithmModule
             _container.RegisterType<IAlgorithmView,AlgorithmLoadingView>();
 
             _regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion, typeof(AlgorithmLoadingView));
-            _regionManager.RegisterViewWithRegion(RegionNames.BottomToolbarReegion, typeof(AlgorithmBottomToolbarView));
+            _regionManager.RegisterViewWithRegion(RegionNames.BottomToolbarRegion, typeof(AlgorithmBottomToolbarView));
         }
     }
 }

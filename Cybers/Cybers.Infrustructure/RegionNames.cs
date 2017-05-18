@@ -9,6 +9,6 @@ namespace Cybers.Infrustructure
     public class RegionNames
     {
         public static string MainContentRegion = "MainContentRegion";
-        public static string BottomToolbarReegion = "BottomToolbarRegion";
+        public static string BottomToolbarRegion = "BottomToolbarRegion";
     }
 }
