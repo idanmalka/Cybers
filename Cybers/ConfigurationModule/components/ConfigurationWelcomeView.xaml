@@ -161,9 +161,6 @@
                 </ComboBox>
             </StackPanel>
         </Grid>
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button Style="{StaticResource MaterialDesignRaisedButton}">Next</Button>
-        </StackPanel>
     </DockPanel>
 </UserControl>
 
