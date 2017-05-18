@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
 using ConfigurationModule.interfaces;
 using Cybers.Infrustructure;
 using Cybers.Infrustructure.interfaces;
+using Cybers.Infrustructure.models;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -42,13 +43,17 @@ namespace ConfigurationModule.components
 
         private readonly IRegionManager _regionManager;
         private readonly IIOService _ioService;
+        private int _distributionThreshold;
 
         public ConfigurationViewModel(IRegionManager regionManager, IIOService ioService)
         {
             _regionManager = regionManager;
             _ioService = ioService;
+            DistributionThresholds = new List<int> { 5, 10, 15, 20, 25 };
             GoBackCommand = new DelegateCommand(GoBack);
             TextFieldFocusedCommand = new DelegateCommand<string>(OpenFileBrowser);
+            ItemsClustering = CreateData();
+            ItemsDistribution = CreateData();
         }
 
         private void OpenFileBrowser(string value)
@@ -95,6 +100,84 @@ namespace ConfigurationModule.components
             {
                 IsNew = mode.Equals("NEW");
             }
+        }
+
+        public ObservableCollection<UserAttribute> ItemsClustering { get; }
+        public ObservableCollection<UserAttribute> ItemsDistribution { get; }
+        public IList<int> DistributionThresholds { get; }
+
+        private static ObservableCollection<UserAttribute> CreateData()
+        {
+            return new ObservableCollection<UserAttribute>
+            {
+                new UserAttribute
+                {
+                    Key = "Name",
+                    Value = "Test1"
+                },
+                new UserAttribute
+                {
+                    Key = "Country",
+                    Value = "Test2"
+                },
+                new UserAttribute
+                {
+                    Key = "Age",
+                    Value = "Test3"
+                },
+                new UserAttribute
+                {
+                    Key = "Name",
+                    Value = "Test1"
+                },
+                new UserAttribute
+                {
+                    Key = "Country",
+                    Value = "Test2"
+                },
+                new UserAttribute
+                {
+                    Key = "Age",
+                    Value = "Test3"
+                },
+                new UserAttribute
+                {
+                    Key = "Name",
+                    Value = "Test1"
+                },
+                new UserAttribute
+                {
+                    Key = "Country",
+                    Value = "Test2"
+                },
+                new UserAttribute
+                {
+                    Key = "Age",
+                    Value = "Test3"
+                },
+                new UserAttribute
+                {
+                    Key = "Name",
+                    Value = "Test1"
+                },
+                new UserAttribute
+                {
+                    Key = "Country",
+                    Value = "Test2"
+                },
+                new UserAttribute
+                {
+                    Key = "Age",
+                    Value = "Test3"
+                }
+
+            };
+        }
+
+        public int DistributionThreshold
+        {
+            get => _distributionThreshold;
+            set => SetProperty(ref _distributionThreshold, value);
         }
     }
 }

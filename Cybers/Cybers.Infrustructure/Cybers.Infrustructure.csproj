@@ -45,7 +45,7 @@
     <Compile Include="interfaces\IView.cs" />
     <Compile Include="interfaces\IViewModel.cs" />
     <Compile Include="models\Address.cs" />
-    <Compile Include="models\Attribute.cs" />
+    <Compile Include="models\UserAttribute.cs" />
     <Compile Include="models\Cluster.cs" />
     <Compile Include="models\Partition.cs" />
     <Compile Include="models\User.cs" />
