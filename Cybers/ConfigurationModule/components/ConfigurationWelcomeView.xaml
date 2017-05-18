@@ -54,7 +54,7 @@
             <materialDesign:PackIcon Kind="Folder" Foreground="{Binding ElementName=NameTextBox, Path=BorderBrush}" Margin="4 10 4 0" VerticalAlignment="Center"/>
             <TextBox Text="{Binding GraphFilePath}" Grid.Column="1" Grid.Row="0" materialDesign:HintAssist.Hint="Graph File Path" materialDesign:HintAssist.IsFloating="True">
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="GotFocus">
+                    <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                         <prism:InvokeCommandAction Command="{Binding TextFieldFocusedCommand}" CommandParameter="Graph"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
@@ -73,7 +73,7 @@
             </materialDesign:PackIcon>
             <TextBox Text="{Binding ConfigFilePath}" Grid.Column="1" Grid.Row="1" materialDesign:HintAssist.Hint="Algorithm Properties File Path" materialDesign:HintAssist.IsFloating="True">
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="GotFocus">
+                    <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                         <prism:InvokeCommandAction Command="{Binding TextFieldFocusedCommand}" CommandParameter="Config"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
