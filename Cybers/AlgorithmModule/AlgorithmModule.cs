@@ -12,25 +12,23 @@ using Prism.Regions;
 
 namespace AlgorithmModule
 {
-    public class AlgorithmModule: IModule
+    public class AlgorithmModule: ModuleBase
     {
-        private readonly IUnityContainer _container;
-        private readonly IRegionManager _regionManager;
-
-        public AlgorithmModule(IUnityContainer container, IRegionManager regionManager)
+        public AlgorithmModule(IUnityContainer container, IRegionManager regionManager) : base(container, regionManager)
         {
-            _container = container;
-            _regionManager = regionManager;
         }
 
-        public void Initialize()
+        protected override void InitializeModule()
         {
-            _container.RegisterType<IAlgorithmToolbarView>();
-            _container.RegisterType<IAlgorithmViewModel,AlgorithmViewModel>();
-            _container.RegisterType<IAlgorithmView,AlgorithmLoadingView>();
+            //RegionManager.RegisterViewWithRegion(RegionNames.BottomToolbarRegion, typeof(AlgorithmBottomToolbarView));
+        }
 
-            _regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion, typeof(AlgorithmLoadingView));
-            _regionManager.RegisterViewWithRegion(RegionNames.BottomToolbarRegion, typeof(AlgorithmBottomToolbarView));
+        protected override void RegisterTypes()
+        {
+            Container.RegisterType<IAlgorithmToolbarView>();
+            Container.RegisterType<IAlgorithmViewModel, AlgorithmViewModel>();
+            Container.RegisterType<IAlgorithmView, AlgorithmLoadingView>();
+            Container.RegisterTypeForNavigation<AlgorithmLoadingView>();
         }
     }
 }

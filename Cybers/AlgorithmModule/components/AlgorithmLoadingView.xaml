@@ -4,9 +4,155 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AlgorithmModule.components"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <TextBlock Text="{Binding MainContentTitle}"></TextBlock>  
-    </Grid>
-</UserControl>
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ProgressBar.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Card.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.GroupBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBlock.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="ProgressBar" BasedOn="{StaticResource MaterialDesignCircularProgressBar}">
+                <Setter Property="Width" Value="44" />
+                <Setter Property="Height" Value="44" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="IsIndeterminate" Value="True"/>
+            </Style>
+            <!--<Style TargetType="GroupBox">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="GroupBox">
+                            <materialDesign:Card VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                 Width="60" Height="60" Padding="4" RenderTransformOrigin=".5,.5"
+                                                 UniformCornerRadius="30">
+                                <ProgressBar />
+                                <materialDesign:Card.Style>
+                                    <Style TargetType="materialDesign:Card">
+                                        <Style.Resources>
+                                            <Storyboard x:Key="FadeIn" FillBehavior="HoldEnd">
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                                                    <EasingDoubleKeyFrame Value="0" />
+                                                    <EasingDoubleKeyFrame Value="1" KeyTime="0:0:0.8">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CircleEase EasingMode="EaseOut" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                                    <EasingDoubleKeyFrame Value="0" />
+                                                    <EasingDoubleKeyFrame Value="1" KeyTime="0:0:0.8">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CircleEase EasingMode="EaseOut" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                            <Storyboard x:Key="FadeOut">
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                                                    <EasingDoubleKeyFrame Value="1" />
+                                                    <EasingDoubleKeyFrame Value="0" KeyTime="0:0:0.8">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CircleEase EasingMode="EaseOut" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                                    <EasingDoubleKeyFrame Value="1" />
+                                                    <EasingDoubleKeyFrame Value="0" KeyTime="0:0:0.8">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CircleEase EasingMode="EaseOut" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </Style.Resources>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Visibility}" Value="Visible">
+                                                <DataTrigger.EnterActions>
+                                                    <RemoveStoryboard BeginStoryboardName="FadeOut" />
+                                                    <BeginStoryboard Storyboard="{StaticResource FadeIn}" Name="FadeIn" />
+                                                </DataTrigger.EnterActions>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Visibility}" Value="Hidden">
+                                                <DataTrigger.EnterActions>
+                                                    <RemoveStoryboard BeginStoryboardName="FadeIn" />
+                                                    <BeginStoryboard Storyboard="{StaticResource FadeOut}" Name="FadeOut" />
+                                                </DataTrigger.EnterActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </materialDesign:Card.Style>
+                                --><!--<materialDesign:Card.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0" ScaleY="0" />
+                                    </TransformGroup>
+                                </materialDesign:Card.RenderTransform>--><!--
+                            </materialDesign:Card>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>-->
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <DockPanel>
+        <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2" Mode="PrimaryMid" DockPanel.Dock="Top" Height="64">
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Algorithm</TextBlock>
+        </materialDesign:ColorZone>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <GroupBox Grid.Column="0" Grid.Row="1" Header="Initialization" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="16">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding}"/>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <ProgressBar />
+            </GroupBox>
+
+            <GroupBox Grid.Column="1" Grid.Row="1" Header="Clustering" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="16">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding}"/>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <ProgressBar />
+            </GroupBox>
+
+            <GroupBox Grid.Column="2" Grid.Row="1" Header="Distributing" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="16">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding}"/>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <ProgressBar />
+            </GroupBox>
+
+            <GroupBox Grid.Column="3" Grid.Row="1" Header="Finalizing" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="16">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding}"/>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <ProgressBar />
+            </GroupBox>
+            
+        </Grid>
+    </DockPanel>
+</UserControl>

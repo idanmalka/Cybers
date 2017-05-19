@@ -24,8 +24,8 @@ namespace AlgorithmModule.components
     {
         public IViewModel ViewModel
         {
-            get { return (IAlgorithmViewModel) DataContext; }
-            set { DataContext = value; }
+            get => DataContext as IAlgorithmViewModel;
+            set => DataContext = value;
         }
 
         public AlgorithmLoadingView(IAlgorithmViewModel viewModel)
