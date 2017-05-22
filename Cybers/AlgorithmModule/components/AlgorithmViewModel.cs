@@ -12,6 +12,18 @@ namespace AlgorithmModule.components
 {
     public class AlgorithmViewModel : BindableBase, IAlgorithmViewModel, INavigationAware
     {
+        private AlgorithmStep _algStep = AlgorithmStep.Init;
+
+        public enum AlgorithmStep
+        {
+            Init, Clustering, Distributing, Finish, End
+        }
+
+        public AlgorithmStep AlgStep
+        {
+            get => _algStep;
+            set => SetProperty(ref _algStep, value);
+        }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
