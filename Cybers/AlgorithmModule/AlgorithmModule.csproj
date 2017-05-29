@@ -110,7 +110,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\success.png" />
+    <Resource Include="Resources\Success.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
