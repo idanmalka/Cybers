@@ -57,6 +57,10 @@
       <Project>{79992E29-00A1-4791-B33B-3D9A5AAF2488}</Project>
       <Name>Cybers.Infrustructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CybersDetectionAlgorithm\CybersDetectionAlgorithm.csproj">
+      <Project>{dc0be86a-43d2-4f98-bf6a-5cbe6636c01c}</Project>
+      <Name>CybersDetectionAlgorithm</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MaterialDesignColors, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">

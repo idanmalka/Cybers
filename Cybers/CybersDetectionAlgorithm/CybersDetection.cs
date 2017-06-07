@@ -11,12 +11,31 @@ namespace CybersDetectionAlgorithm
 {
     public class CybersDetection
     {
+
+        #region Private Fields
+
         private readonly IEnumerable<User> _users;
         private readonly IEnumerable<string> _clusteringAttributes;
         private readonly IEnumerable<string> _distributionAttributes;
         private readonly double _threshold;
 
+        #endregion
+
+        #region Public Properties
+
         public CybersDetectionResults LatestRunResults { get; set; }
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler InitializationFinished;
+        public event EventHandler ClusteringFinished;
+        public event EventHandler DistributingFinished;
+
+        #endregion
+
+        #region Methods
 
         public CybersDetection(IEnumerable<User> users, IEnumerable<string> clusteringAttributes,
             IEnumerable<string> distributionAttributes, double threshold)
@@ -31,10 +50,16 @@ namespace CybersDetectionAlgorithm
         {
             var graph = CreateClusteringGraph();
 
+            InitializationFinished?.Invoke(this,null);
+
             var ilouvain = new ILouvain(graph);
             ilouvain.Execute();
 
+            ClusteringFinished?.Invoke(this,null);
+
             Dictionary<string, double> userSuspicionLevel = CreateUserSuspicionLevels(ilouvain.ILouvainExecutionResult);
+
+            DistributingFinished?.Invoke(this,null);
 
             return new CybersDetectionResults
             {
@@ -76,24 +101,24 @@ namespace CybersDetectionAlgorithm
                 userSuspicionLevel[user.Id] = 0;
 
             foreach (var cluster in partition.Clusters)
-                foreach (var distributionAttribute in _distributionAttributes)
-                {
-                    var suspectedUsersByAttribute = IdentifyByDistribution(cluster, distributionAttribute);
-                    foreach (var user in suspectedUsersByAttribute)
-                        userSuspicionLevel[user.Id]++;
-                }
+            foreach (var distributionAttribute in _distributionAttributes)
+            {
+                var suspectedUsersByAttribute = IdentifyByDistribution(cluster, distributionAttribute);
+                foreach (var user in suspectedUsersByAttribute)
+                    userSuspicionLevel[user.Id]++;
+            }
 
             //conversion to percentage
             foreach (var key in userSuspicionLevel.Keys)
                 userSuspicionLevel[key] = (userSuspicionLevel[key] / _distributionAttributes.Count()) * 100;
-            
+
 
             return userSuspicionLevel;
         }
 
         private IEnumerable<User> IdentifyByDistribution(Cluster cluster, string distributionAttribute)
         {
-            var rarityMeasurementPerValue = new Dictionary<long,double>();
+            var rarityMeasurementPerValue = new Dictionary<long, double>();
             var clusterUsers = _users.Where(user => cluster.Verticies.Contains(user));
 
             foreach (var user in clusterUsers)
@@ -108,13 +133,13 @@ namespace CybersDetectionAlgorithm
                 rarityMeasurementPerValue[key] = (rarityMeasurementPerValue[key] / valuesCount) * 100;
 
             return (from user in clusterUsers
-                    from key in rarityMeasurementPerValue.Keys
-                    where user.Attributes[distributionAttribute] == key && rarityMeasurementPerValue[key] <= _threshold
-                    select user).ToList();
+                from key in rarityMeasurementPerValue.Keys
+                where user.Attributes[distributionAttribute] == key && rarityMeasurementPerValue[key] <= _threshold
+                select user).ToList();
         }
 
-       
 
+        #endregion
 
     }
 }

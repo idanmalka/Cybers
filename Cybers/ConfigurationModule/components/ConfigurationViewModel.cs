@@ -2,12 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Controls;
 using ConfigurationModule.interfaces;
 using Cybers.Infrustructure;
 using Cybers.Infrustructure.interfaces;
 using Cybers.Infrustructure.models;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 
@@ -16,8 +18,6 @@ namespace ConfigurationModule.components
     
     public class ConfigurationViewModel: BindableBase, IConfigurationViewModel, INavigationAware
     {
-        public string MainContentTitle { get; set; } = "Configuration Main Content Title";
-        public string BottomToolbarTitle { get; set; } = "Configuration Bottom Toolbar Title";
         public DelegateCommand<string> TextFieldFocusedCommand { get; }
         public DelegateCommand NextCommand { get; }
 
@@ -45,11 +45,13 @@ namespace ConfigurationModule.components
         private readonly IRegionManager _regionManager;
         private readonly IIOService _ioService;
         private int _distributionThreshold;
+        private readonly IEventAggregator _eventAggregator;
 
-        public ConfigurationViewModel(IRegionManager regionManager, IIOService ioService)
+        public ConfigurationViewModel(IRegionManager regionManager, IIOService ioService, IEventAggregator eventAggregator)
         {
             _regionManager = regionManager;
             _ioService = ioService;
+            _eventAggregator = eventAggregator;
             DistributionThresholds = new List<int> { 5, 10, 15, 20, 25 };
             GoBackCommand = new DelegateCommand(GoBack);
             NextCommand = new DelegateCommand(Next);
@@ -62,6 +64,14 @@ namespace ConfigurationModule.components
         {
             var uri = new Uri(typeof(AlgorithmModule.components.AlgorithmLoadingView).FullName, UriKind.Relative);
             _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
+
+            _eventAggregator.GetEvent<AlgorithmAttributesEvent>().Publish(new AlgorithmAttributesEventArgs
+            {
+                ClustringAttributes = ItemsClustering.Where(a => a.IsSelected).ToList(),
+                DistributingAttributes = ItemsDistribution.Where(a => a.IsSelected).ToList(),
+                GraphFilePath = this.GraphFilePath,
+                Threshold = DistributionThreshold
+            });
         }
 
         private void OpenFileBrowser(string value)

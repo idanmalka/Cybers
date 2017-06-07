@@ -67,6 +67,15 @@
                                     <DataTrigger Binding="{Binding AlgStep}" Value="Clustering">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
+                                    <DataTrigger Binding="{Binding AlgStep}" Value="Distributing">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding AlgStep}" Value="Finish">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding AlgStep}" Value="End">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </ProgressBar.Style>
@@ -103,10 +112,19 @@
                                 <Setter Property="IsIndeterminate" Value="True"/>
                                 <Setter Property="Visibility" Value="Hidden"/>
                                 <Style.Triggers>
+                                    <DataTrigger Binding="{Binding AlgStep}" Value="Init">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding AlgStep}" Value="Clustering">
                                         <Setter Property="Visibility" Value="Visible" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding AlgStep}" Value="Distributing">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding AlgStep}" Value="Finish">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding AlgStep}" Value="End">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -145,10 +163,19 @@
                                 <Setter Property="IsIndeterminate" Value="True"/>
                                 <Setter Property="Visibility" Value="Hidden"/>
                                 <Style.Triggers>
+                                    <DataTrigger Binding="{Binding AlgStep}" Value="Init">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding AlgStep}" Value="Clustering">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding AlgStep}" Value="Distributing">
                                         <Setter Property="Visibility" Value="Visible" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding AlgStep}" Value="Finish">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding AlgStep}" Value="End">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -187,6 +214,15 @@
                                 <Setter Property="IsIndeterminate" Value="True"/>
                                 <Setter Property="Visibility" Value="Hidden"/>
                                 <Style.Triggers>
+                                    <DataTrigger Binding="{Binding AlgStep}" Value="Init">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding AlgStep}" Value="Clustering">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding AlgStep}" Value="Distributing">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding AlgStep}" Value="Finish">
                                         <Setter Property="Visibility" Value="Visible" />
                                     </DataTrigger>
@@ -214,4 +250,11 @@
 
         </Grid>
     </DockPanel>
-</UserControl>
+</UserControl>
+
+
+
+
+
+
+
