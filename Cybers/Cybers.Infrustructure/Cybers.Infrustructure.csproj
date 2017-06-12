@@ -47,6 +47,8 @@
     <Compile Include="models\Address.cs" />
     <Compile Include="models\AlgorithmAttributesEvent.cs" />
     <Compile Include="models\AlgorithmAttributesEventArgs.cs" />
+    <Compile Include="models\AlgorithmResultsEvent.cs" />
+    <Compile Include="models\AlgorithmResultsEventArgs.cs" />
     <Compile Include="models\UserAttribute.cs" />
     <Compile Include="models\Cluster.cs" />
     <Compile Include="models\Partition.cs" />

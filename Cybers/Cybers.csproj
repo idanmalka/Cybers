@@ -140,6 +140,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ResultsModule\ResultsModule.csproj">
+      <Project>{57fb3d97-2fb4-4058-adc6-e03668b17518}</Project>
+      <Name>ResultsModule</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WelcomeModule\WelcomeModule.csproj">
       <Project>{B8FE96CA-979D-44DA-8E02-8C4EEBCAC2B1}</Project>
       <Name>WelcomeModule</Name>

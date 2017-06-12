@@ -248,6 +248,19 @@
                 </Grid>
             </GroupBox>
 
+            <Button Command="{Binding NextCommand}" Grid.Column="3" Grid.Row="2" Content="Next">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Visibility" Value="Hidden"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AlgStep}" Value="End">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
         </Grid>
     </DockPanel>
 </UserControl>

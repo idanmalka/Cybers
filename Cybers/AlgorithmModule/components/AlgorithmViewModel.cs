@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AlgorithmModule.interfaces;
+using Cybers.Infrustructure;
 using Cybers.Infrustructure.interfaces;
 using Cybers.Infrustructure.models;
 using CybersDetectionAlgorithm;
@@ -27,13 +28,14 @@ namespace AlgorithmModule.components
         private readonly IEventAggregator _eventAggregator;
         private IEnumerable<User> _users;
         private CybersDetectionResults _results;
+        private IRegionManager _regionManager;
 
         #endregion
 
         #region Properties
 
         public DelegateCommand TestCommand { get; }
-
+        public DelegateCommand NextCommand { get; }
         public AlgorithmStep AlgStep
         {
             get => _algStep;
@@ -49,9 +51,11 @@ namespace AlgorithmModule.components
 
         #region Methods
 
-        public AlgorithmViewModel(IEventAggregator eventAggregator)
+        public AlgorithmViewModel(IEventAggregator eventAggregator, IRegionManager regionManager)
         {
             TestCommand = new DelegateCommand(Test);
+            NextCommand = new DelegateCommand(OnNextCommandPressed);
+            _regionManager = regionManager;
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<AlgorithmAttributesEvent>().Subscribe(obj =>
             {
@@ -121,6 +125,18 @@ namespace AlgorithmModule.components
                     AlgStep = AlgorithmStep.Init;
                     break;
             }
+        }
+
+        private void OnNextCommandPressed()
+        {
+            var uri = new Uri(typeof(ResultsModule.components.ResultsView).FullName, UriKind.Relative);
+            _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
+
+            //_eventAggregator.GetEvent<AlgorithmResultsEvent>().Publish(new AlgorithmResultsEventArgs
+            //{
+            //    UsersSuspicionLevel = _results.UsersSuspicionLevel,
+            //    Partition = _results.Partition
+            //});
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)

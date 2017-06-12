@@ -53,6 +53,10 @@
     <Compile Include="interfaces\IAlgorithmViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ResultsModule\ResultsModule.csproj">
+      <Project>{57FB3D97-2FB4-4058-ADC6-E03668B17518}</Project>
+      <Name>ResultsModule</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Cybers.Infrustructure\Cybers.Infrustructure.csproj">
       <Project>{79992E29-00A1-4791-B33B-3D9A5AAF2488}</Project>
       <Name>Cybers.Infrustructure</Name>
