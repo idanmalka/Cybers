@@ -17,13 +17,24 @@ namespace ResultsModule.components
 
         private IEventAggregator _eventAggregator;
         private IRegionManager _regionManager;
+        private Dictionary<string, double> _usersSuspicionLevel;
+        private Partition _partition;
 
         #endregion
 
         #region Properties
 
-        public Dictionary<string, double> UsersSuspicionLevel { get; set; }
-        public Partition Partition { get; set; }
+        public Dictionary<string, double> UsersSuspicionLevel
+        {
+            get => _usersSuspicionLevel;
+            set => SetProperty(ref _usersSuspicionLevel, value);
+        }
+
+        public Partition Partition
+        {
+            get => _partition;
+            set => SetProperty(ref _partition, value);
+        }
 
         #endregion
 
@@ -31,6 +42,7 @@ namespace ResultsModule.components
 
         public ResultsViewModel(IEventAggregator eventAggregator, IRegionManager regionManager)
         {
+
             _eventAggregator = eventAggregator;
             _regionManager = regionManager;
 

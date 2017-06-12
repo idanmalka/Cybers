@@ -26,7 +26,7 @@ namespace ResultsModule
         {
             Container.RegisterType<IResultsView, ResultsView>();
             Container.RegisterType<IResultsViewModel, ResultsViewModel>();
-            Container.RegisterTypeForNavigation<ResultsViewModel>();
+            Container.RegisterTypeForNavigation<ResultsView>();
         }
     }
 }

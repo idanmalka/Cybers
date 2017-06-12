@@ -251,7 +251,7 @@
             <Button Command="{Binding NextCommand}" Grid.Column="3" Grid.Row="2" Content="Next">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                        <Setter Property="Visibility" Value="Hidden"></Setter>
+                        <Setter Property="Visibility" Value="Visible"></Setter>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding AlgStep}" Value="End">
                                 <Setter Property="Visibility" Value="Visible"></Setter>

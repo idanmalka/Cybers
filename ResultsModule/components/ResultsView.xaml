@@ -4,9 +4,48 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ResultsModule.components"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:materialDesignColors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
-    </Grid>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <DockPanel LastChildFill="True">
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
+            <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2" Mode="PrimaryMid" Height="64">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Examine Results</TextBlock>
+            </materialDesign:ColorZone>
+            <UniformGrid Columns="3">
+                <Button Content="Report" Style="{StaticResource MaterialDesignRaisedLightButton}"></Button>
+                <Button Content="Distribution Chart" Style="{StaticResource MaterialDesignRaisedLightButton}"></Button>
+                <Button Content="Export" Style="{StaticResource MaterialDesignRaisedLightButton}"></Button>
+            </UniformGrid>
+        </StackPanel>
+
+        <DataGrid  Margin="0 8 0 0" ItemsSource="{Binding Items}" CanUserSortColumns="True" CanUserAddRows="False" AutoGenerateColumns="False"
+                   materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8">
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Binding="{Binding UsersSuspicionLevel.Keys}">
+                    <DataGridCheckBoxColumn.Header>
+                        <Border Background="Transparent" Padding="6 0 6 0" HorizontalAlignment="Center">
+                            <TextBlock Text="User ID"></TextBlock>
+                        </Border>
+                    </DataGridCheckBoxColumn.Header>
+                </DataGridCheckBoxColumn>
+                <DataGridCheckBoxColumn Binding="{Binding UsersSuspicionLevel.Values}">
+                    <DataGridCheckBoxColumn.Header>
+                        <Border Background="Transparent" Padding="6 0 6 0" HorizontalAlignment="Center">
+                            <TextBlock Text="Suspicion Percent"></TextBlock>
+                        </Border>
+                    </DataGridCheckBoxColumn.Header>
+                </DataGridCheckBoxColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </DockPanel>
 </UserControl>
