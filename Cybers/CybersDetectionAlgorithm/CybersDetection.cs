@@ -61,11 +61,13 @@ namespace CybersDetectionAlgorithm
 
             DistributingFinished?.Invoke(this,null);
 
-            return new CybersDetectionResults
+            LatestRunResults = new CybersDetectionResults
             {
                 Partition = ilouvain.ILouvainExecutionResult,
                 UsersSuspicionLevel = userSuspicionLevel
             };
+
+            return LatestRunResults;
         }
 
         private UndirectedGraph<User, Edge<User>> CreateClusteringGraph()

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cybers.Infrustructure;
+using Cybers.Infrustructure.models;
 using Microsoft.Win32;
 
 namespace ServicesModule
@@ -20,6 +21,15 @@ namespace ServicesModule
             {
                 callback.Invoke(this, new ServiceResult<string>(openFileDialog.FileName));
             }
+        }
+
+        public IEnumerable<User> ReadUsersFromPath(string path)
+        {
+            var users = new List<User>();
+
+
+
+            return users;
         }
     }
 }
