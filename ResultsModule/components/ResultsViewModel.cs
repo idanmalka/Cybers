@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using ResultsModule.interfaces;
+using ResultsModule.models;
 
 namespace ResultsModule.components
 {
@@ -17,14 +19,14 @@ namespace ResultsModule.components
 
         private IEventAggregator _eventAggregator;
         private IRegionManager _regionManager;
-        private Dictionary<string, double> _usersSuspicionLevel;
+        private ObservableCollection<UserSuspicion> _usersSuspicionLevel;
         private Partition _partition;
 
         #endregion
 
         #region Properties
 
-        public Dictionary<string, double> UsersSuspicionLevel
+        public ObservableCollection<UserSuspicion> UsersSuspicionLevel
         {
             get => _usersSuspicionLevel;
             set => SetProperty(ref _usersSuspicionLevel, value);
@@ -42,17 +44,130 @@ namespace ResultsModule.components
 
         public ResultsViewModel(IEventAggregator eventAggregator, IRegionManager regionManager)
         {
-
             _eventAggregator = eventAggregator;
             _regionManager = regionManager;
 
-            _eventAggregator.GetEvent<AlgorithmResultsEvent>().Subscribe(arg =>
-            {
-                UsersSuspicionLevel = arg.UsersSuspicionLevel;
-                Partition = arg.Partition;
-            });
+            UsersSuspicionLevel = CreateData();
+
+            //_eventAggregator.GetEvent<AlgorithmResultsEvent>().Subscribe(arg =>
+            //{
+            //    UsersSuspicionLevel = new ObservableCollection<UserSuspicion>(arg.UsersSuspicionLevel.Select(kvp => new UserSuspicion(kvp.Key, kvp.Value)).ToList());
+            //    Partition = arg.Partition;
+            //});
         }
 
+        private static ObservableCollection<UserSuspicion> CreateData()
+        {
+            return new ObservableCollection<UserSuspicion>
+            {
+                new UserSuspicion
+                {
+                    Key = "A",
+                    Level = 20
+                },
+                new UserSuspicion
+                {
+                    Key = "B",
+                    Level = 40
+                },
+                new UserSuspicion
+                {
+                    Key = "C",
+                    Level = 60
+                },
+                new UserSuspicion
+                {
+                    Key = "B",
+                    Level = 40
+                },
+                new UserSuspicion
+                {
+                    Key = "C",
+                    Level = 60
+                },
+                new UserSuspicion
+                {
+                    Key = "B",
+                    Level = 40
+                },
+                new UserSuspicion
+                {
+                    Key = "C",
+                    Level = 60
+                },
+                new UserSuspicion
+                {
+                    Key = "B",
+                    Level = 40
+                },
+                new UserSuspicion
+                {
+                    Key = "C",
+                    Level = 60
+                },
+                new UserSuspicion
+                {
+                    Key = "B",
+                    Level = 40
+                },
+                new UserSuspicion
+                {
+                    Key = "C",
+                    Level = 60
+                },
+                new UserSuspicion
+                {
+                    Key = "B",
+                    Level = 40
+                },
+                new UserSuspicion
+                {
+                    Key = "C",
+                    Level = 60
+                },
+                new UserSuspicion
+                {
+                    Key = "B",
+                    Level = 40
+                },
+                new UserSuspicion
+                {
+                    Key = "C",
+                    Level = 60
+                },
+                new UserSuspicion
+                {
+                    Key = "B",
+                    Level = 40
+                },
+                new UserSuspicion
+                {
+                    Key = "C",
+                    Level = 60
+                },
+                new UserSuspicion
+                {
+                    Key = "B",
+                    Level = 40
+                },
+                new UserSuspicion
+                {
+                    Key = "C",
+                    Level = 60
+                },
+                new UserSuspicion
+                {
+                    Key = "B",
+                    Level = 40
+                },
+                new UserSuspicion
+                {
+                    Key = "C",
+                    Level = 60
+                }
+
+            };
+        }
 
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

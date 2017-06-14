@@ -23,7 +23,7 @@ namespace AlgorithmModule.components
         }
 
         #region Private Fields
-
+        
         private AlgorithmStep _algStep = AlgorithmStep.Init;
         private readonly IEventAggregator _eventAggregator;
         private IEnumerable<User> _users;
