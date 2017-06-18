@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:ResultsModule.components"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:materialDesignColors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
+             xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+             xmlns:visualizationToolkit="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -106,6 +108,51 @@
             </TabItem>
             <TabItem Header="Distribution Chart">
 
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox Grid.Column="0" HorizontalAlignment="Right" Width="100" Margin="0, 0, 16, 16">
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                    </ComboBox>
+
+                    <ComboBox Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Width="100" Margin="16, 0, 0, 16">
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                    </ComboBox>
+
+                    <chartingToolkit:Chart Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Name="BarChart">
+                        <chartingToolkit:Chart.LegendStyle>
+                            <Style TargetType="visualizationToolkit:Legend">
+                                <Setter Property="Width" Value="0"/>
+                                <Setter Property="Height" Value="0"/>
+                            </Style>
+                        </chartingToolkit:Chart.LegendStyle>
+                        <chartingToolkit:ColumnSeries DependentValuePath="Value" 
+                                                      IndependentValuePath="Year" 
+                                                      ItemsSource="{Binding DistributionData}">
+                            <chartingToolkit:ColumnSeries.DataPointStyle>
+                                <Style TargetType="chartingToolkit:ColumnDataPoint">
+                                    <Setter Property="Background" Value="Purple"/>
+                                </Style>
+                            </chartingToolkit:ColumnSeries.DataPointStyle>
+                        </chartingToolkit:ColumnSeries>
+                    </chartingToolkit:Chart>
+                </Grid>
+                
             </TabItem>
             <TabItem Header="Export">
                 
