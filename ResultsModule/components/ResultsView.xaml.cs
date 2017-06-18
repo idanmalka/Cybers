@@ -27,6 +27,7 @@ namespace ResultsModule.components
             ViewModel = viewModel;
 
             InitializeComponent();
+            BarChart.DataContext = viewModel;
         }
 
         public IViewModel ViewModel

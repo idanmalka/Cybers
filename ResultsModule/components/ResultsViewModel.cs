@@ -21,10 +21,17 @@ namespace ResultsModule.components
         private IRegionManager _regionManager;
         private ObservableCollection<UserSuspicion> _usersSuspicionLevel;
         private Partition _partition;
+        private ObservableCollection<ChartData> _distributionData;
 
         #endregion
 
         #region Properties
+
+        public ObservableCollection<ChartData> DistributionData
+        {
+            get => _distributionData;
+            set => SetProperty(ref _distributionData, value);
+        }
 
         public ObservableCollection<UserSuspicion> UsersSuspicionLevel
         {
@@ -48,12 +55,26 @@ namespace ResultsModule.components
             _regionManager = regionManager;
 
             UsersSuspicionLevel = CreateData();
-
+            DistributionData = CreateChartData();
             //_eventAggregator.GetEvent<AlgorithmResultsEvent>().Subscribe(arg =>
             //{
             //    UsersSuspicionLevel = new ObservableCollection<UserSuspicion>(arg.UsersSuspicionLevel.Select(kvp => new UserSuspicion(kvp.Key, kvp.Value)).ToList());
             //    Partition = arg.Partition;
             //});
+        }
+
+        private static ObservableCollection<ChartData> CreateChartData()
+        {
+            return new ObservableCollection<ChartData>
+            {
+                new ChartData { Year = 2006, Value = 50.5 },
+                new ChartData { Year = 2008, Value = 20.0 },
+                new ChartData { Year = 2009, Value = 5.5  },
+                new ChartData { Year = 2010, Value = 12.5 },
+                new ChartData { Year = 2011, Value = 18.0 },
+                new ChartData { Year = 2012, Value = 22.0 },
+                new ChartData { Year = 2013, Value = 19.8 }
+            };
         }
 
         private static ObservableCollection<UserSuspicion> CreateData()
