@@ -71,7 +71,7 @@
                     </Style>
                 </materialDesign:PackIcon.Style>
             </materialDesign:PackIcon>
-            <TextBox Text="{Binding ConfigFilePath}" Grid.Column="1" Grid.Row="1" materialDesign:HintAssist.Hint="Algorithm Properties File Path" materialDesign:HintAssist.IsFloating="True">
+            <TextBox Text="{Binding ConfigFilePath,Mode=TwoWay}" Grid.Column="1" Grid.Row="1" materialDesign:HintAssist.Hint="Algorithm Properties File Path" materialDesign:HintAssist.IsFloating="True">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                         <prism:InvokeCommandAction Command="{Binding TextFieldFocusedCommand}" CommandParameter="Config"/>

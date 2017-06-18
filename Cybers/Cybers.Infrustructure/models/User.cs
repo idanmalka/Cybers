@@ -13,6 +13,7 @@ namespace Cybers.Infrustructure.models
 {
     public class User
     {
+        private List<int> _friendsIds;
         public Dictionary<string, long> Attributes { get; } = new Dictionary<string, long>();
         public long ClusterId { get; set; }
 
@@ -35,10 +36,16 @@ namespace Cybers.Infrustructure.models
 
 
         [JsonProperty("friends")]
-        public List<int> FriendsIds { get; set; }
+        public List<int> FriendsIds
+        {
+            get => _friendsIds;
+            set
+            {
+                _friendsIds = value;
+                NumberOfFriends = value.Count;
+            }
+        }
 
-        [JsonProperty("friends")]
-        [JsonConverter(typeof(FriendsListToNumberJSONConverter))]
         public int NumberOfFriends
         {
             set => AddAttribute(value);
@@ -57,12 +64,12 @@ namespace Cybers.Infrustructure.models
         }
 
         [JsonProperty("registered")]
-        public TimeSpan CreationDate
+        public DateTime CreationDate
         {
             set
             {
                 var now = new TimeSpan(DateTime.Today.Ticks).TotalMilliseconds;
-                AddAttribute((long)(now - value.TotalMilliseconds));
+                AddAttribute((long)(now - value.Millisecond));
             }
         }
 

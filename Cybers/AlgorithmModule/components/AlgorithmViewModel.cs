@@ -42,8 +42,8 @@ namespace AlgorithmModule.components
             set => SetProperty(ref _algStep, value);
         }
 
-        public List<UserAttribute> ClusteringAttributes { get; set; }
-        public List<UserAttribute> DistributingAttributes { get; set; }
+        public List<string> ClusteringAttributes { get; set; }
+        public List<string> DistributingAttributes { get; set; }
         public string GraphFilePath { get; set; }
         public int DistributingThreshold { get; set; }
 
@@ -51,7 +51,7 @@ namespace AlgorithmModule.components
 
         #region Methods
 
-        public AlgorithmViewModel(IEventAggregator eventAggregator, IRegionManager regionManager)
+        public AlgorithmViewModel(IEventAggregator eventAggregator, IRegionManager regionManager,IIOService ioService)
         {
             TestCommand = new DelegateCommand(Test);
             NextCommand = new DelegateCommand(OnNextCommandPressed);
@@ -63,23 +63,15 @@ namespace AlgorithmModule.components
                 DistributingAttributes = obj.DistributingAttributes;
                 GraphFilePath = obj.GraphFilePath;
                 DistributingThreshold = obj.Threshold;
-            });
 
-            //get users from file here
-            //
-            //
-            //
-
-
-            //Task.Run(() => StartAlgorithm());
+                _users = ioService.ReadUsersFromPath(obj.GraphFilePath);
+                //Task.Run(() => StartAlgorithm());
+            },true);
         }
 
         private void StartAlgorithm()
         {
-            var clusteringAttributes = ClusteringAttributes.Select(a => a.Value);
-            var distributingAttributes = DistributingAttributes.Select(a => a.Value);
-
-            var algorithm = new CybersDetection(_users, clusteringAttributes, distributingAttributes, DistributingThreshold);
+            var algorithm = new CybersDetection(_users, ClusteringAttributes, DistributingAttributes, DistributingThreshold);
 
             algorithm.InitializationFinished += OnAlgorithmInitializationFinished;
             algorithm.ClusteringFinished += OnClusteringFinished;
@@ -132,11 +124,11 @@ namespace AlgorithmModule.components
             var uri = new Uri(typeof(ResultsModule.components.ResultsView).FullName, UriKind.Relative);
             _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
 
-            //_eventAggregator.GetEvent<AlgorithmResultsEvent>().Publish(new AlgorithmResultsEventArgs
-            //{
-            //    UsersSuspicionLevel = _results.UsersSuspicionLevel,
-            //    Partition = _results.Partition
-            //});
+            _eventAggregator.GetEvent<AlgorithmResultsEvent>().Publish(new AlgorithmResultsEventArgs
+            {
+                //UsersSuspicionLevel = _results.UsersSuspicionLevel,
+                //Partition = _results.Partition
+            });
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)

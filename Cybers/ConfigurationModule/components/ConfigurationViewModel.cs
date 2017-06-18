@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using ConfigurationModule.interfaces;
 using Cybers.Infrustructure;
@@ -15,8 +16,8 @@ using Prism.Regions;
 
 namespace ConfigurationModule.components
 {
-    
-    public class ConfigurationViewModel: BindableBase, IConfigurationViewModel, INavigationAware
+
+    public class ConfigurationViewModel : BindableBase, IConfigurationViewModel, INavigationAware
     {
         public DelegateCommand<string> TextFieldFocusedCommand { get; }
         public DelegateCommand NextCommand { get; }
@@ -25,21 +26,33 @@ namespace ConfigurationModule.components
         public bool IsNew
         {
             get => _isNew;
-            set => SetProperty(ref _isNew, value);
+            set
+            {
+                SetProperty(ref _isNew, value);
+                NextCommand.RaiseCanExecuteChanged();
+            }
         }
 
         private string _graphFilePath;
         public string GraphFilePath
         {
             get => _graphFilePath;
-            set => SetProperty(ref _graphFilePath, value);
+            set
+            {
+                SetProperty(ref _graphFilePath, value);
+                NextCommand.RaiseCanExecuteChanged();
+            }
         }
 
         private string _configFilePath;
         public string ConfigFilePath
         {
             get => _configFilePath;
-            set => SetProperty(ref _configFilePath, value);
+            set
+            {
+                SetProperty(ref _configFilePath, value);
+                NextCommand.RaiseCanExecuteChanged();
+            }
         }
 
         private readonly IRegionManager _regionManager;
@@ -54,24 +67,32 @@ namespace ConfigurationModule.components
             _eventAggregator = eventAggregator;
             DistributionThresholds = new List<int> { 5, 10, 15, 20, 25 };
             GoBackCommand = new DelegateCommand(GoBack);
-            NextCommand = new DelegateCommand(Next);
+            NextCommand = new DelegateCommand(Next, NextCanExecute);
             TextFieldFocusedCommand = new DelegateCommand<string>(OpenFileBrowser);
             ItemsClustering = CreateData();
             ItemsDistribution = CreateData();
         }
 
+        private bool NextCanExecute()
+        {
+            //return (IsNew || ConfigFilePath != null) && GraphFilePath != null;
+            return true; //for now
+        }
+
         private void Next()
         {
+            var arg = new AlgorithmAttributesEventArgs
+            {
+                ClustringAttributes = ItemsClustering.Where(a => a.IsSelected).Select(a => a.Value).ToList(),
+                DistributingAttributes = ItemsDistribution.Where(a => a.IsSelected).Select(a => a.Value).ToList(),
+                GraphFilePath = this.GraphFilePath,
+                Threshold = DistributionThreshold
+            };
+
             var uri = new Uri(typeof(AlgorithmModule.components.AlgorithmLoadingView).FullName, UriKind.Relative);
             _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
 
-            _eventAggregator.GetEvent<AlgorithmAttributesEvent>().Publish(new AlgorithmAttributesEventArgs
-            {
-                ClustringAttributes = ItemsClustering.Where(a => a.IsSelected).ToList(),
-                DistributingAttributes = ItemsDistribution.Where(a => a.IsSelected).ToList(),
-                GraphFilePath = this.GraphFilePath,
-                Threshold = DistributionThreshold
-            });
+            _eventAggregator.GetEvent<AlgorithmAttributesEvent>().Publish(arg);
         }
 
         private void OpenFileBrowser(string value)
@@ -88,9 +109,36 @@ namespace ConfigurationModule.components
                             break;
                         case "Config":
                             ConfigFilePath = path;
+                            LoadExistingConfiguration(path);
                             break;
                     }
                 });
+            }
+        }
+
+        private void LoadExistingConfiguration(string path)
+        {
+            try
+            {
+                var attributes = _ioService.ReadConfigurationFromFile(path);
+
+                foreach (var cAttribute in attributes.ClustringAttributes)
+                {
+                    var userAttribute = ItemsClustering.FirstOrDefault(a => a.Key == cAttribute);
+                    if (userAttribute != null)
+                        userAttribute.IsSelected = true;
+                }
+
+                foreach (var dAttribute in attributes.DistributingAttributes)
+                {
+                    var userAttribute = ItemsDistribution.FirstOrDefault(a => a.Key == dAttribute);
+                    if (userAttribute != null)
+                        userAttribute.IsSelected = true;
+                }
+            }
+            catch
+            {
+                // ignored for now
             }
         }
 
@@ -120,8 +168,8 @@ namespace ConfigurationModule.components
             }
         }
 
-        public ObservableCollection<UserAttribute> ItemsClustering { get; }
-        public ObservableCollection<UserAttribute> ItemsDistribution { get; }
+        public ObservableCollection<UserAttribute> ItemsClustering { get; set; }
+        public ObservableCollection<UserAttribute> ItemsDistribution { get; set; }
         public IList<int> DistributionThresholds { get; }
 
         private static ObservableCollection<UserAttribute> CreateData()
@@ -130,13 +178,13 @@ namespace ConfigurationModule.components
             {
                 new UserAttribute
                 {
-                    Key = "Name",
-                    Value = "Test1"
+                    Key = "postsNumber",
+                    Value = "postsNumber"
                 },
                 new UserAttribute
                 {
-                    Key = "Country",
-                    Value = "Test2"
+                    Key = "registered",
+                    Value = "registered"
                 },
                 new UserAttribute
                 {

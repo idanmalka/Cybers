@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cybers.Infrustructure;
 using Cybers.Infrustructure.models;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 
 namespace ServicesModule
 {
@@ -25,11 +27,32 @@ namespace ServicesModule
 
         public IEnumerable<User> ReadUsersFromPath(string path)
         {
-            var users = new List<User>();
+            try
+            {
+                var usersJson = File.ReadAllText(path);
+                var users = JsonConvert.DeserializeObject<List<User>>(usersJson);
 
+                return users;
+            }
+            catch (Exception e)
+            {
+                throw new IncorrectUsersFileException();
+            }
+        }
 
+        public AlgorithmAttributesEventArgs ReadConfigurationFromFile(string path)
+        {
+            try
+            {
+                var attributesJson = File.ReadAllText(path);
+                var obj = JsonConvert.DeserializeObject<AlgorithmAttributesEventArgs>(attributesJson);
 
-            return users;
+                return obj;
+            }
+            catch (Exception e)
+            {
+                throw new IncorrectConfigurationFileException();
+            }
         }
     }
 }

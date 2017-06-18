@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:ResultsModule.components"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:materialDesignColors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
-             xmlns:chart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -106,10 +105,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Distribution Chart">
-                <chart:PieChart
-                    ChartTitle="Minimal Pie Chart"
-                    ChartSubTitle="Chart with fixed width and height">
-                </chart:PieChart>
+
             </TabItem>
             <TabItem Header="Export">
                 
