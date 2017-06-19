@@ -59,13 +59,20 @@ namespace AlgorithmModule.components
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<AlgorithmAttributesEvent>().Subscribe(obj =>
             {
-                ClusteringAttributes = obj.ClustringAttributes;
-                DistributingAttributes = obj.DistributingAttributes;
-                GraphFilePath = obj.GraphFilePath;
-                DistributingThreshold = obj.Threshold;
+                try
+                {
+                    ClusteringAttributes = obj.ClustringAttributes;
+                    DistributingAttributes = obj.DistributingAttributes;
+                    GraphFilePath = obj.GraphFilePath;
+                    DistributingThreshold = obj.Threshold;
 
-                _users = ioService.ReadUsersFromPath(obj.GraphFilePath);
-                //Task.Run(() => StartAlgorithm());
+                    //_users = ioService.ReadUsersFromPath(obj.GraphFilePath);
+                    //Task.Run(() => StartAlgorithm());
+                }
+                catch (IncorrectUsersFileException e)
+                {
+                    //Ignored for now
+                }
             },true);
         }
 

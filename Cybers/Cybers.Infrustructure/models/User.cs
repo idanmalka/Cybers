@@ -17,25 +17,25 @@ namespace Cybers.Infrustructure.models
         public Dictionary<string, long> Attributes { get; } = new Dictionary<string, long>();
         public long ClusterId { get; set; }
 
-        [JsonProperty("_id")]
+        [JsonProperty(nameof(Id))]
         public string Id { get; set; }
 
         public List<User> FriendsList { get; set; }
 
-        [JsonProperty("verified")]
+        [JsonProperty(nameof(Verified))]
         public bool Verified
         {
             set => AddAttribute(value ? 1 : 0);
         }
 
-        [JsonProperty("groups")]
+        [JsonProperty(nameof(Groups))]
         public int Groups
         {
             set => AddAttribute(value);
         }
 
 
-        [JsonProperty("friends")]
+        [JsonProperty(nameof(FriendsIds))]
         public List<int> FriendsIds
         {
             get => _friendsIds;
@@ -51,19 +51,19 @@ namespace Cybers.Infrustructure.models
             set => AddAttribute(value);
         }
 
-        [JsonProperty("address")]
+        [JsonProperty(nameof(Address))]
         public Address Address
         {
             set => AddAttribute(value.Code);
         }
 
-        [JsonProperty("postsNumber")]
+        [JsonProperty(nameof(PostsNumber))]
         public int PostsNumber
         {
             set => AddAttribute(value);
         }
 
-        [JsonProperty("registered")]
+        [JsonProperty(nameof(CreationDate))]
         public DateTime CreationDate
         {
             set
@@ -73,10 +73,14 @@ namespace Cybers.Infrustructure.models
             }
         }
 
-
         private void AddAttribute(long value = 0, [CallerMemberName] string propertyName = null)
         {
             if (propertyName != null) Attributes[propertyName] = value;
+        }
+
+        public User()
+        {
+            FriendsList = new List<User>();
         }
     }
 }

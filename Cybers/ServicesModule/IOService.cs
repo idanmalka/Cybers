@@ -31,7 +31,17 @@ namespace ServicesModule
             {
                 var usersJson = File.ReadAllText(path);
                 var users = JsonConvert.DeserializeObject<List<User>>(usersJson);
+                foreach (var user in users)
+                {
+                    var friendsDictionary = new Dictionary<string, User>();
 
+                    foreach (var userFriendsId in user.FriendsIds)
+                    {
+                        friendsDictionary[userFriendsId.ToString()] = users[userFriendsId];
+
+                        user.FriendsList = friendsDictionary.Values.ToList();
+                    }
+                }
                 return users;
             }
             catch (Exception e)

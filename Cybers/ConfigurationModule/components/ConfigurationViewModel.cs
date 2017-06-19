@@ -136,7 +136,7 @@ namespace ConfigurationModule.components
                         userAttribute.IsSelected = true;
                 }
             }
-            catch
+            catch(IncorrectConfigurationFileException e)
             {
                 // ignored for now
             }
@@ -178,13 +178,13 @@ namespace ConfigurationModule.components
             {
                 new UserAttribute
                 {
-                    Key = "postsNumber",
-                    Value = "postsNumber"
+                    Key = "PostsNumber",
+                    Value = "PostsNumber"
                 },
                 new UserAttribute
                 {
-                    Key = "registered",
-                    Value = "registered"
+                    Key = "CreationDate",
+                    Value = "CreationDate"
                 },
                 new UserAttribute
                 {
