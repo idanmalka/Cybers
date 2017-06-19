@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using ConfigurationModule.interfaces;
@@ -17,7 +20,7 @@ using Prism.Regions;
 namespace ConfigurationModule.components
 {
 
-    public class ConfigurationViewModel : BindableBase, IConfigurationViewModel, INavigationAware
+    public class ConfigurationViewModel : BindableBase, IConfigurationViewModel, INavigationAware, IRegionMemberLifetime
     {
         public DelegateCommand<string> TextFieldFocusedCommand { get; }
         public DelegateCommand NextCommand { get; }
@@ -69,8 +72,8 @@ namespace ConfigurationModule.components
             GoBackCommand = new DelegateCommand(GoBack);
             NextCommand = new DelegateCommand(Next, NextCanExecute);
             TextFieldFocusedCommand = new DelegateCommand<string>(OpenFileBrowser);
-            ItemsClustering = CreateData();
-            ItemsDistribution = CreateData();
+            ItemsClustering = new ObservableCollection<UserAttribute>();
+            ItemsDistribution = new ObservableCollection<UserAttribute>();
         }
 
         private bool NextCanExecute()
@@ -83,8 +86,8 @@ namespace ConfigurationModule.components
         {
             var arg = new AlgorithmAttributesEventArgs
             {
-                ClustringAttributes = ItemsClustering.Where(a => a.IsSelected).Select(a => a.Value).ToList(),
-                DistributingAttributes = ItemsDistribution.Where(a => a.IsSelected).Select(a => a.Value).ToList(),
+                ClustringAttributes = ItemsClustering.Where(a => a.IsSelected).Select(a => a.Key).ToList(),
+                DistributingAttributes = ItemsDistribution.Where(a => a.IsSelected).Select(a => a.Key).ToList(),
                 GraphFilePath = this.GraphFilePath,
                 Threshold = DistributionThreshold
             };
@@ -106,6 +109,18 @@ namespace ConfigurationModule.components
                     {
                         case "Graph":
                             GraphFilePath = path;
+                            LoadAttributes(path).Subscribe(attribute =>
+                            {
+                                ItemsClustering.Add(new UserAttribute
+                                {
+                                    Key = attribute
+                                });
+                                ItemsDistribution.Add(new UserAttribute
+                                {
+                                    Key = attribute
+                                });
+                            }, exception => //TODO : show AlertDialog 
+                                Console.WriteLine(exception.Message));
                             break;
                         case "Config":
                             ConfigFilePath = path;
@@ -114,6 +129,27 @@ namespace ConfigurationModule.components
                     }
                 });
             }
+        }
+
+        private IObservable<string> LoadAttributes(string path)
+        {
+            return Observable.Create<string>(observer =>
+            {
+                try
+                {
+                    var user = _ioService.ReadUsersFromPath(path).First();
+                    foreach (var userAttribute in user.Attributes)
+                    {
+                        observer.OnNext(userAttribute.Key);
+                    }
+                    observer.OnCompleted();
+                }
+                catch (Exception e)
+                {
+                    observer.OnError(e);
+                }
+                return Disposable.Empty;
+            }).SubscribeOn(Scheduler.Default).ObserveOnDispatcher();
         }
 
         private void LoadExistingConfiguration(string path)
@@ -146,6 +182,7 @@ namespace ConfigurationModule.components
 
         private void GoBack()
         {
+            KeepAlive = false;
             _regionManager.Regions[RegionNames.MainContentRegion].NavigationService.Journal.GoBack();
         }
 
@@ -172,78 +209,12 @@ namespace ConfigurationModule.components
         public ObservableCollection<UserAttribute> ItemsDistribution { get; set; }
         public IList<int> DistributionThresholds { get; }
 
-        private static ObservableCollection<UserAttribute> CreateData()
-        {
-            return new ObservableCollection<UserAttribute>
-            {
-                new UserAttribute
-                {
-                    Key = "PostsNumber",
-                    Value = "PostsNumber"
-                },
-                new UserAttribute
-                {
-                    Key = "CreationDate",
-                    Value = "CreationDate"
-                },
-                new UserAttribute
-                {
-                    Key = "Age",
-                    Value = "Test3"
-                },
-                new UserAttribute
-                {
-                    Key = "Name",
-                    Value = "Test1"
-                },
-                new UserAttribute
-                {
-                    Key = "Country",
-                    Value = "Test2"
-                },
-                new UserAttribute
-                {
-                    Key = "Age",
-                    Value = "Test3"
-                },
-                new UserAttribute
-                {
-                    Key = "Name",
-                    Value = "Test1"
-                },
-                new UserAttribute
-                {
-                    Key = "Country",
-                    Value = "Test2"
-                },
-                new UserAttribute
-                {
-                    Key = "Age",
-                    Value = "Test3"
-                },
-                new UserAttribute
-                {
-                    Key = "Name",
-                    Value = "Test1"
-                },
-                new UserAttribute
-                {
-                    Key = "Country",
-                    Value = "Test2"
-                },
-                new UserAttribute
-                {
-                    Key = "Age",
-                    Value = "Test3"
-                }
-
-            };
-        }
-
         public int DistributionThreshold
         {
             get => _distributionThreshold;
             set => SetProperty(ref _distributionThreshold, value);
         }
+
+        public bool KeepAlive { get; private set; } = true;
     }
 }

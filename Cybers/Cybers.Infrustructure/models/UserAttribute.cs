@@ -11,7 +11,7 @@ namespace Cybers.Infrustructure.models
     {
         private string _value;
         private string _key;
-        private int _numberValue;
+        private double _numberValue;
         private bool _isSelected;
 
         public string Value
@@ -26,7 +26,7 @@ namespace Cybers.Infrustructure.models
             set => SetProperty(ref _key, value);
         }
 
-        public int NumberValue
+        public double NumberValue
         {
             get => _numberValue;
             set => SetProperty(ref _numberValue, value);

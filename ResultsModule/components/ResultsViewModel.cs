@@ -62,11 +62,11 @@ namespace ResultsModule.components
 
             UsersSuspicionLevel = CreateData();
             DistributionData = CreateChartData();
-            //_eventAggregator.GetEvent<AlgorithmResultsEvent>().Subscribe(arg =>
-            //{
-            //    UsersSuspicionLevel = new ObservableCollection<UserSuspicion>(arg.UsersSuspicionLevel.Select(kvp => new UserSuspicion(kvp.Key, kvp.Value)).ToList());
-            //    Partition = arg.Partition;
-            //});
+            _eventAggregator.GetEvent<AlgorithmResultsEvent>().Subscribe(arg =>
+            {
+                UsersSuspicionLevel = new ObservableCollection<UserSuspicion>(arg.UsersSuspicionLevel.Select(kvp => new UserSuspicion(kvp.Key, kvp.Value)).ToList());
+                Partition = arg.Partition;
+            });
         }
 
         private void GoToWelcomeScreen()

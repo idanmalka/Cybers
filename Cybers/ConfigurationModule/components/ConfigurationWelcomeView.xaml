@@ -121,7 +121,6 @@
                                             <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsSelected}">
                                                 <StackPanel Margin="8 0 0 0">
                                                     <TextBlock FontWeight="Bold" Text="{Binding Key}" />
-                                                    <TextBlock Text="{Binding Value}" />
                                                 </StackPanel>
                                             </CheckBox>
                                         </Border>
@@ -155,7 +154,6 @@
                                             <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsSelected}">
                                                 <StackPanel Margin="8 0 0 0">
                                                     <TextBlock FontWeight="Bold" Text="{Binding Key}" />
-                                                    <TextBlock Text="{Binding Value}" />
                                                 </StackPanel>
                                             </CheckBox>
                                         </Border>
