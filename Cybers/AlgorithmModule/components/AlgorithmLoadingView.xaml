@@ -17,19 +17,34 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBlock.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
             </ResourceDictionary.MergedDictionaries>
-<!--            <Style TargetType="ProgressBar" BasedOn="{StaticResource MaterialDesignCircularProgressBar}">-->
-<!--                <Setter Property="Width" Value="44" />-->
-<!--                <Setter Property="Height" Value="44" />-->
-<!--                <Setter Property="VerticalAlignment" Value="Center" />-->
-<!--                <Setter Property="HorizontalAlignment" Value="Center" />-->
-<!--                <Setter Property="IsIndeterminate" Value="True"/>-->
-<!--            </Style>-->
         </ResourceDictionary>
     </UserControl.Resources>
 
     <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button HorizontalAlignment="Center" Content="View Results" Command="{Binding NextCommand}" Margin="16 8 16 8">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Visibility" Value="Visible"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AlgStep}" Value="End">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
         <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2" Mode="PrimaryMid" DockPanel.Dock="Top" Height="64">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Algorithm</TextBlock>
+            <DockPanel>
+                <Button VerticalAlignment="Center" Command="{Binding GoBackCommand}" Style="{DynamicResource MaterialDesignFlatButton}" DockPanel.Dock="Left">
+                    <TextBlock Foreground="White" FontSize="16">BACK</TextBlock>
+                </Button>
+                <Button Visibility="Hidden" IsEnabled="False" Style="{DynamicResource MaterialDesignFlatButton}" DockPanel.Dock="Right">
+                    <TextBlock Foreground="White" FontSize="16">BACK</TextBlock>
+                </Button>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Algorithm</TextBlock>
+            </DockPanel>
         </materialDesign:ColorZone>
         <Grid>
             <Grid.RowDefinitions>
@@ -43,7 +58,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
+            <TextBlock Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="32" Style="{StaticResource MaterialDesignDisplay1TextBlock}" FontSize="22" TextWrapping="Wrap" TextAlignment="Center">Please wait while the algotithm is running</TextBlock>
             <Button Command="{Binding TestCommand}" Grid.Column="0" Grid.Row="0">Test</Button>
             <GroupBox Grid.Column="0" Grid.Row="1" Header="Initialization" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="16">
                 <GroupBox.HeaderTemplate>
@@ -248,7 +263,7 @@
                 </Grid>
             </GroupBox>
 
-            <Button Command="{Binding NextCommand}" Grid.Column="3" Grid.Row="2" Content="Next">
+            <!--<Button Command="{Binding NextCommand}" Grid.Column="3" Grid.Row="2" Content="Next">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Visibility" Value="Visible"></Setter>
@@ -259,7 +274,7 @@
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
-            </Button>
+            </Button>-->
 
         </Grid>
     </DockPanel>
