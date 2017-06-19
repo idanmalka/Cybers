@@ -23,7 +23,7 @@ namespace Cybers.Infrustructure.models
                 else clusters.Add(vertex.ClusterId, new List<User> { vertex });
 
             //create new clusters according to the dictionary 
-            Clusters = clusters.Select(c => new Cluster {Id = c.Key, Verticies = c.Value}).ToList(); 
+            Clusters = clusters.Select(c => new Cluster {Id = c.Key, Verticies = c.Value}).ToList();
 
             //connect neighbor clusters
             foreach (var vertex in graph.Vertices)

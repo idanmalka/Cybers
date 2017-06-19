@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="converters\FriendsListToNumberJSONConverter.cs" />
+    <Compile Include="converters\NullToVisibilityConverter.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="interfaces\IIOService.cs" />
     <Compile Include="interfaces\IView.cs" />
@@ -89,6 +90,8 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="Prism, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.6.3.0\lib\net45\Prism.dll</HintPath>
     </Reference>
@@ -102,6 +105,7 @@
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Wpf.6.3.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
     <Reference Include="YC.QuickGraph, Version=3.7.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\YC.QuickGraph.3.7.3\lib\net45\YC.QuickGraph.dll</HintPath>
     </Reference>

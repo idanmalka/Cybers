@@ -66,10 +66,10 @@ namespace AlgorithmModule.components
                     GraphFilePath = obj.GraphFilePath;
                     DistributingThreshold = obj.Threshold;
 
-                    //_users = ioService.ReadUsersFromPath(obj.GraphFilePath);
-                    //Task.Run(() => StartAlgorithm());
+                    _users = ioService.ReadUsersFromPath(obj.GraphFilePath);
+                    Task.Run(() => StartAlgorithm());
                 }
-                catch (IncorrectUsersFileException e)
+                catch (IncorrectUsersFileException)
                 {
                     //Ignored for now
                 }

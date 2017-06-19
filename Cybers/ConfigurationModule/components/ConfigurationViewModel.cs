@@ -136,7 +136,7 @@ namespace ConfigurationModule.components
                         userAttribute.IsSelected = true;
                 }
             }
-            catch(IncorrectConfigurationFileException e)
+            catch(IncorrectConfigurationFileException)
             {
                 // ignored for now
             }

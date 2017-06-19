@@ -36,15 +36,13 @@ namespace ServicesModule
                     var friendsDictionary = new Dictionary<string, User>();
 
                     foreach (var userFriendsId in user.FriendsIds)
-                    {
                         friendsDictionary[userFriendsId.ToString()] = users[userFriendsId];
 
-                        user.FriendsList = friendsDictionary.Values.ToList();
-                    }
+                    user.FriendsList = friendsDictionary.Values.ToList();
                 }
                 return users;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new IncorrectUsersFileException();
             }
@@ -59,7 +57,7 @@ namespace ServicesModule
 
                 return obj;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new IncorrectConfigurationFileException();
             }

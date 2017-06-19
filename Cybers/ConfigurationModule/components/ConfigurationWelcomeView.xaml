@@ -8,7 +8,8 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:models="clr-namespace:Cybers.Infrustructure.models;assembly=Cybers.Infrustructure"
-             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300">
+             xmlns:converters="clr-namespace:Cybers.Infrustructure.converters;assembly=Cybers.Infrustructure"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="600">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -21,6 +22,8 @@
             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
                 <Setter Property="Margin" Value="0 8 0 8" />
             </Style>
+            <converters:NullToVisibilityConverter x:Key="NullToInvisibleConverter" IsNullVisible="False"/>
+            <converters:NullToVisibilityConverter x:Key="NullToVisibleConverter" IsNullVisible="True"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
@@ -101,7 +104,16 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Style="{StaticResource MaterialDesignTitleTextBlock}" Margin="0 8 0 0" HorizontalAlignment="Center" Foreground="DarkBlue">Clustering</TextBlock>
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <TextBlock Grid.Row="1"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Text="Please Load Graph File"
+                                   Visibility="{Binding GraphFilePath, Converter={StaticResource NullToVisibleConverter}}"
+                                   ></TextBlock>
+                        <ScrollViewer Grid.Row="1" 
+                                      VerticalScrollBarVisibility="Auto" 
+                                      HorizontalScrollBarVisibility="Auto"
+                                      Visibility="{Binding GraphFilePath, Converter={StaticResource NullToInvisibleConverter}}">
                             <ItemsControl ItemsSource="{Binding ItemsClustering}" Grid.IsSharedSizeScope="True" Margin="16">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate DataType="{x:Type models:UserAttribute}">
@@ -126,7 +138,16 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Style="{StaticResource MaterialDesignTitleTextBlock}" Margin="0 8 0 0" HorizontalAlignment="Center" Foreground="DarkBlue">Distribution</TextBlock>
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <TextBlock Grid.Row="1"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Text="Please Load Graph File"
+                                   Visibility="{Binding GraphFilePath, Converter={StaticResource NullToVisibleConverter}}"
+                                   ></TextBlock>
+                        <ScrollViewer Grid.Row="1"
+                                      VerticalScrollBarVisibility="Auto"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      Visibility="{Binding GraphFilePath, Converter={StaticResource NullToInvisibleConverter}}">
                             <ItemsControl ItemsSource="{Binding ItemsDistribution}" Grid.IsSharedSizeScope="True" Margin="16">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate DataType="{x:Type models:UserAttribute}">

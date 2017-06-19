@@ -28,12 +28,13 @@ namespace ILouvainLibrary
             do
             {
                 qqPlusAnterior = CalculateQQplus();
-                var dirty = false;
+                bool dirty;
                 do
                 {
+                    dirty = false;
                     foreach (var vertex in verticies)
                     {
-                        vertex.ClusterId = FindNeighborClusterMaximizingQQplusGain(vertex, qqPlusAnterior, ref dirty);
+                        vertex.ClusterId = FindNeighborClusterMaximizingQQplusGain(vertex,ref qqPlusAnterior, ref dirty);
                     }
                 } while (dirty);
             } while (CalculateQQplus() > qqPlusAnterior);
@@ -135,7 +136,7 @@ namespace ILouvainLibrary
 
         private double CalculateQQplus() => CalculateQinertia() + CalculateQng();
 
-        private long FindNeighborClusterMaximizingQQplusGain(User vertex, double qqPlusAnertior, ref bool dirty)
+        private long FindNeighborClusterMaximizingQQplusGain(User vertex,ref double qqPlusAnertior, ref bool dirty)
         {
             var anteriorClusterId = vertex.ClusterId;
             var newClusterId = vertex.ClusterId;
@@ -152,7 +153,7 @@ namespace ILouvainLibrary
                 var qqPlusNew = CalculateQQplus();
                 if (maxQQPlus < qqPlusNew)
                 {
-                    maxQQPlus = qqPlusNew;
+                    qqPlusAnertior = maxQQPlus = qqPlusNew;
                     newClusterId = neighbour.ClusterId;
                     dirty = true;
                 }
