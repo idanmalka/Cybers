@@ -34,6 +34,7 @@ namespace AlgorithmModule.components
 
         #region Properties
 
+        public DelegateCommand GoBackCommand { get; }
         public DelegateCommand TestCommand { get; }
         public DelegateCommand NextCommand { get; }
         public AlgorithmStep AlgStep
@@ -53,6 +54,7 @@ namespace AlgorithmModule.components
 
         public AlgorithmViewModel(IEventAggregator eventAggregator, IRegionManager regionManager,IIOService ioService)
         {
+            GoBackCommand = new DelegateCommand(GoBack);
             TestCommand = new DelegateCommand(Test);
             NextCommand = new DelegateCommand(OnNextCommandPressed);
             _regionManager = regionManager;
@@ -87,6 +89,11 @@ namespace AlgorithmModule.components
             algorithm.Execute();
 
             _results = algorithm.LatestRunResults;
+        }
+
+        private void GoBack()
+        {
+            _regionManager.Regions[RegionNames.MainContentRegion].NavigationService.Journal.GoBack();
         }
 
         private void OnDistributingFinished(object sender, EventArgs e)

@@ -4,7 +4,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cybers.Infrustructure;
 using Cybers.Infrustructure.models;
+using Microsoft.Practices.ServiceLocation;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -26,6 +29,8 @@ namespace ResultsModule.components
         #endregion
 
         #region Properties
+
+        public DelegateCommand GoToWelcomeScreenCommand { get; }
 
         public ObservableCollection<ChartData> DistributionData
         {
@@ -51,6 +56,7 @@ namespace ResultsModule.components
 
         public ResultsViewModel(IEventAggregator eventAggregator, IRegionManager regionManager)
         {
+            GoToWelcomeScreenCommand = new DelegateCommand(GoToWelcomeScreen);
             _eventAggregator = eventAggregator;
             _regionManager = regionManager;
 
@@ -61,6 +67,12 @@ namespace ResultsModule.components
             //    UsersSuspicionLevel = new ObservableCollection<UserSuspicion>(arg.UsersSuspicionLevel.Select(kvp => new UserSuspicion(kvp.Key, kvp.Value)).ToList());
             //    Partition = arg.Partition;
             //});
+        }
+
+        private void GoToWelcomeScreen()
+        {
+            var uri = new Uri("WelcomeView", UriKind.Relative);
+            _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
         }
 
         private static ObservableCollection<ChartData> CreateChartData()

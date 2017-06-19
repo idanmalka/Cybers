@@ -30,14 +30,17 @@
 
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
             <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2" Mode="PrimaryMid" Height="64">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Examine Results</TextBlock>
+                <DockPanel>
+                    <Button VerticalAlignment="Center" Command="{Binding GoToWelcomeScreenCommand}" Style="{DynamicResource MaterialDesignFlatButton}" DockPanel.Dock="Left">
+                        <TextBlock Foreground="White" FontSize="16">MAIN MENU</TextBlock>
+                    </Button>
+                    <Button Visibility="Hidden" IsEnabled="False" Style="{DynamicResource MaterialDesignFlatButton}" DockPanel.Dock="Right">
+                        <TextBlock Foreground="White" FontSize="16">MAIN MENU</TextBlock>
+                    </Button>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Examine Results</TextBlock>
+                </DockPanel>
             </materialDesign:ColorZone>
-            
-            <!--<UniformGrid Columns="3">
-                <Button Content="Report" Style="{StaticResource MaterialDesignRaisedLightButton}"/>
-                <Button Content="Distribution Chart" Style="{StaticResource MaterialDesignRaisedLightButton}"/>
-                <Button Content="Export" Style="{StaticResource MaterialDesignRaisedLightButton}"/>
-            </UniformGrid>-->
+   
         </StackPanel>
 
         <local:CustomTabControl Background="Transparent">
