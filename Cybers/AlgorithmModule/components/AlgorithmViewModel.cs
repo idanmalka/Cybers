@@ -140,8 +140,8 @@ namespace AlgorithmModule.components
 
             _eventAggregator.GetEvent<AlgorithmResultsEvent>().Publish(new AlgorithmResultsEventArgs
             {
-                //UsersSuspicionLevel = _results.UsersSuspicionLevel,
-                //Partition = _results.Partition
+                UsersSuspicionLevel = _results.UsersSuspicionLevel,
+                Partition = _results.Partition
             });
         }
 
