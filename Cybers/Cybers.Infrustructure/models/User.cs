@@ -81,8 +81,9 @@ namespace Cybers.Infrustructure.models
         public User()
         {
             FriendsList = new List<User>();
+            //
         }
 
-        
+         
     }
 }
