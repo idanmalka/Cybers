@@ -63,7 +63,7 @@ namespace ServicesModule
             }
         }
 
-        public void SaveConfigurationToJson(List<string> clusterList, List<string> distributionList)
+        public bool SaveConfigurationToJson(List<string> clusterList, List<string> distributionList)
         {
             var configJson = JsonConvert.SerializeObject(new AlgorithmAttributesEventArgs
             {
@@ -71,7 +71,7 @@ namespace ServicesModule
                 DistributingAttributes = distributionList
             });
 
-            SaveFileDialog dlg = new SaveFileDialog
+            var dlg = new SaveFileDialog
             {
                 FileName = "Cybers Configuration",
                 DefaultExt = ".json",
@@ -86,8 +86,9 @@ namespace ServicesModule
                 // Save document
                 string filename = dlg.FileName;
                 File.WriteAllText(filename, configJson);
+                return true;
             }
-
+            return false;
         }
     }
 }

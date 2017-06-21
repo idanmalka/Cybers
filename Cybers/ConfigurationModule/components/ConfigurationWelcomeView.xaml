@@ -28,10 +28,17 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button Command="{Binding NextCommand}" Style="{StaticResource MaterialDesignRaisedButton}" Margin="16 8 16 8">Next</Button>
-            <Button Command="{Binding SaveConfigurationCommand}" Style="{StaticResource MaterialDesignRaisedButton}">Save Configuration</Button>
-        </StackPanel>
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
+                <Button Command="{Binding NextCommand}" Style="{StaticResource MaterialDesignRaisedButton}" Margin="16 8 16 8">Next</Button>
+                <Button Command="{Binding SaveConfigurationCommand}" Style="{StaticResource MaterialDesignRaisedButton}" Margin="0 8 0 8">Save Configuration</Button>
+            </StackPanel>
+            <materialDesign:Snackbar Grid.Row="1" MessageQueue="{Binding MessageQueue}"/>
+        </Grid>
         <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2"
                                   Mode="PrimaryMid" DockPanel.Dock="Top" Height="64">
             <DockPanel>

@@ -10,7 +10,7 @@
         Height="600" Width="700"
         Title="Shell" d:DesignWidth="300" d:DesignHeight="300" BorderBrush="DarkBlue" BorderThickness="2">
     <DockPanel LastChildFill="True">
-        <ContentControl DockPanel.Dock="Bottom" prism:RegionManager.RegionName="{x:Static inf:RegionNames.BottomToolbarRegion}" Margin="5" />
+        <ContentControl DockPanel.Dock="Bottom" prism:RegionManager.RegionName="{x:Static inf:RegionNames.BottomToolbarRegion}" />
         <ContentControl prism:RegionManager.RegionName="{x:Static inf:RegionNames.MainContentRegion}"/>
     </DockPanel>
 </Window>

@@ -6,12 +6,14 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using ConfigurationModule.interfaces;
 using Cybers.Infrustructure;
 using Cybers.Infrustructure.interfaces;
 using Cybers.Infrustructure.models;
+using MaterialDesignThemes.Wpf;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -20,11 +22,18 @@ using Prism.Regions;
 namespace ConfigurationModule.components
 {
 
-    public class ConfigurationViewModel : BindableBase, IConfigurationViewModel, INavigationAware, IRegionMemberLifetime
+    public class ConfigurationViewModel : BindableBase, IConfigurationViewModel, INavigationAware
     {
         public DelegateCommand<string> TextFieldFocusedCommand { get; }
         public DelegateCommand NextCommand { get; }
         public DelegateCommand SaveConfigurationCommand { get; set; }
+
+        private SnackbarMessageQueue _messageQueue;
+        public SnackbarMessageQueue MessageQueue
+        {
+            get => _messageQueue;
+            set => SetProperty(ref _messageQueue, value);
+        }
 
         private bool _isNew;
         public bool IsNew
@@ -87,6 +96,8 @@ namespace ConfigurationModule.components
             ItemsDistribution = new ObservableCollection<UserAttribute>();
 
             ConfigToolTip = "Please load graph file first";
+            
+            MessageQueue = new SnackbarMessageQueue();
 
             _eventAggregator.GetEvent<KeepAliveEvent>().Subscribe(() =>
             {
@@ -101,9 +112,18 @@ namespace ConfigurationModule.components
 
         private void OnSaveConfiguration()
         {
-            Task.Run(() =>
-                _ioService.SaveConfigurationToJson(ItemsClustering.Where(a => a.IsSelected).Select(a => a.Key).ToList(),
-                    ItemsDistribution.Where(a => a.IsSelected).Select(a => a.Key).ToList()));
+            var task = Task<bool>.Factory.StartNew(() =>
+            {
+                return _ioService.SaveConfigurationToJson(
+                    ItemsClustering.Where(a => a.IsSelected).Select(a => a.Key).ToList(),
+                    ItemsDistribution.Where(a => a.IsSelected).Select(a => a.Key).ToList());
+            });
+
+            var result = task.Result;
+            if (result)
+            {
+                MessageQueue.Enqueue("Configuration saved successfully");
+            }
         }
 
         private bool NextCanExecute()
@@ -226,7 +246,7 @@ namespace ConfigurationModule.components
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
-            return true;
+            return KeepAlive;
         }
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
