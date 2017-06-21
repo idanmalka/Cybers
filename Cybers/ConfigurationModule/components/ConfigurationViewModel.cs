@@ -101,18 +101,9 @@ namespace ConfigurationModule.components
 
         private void OnSaveConfiguration()
         {
-        }
-
-        private bool SaveConfigurationCanExecute()
-        {
-            return ItemsClustering.Any(item => item.IsSelected) || ItemsDistribution.Any(item => item.IsSelected);
-        }
-
-        private void OnSaveConfiguration()
-        {
             Task.Run(() =>
                 _ioService.SaveConfigurationToJson(ItemsClustering.Where(a => a.IsSelected).Select(a => a.Key).ToList(),
-                                                   ItemsDistribution.Where(a => a.IsSelected).Select(a => a.Key).ToList()));
+                    ItemsDistribution.Where(a => a.IsSelected).Select(a => a.Key).ToList()));
         }
 
         private bool NextCanExecute()

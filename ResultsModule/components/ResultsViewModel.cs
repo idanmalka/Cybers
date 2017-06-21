@@ -71,9 +71,10 @@ namespace ResultsModule.components
 
         private void GoToWelcomeScreen()
         {
+            _eventAggregator.GetEvent<KeepAliveEvent>().Publish();
+
             var uri = new Uri("WelcomeView", UriKind.Relative);
             _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
-            _eventAggregator.GetEvent<KeepAliveEvent>().Publish();
         }
 
         private static ObservableCollection<ChartData> CreateChartData()

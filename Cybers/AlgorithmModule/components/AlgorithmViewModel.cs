@@ -139,6 +139,8 @@ namespace AlgorithmModule.components
 
         private void OnNextCommandPressed()
         {
+            _eventAggregator.GetEvent<KeepAliveEvent>().Publish();
+
             var uri = new Uri(typeof(ResultsModule.components.ResultsView).FullName, UriKind.Relative);
             _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
 

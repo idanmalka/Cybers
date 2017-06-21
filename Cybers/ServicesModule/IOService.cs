@@ -85,7 +85,7 @@ namespace ServicesModule
             {
                 // Save document
                 string filename = dlg.FileName;
-                File.WriteAllText(filename,configJson);
+                File.WriteAllText(filename, configJson);
             }
 
         }

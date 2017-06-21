@@ -7,7 +7,7 @@ using Prism.Events;
 
 namespace Cybers.Infrustructure.models
 {
-    public class KeepAliveEvent : PubSubEvent<KeepAliveEventArgs>
+    public class KeepAliveEvent : PubSubEvent
     {
     }
 }
