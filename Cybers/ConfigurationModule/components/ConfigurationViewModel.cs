@@ -24,6 +24,7 @@ namespace ConfigurationModule.components
     {
         public DelegateCommand<string> TextFieldFocusedCommand { get; }
         public DelegateCommand NextCommand { get; }
+        public DelegateCommand SaveConfigurationCommand { get; set; }
 
         private bool _isNew;
         public bool IsNew
@@ -76,13 +77,28 @@ namespace ConfigurationModule.components
             _ioService = ioService;
             _eventAggregator = eventAggregator;
             DistributionThresholds = new List<int> { 5, 10, 15, 20, 25 };
+
             GoBackCommand = new DelegateCommand(GoBack);
             NextCommand = new DelegateCommand(Next, NextCanExecute);
+            SaveConfigurationCommand = new DelegateCommand(OnSaveConfiguration,SaveConfigurationCanExecute);
+
             TextFieldFocusedCommand = new DelegateCommand<string>(OpenFileBrowser);
             ItemsClustering = new ObservableCollection<UserAttribute>();
             ItemsDistribution = new ObservableCollection<UserAttribute>();
 
             ConfigToolTip = "Please load graph file first";
+        }
+
+        private bool SaveConfigurationCanExecute()
+        {
+            return ItemsClustering.Any(item => item.IsSelected) || ItemsDistribution.Any(item => item.IsSelected);
+        }
+
+        private void OnSaveConfiguration()
+        {
+            Task.Run(() =>
+                _ioService.SaveConfigurationToJson(ItemsClustering.Where(a => a.IsSelected).Select(a => a.Key).ToList(),
+                                                   ItemsDistribution.Where(a => a.IsSelected).Select(a => a.Key).ToList()));
         }
 
         private bool NextCanExecute()
@@ -123,14 +139,19 @@ namespace ConfigurationModule.components
                             GraphFilePath = path;
                             LoadAttributes(path).Subscribe(attribute =>
                             {
-                                ItemsClustering.Add(new UserAttribute
+                                var newAtt = new UserAttribute
                                 {
                                     Key = attribute
-                                });
-                                ItemsDistribution.Add(new UserAttribute
+                                };
+                                newAtt.PropertyChanged += (s, e) => { SaveConfigurationCommand.RaiseCanExecuteChanged(); };
+                                ItemsClustering.Add(newAtt);
+
+                                newAtt = new UserAttribute
                                 {
                                     Key = attribute
-                                });
+                                };
+                                newAtt.PropertyChanged += (s, e) => { SaveConfigurationCommand.RaiseCanExecuteChanged(); };
+                                ItemsDistribution.Add(newAtt);
                             }, exception => //TODO : show AlertDialog 
                                 Console.WriteLine(exception.Message), () => ConfigToolTip = "Algorithm Properties File Path");
                             break;

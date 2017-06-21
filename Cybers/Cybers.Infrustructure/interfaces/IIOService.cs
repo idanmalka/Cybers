@@ -14,5 +14,6 @@ namespace Cybers.Infrustructure.interfaces
         void OpenFileDialog(EventHandler<ServiceResult<string>> callback);
         IEnumerable<User> ReadUsersFromPath(string path);
         AlgorithmAttributesEventArgs ReadConfigurationFromFile(string path);
+        void SaveConfigurationToJson(List<string> clusterList, List<string> distributionList);
     }
 }

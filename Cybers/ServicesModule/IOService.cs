@@ -62,5 +62,32 @@ namespace ServicesModule
                 throw new IncorrectConfigurationFileException();
             }
         }
+
+        public void SaveConfigurationToJson(List<string> clusterList, List<string> distributionList)
+        {
+            var configJson = JsonConvert.SerializeObject(new AlgorithmAttributesEventArgs
+            {
+                ClustringAttributes = clusterList,
+                DistributingAttributes = distributionList
+            });
+
+            SaveFileDialog dlg = new SaveFileDialog
+            {
+                FileName = "Cybers Configuration",
+                DefaultExt = ".json",
+            };
+
+            // Show save file dialog box
+            var result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                string filename = dlg.FileName;
+                File.WriteAllText(filename,configJson);
+            }
+
+        }
     }
 }
