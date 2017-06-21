@@ -51,7 +51,7 @@ namespace Cybers.Infrustructure.models
             set => AddAttribute(value);
         }
 
-        [JsonProperty(nameof(Address))]
+        //[JsonProperty(nameof(Address))]
         public Address Address
         {
             set => AddAttribute(value.Code);

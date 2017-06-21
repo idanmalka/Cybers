@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="converters\FriendsListToNumberJSONConverter.cs" />
+    <Compile Include="converters\NullToBooleanConverter.cs" />
     <Compile Include="converters\NullToVisibilityConverter.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="interfaces\IIOService.cs" />

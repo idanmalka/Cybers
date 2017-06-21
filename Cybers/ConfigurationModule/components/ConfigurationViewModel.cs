@@ -58,10 +58,17 @@ namespace ConfigurationModule.components
             }
         }
 
+        public string ConfigToolTip
+        {
+            get => _configToolTip;
+            set => SetProperty(ref _configToolTip, value);
+        }
+
         private readonly IRegionManager _regionManager;
         private readonly IIOService _ioService;
         private int _distributionThreshold;
         private readonly IEventAggregator _eventAggregator;
+        private string _configToolTip;
 
         public ConfigurationViewModel(IRegionManager regionManager, IIOService ioService, IEventAggregator eventAggregator)
         {
@@ -74,12 +81,14 @@ namespace ConfigurationModule.components
             TextFieldFocusedCommand = new DelegateCommand<string>(OpenFileBrowser);
             ItemsClustering = new ObservableCollection<UserAttribute>();
             ItemsDistribution = new ObservableCollection<UserAttribute>();
+
+            ConfigToolTip = "Please load graph file first";
         }
 
         private bool NextCanExecute()
         {
-            //return (IsNew || ConfigFilePath != null) && GraphFilePath != null;
-            return true; //for now
+            return (IsNew || ConfigFilePath != null) && GraphFilePath != null;
+            //return true; //for now
         }
 
         private void Next()
@@ -100,6 +109,9 @@ namespace ConfigurationModule.components
 
         private void OpenFileBrowser(string value)
         {
+            if (value == "Config" && GraphFilePath == null)
+                return;
+
             if (!string.IsNullOrWhiteSpace(value))
             {
                 _ioService?.OpenFileDialog((sender, result) =>
@@ -120,7 +132,7 @@ namespace ConfigurationModule.components
                                     Key = attribute
                                 });
                             }, exception => //TODO : show AlertDialog 
-                                Console.WriteLine(exception.Message));
+                                Console.WriteLine(exception.Message), () => ConfigToolTip = "Algorithm Properties File Path");
                             break;
                         case "Config":
                             ConfigFilePath = path;

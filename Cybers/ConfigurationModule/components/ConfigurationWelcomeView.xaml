@@ -24,6 +24,7 @@
             </Style>
             <converters:NullToVisibilityConverter x:Key="NullToInvisibleConverter" IsNullVisible="False"/>
             <converters:NullToVisibilityConverter x:Key="NullToVisibleConverter" IsNullVisible="True"/>
+            <converters:NullToBooleanConverter x:Key="NullToTrueConverter" IsNullTrue="True"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
@@ -55,14 +56,23 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <materialDesign:PackIcon Kind="Folder" Foreground="{Binding ElementName=NameTextBox, Path=BorderBrush}" Margin="4 10 4 0" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding GraphFilePath}" Grid.Column="1" Grid.Row="0" materialDesign:HintAssist.Hint="Graph File Path" materialDesign:HintAssist.IsFloating="True">
+            <TextBox Text="{Binding GraphFilePath}"
+                     Grid.Column="1"
+                     Grid.Row="0"
+                     materialDesign:HintAssist.Hint="Graph File Path"
+                     ToolTip="Graph File Path"
+                     materialDesign:HintAssist.IsFloating="True">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                         <prism:InvokeCommandAction Command="{Binding TextFieldFocusedCommand}" CommandParameter="Graph"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <materialDesign:PackIcon Grid.Row="1" Grid.Column="0" Kind="Folder" Foreground="{Binding ElementName=NameTextBox, Path=BorderBrush}" Margin="4 10 4 0" VerticalAlignment="Center">
+            <materialDesign:PackIcon Grid.Row="1"
+                                     Grid.Column="0" 
+                                     Kind="Folder"
+                                     Foreground="{Binding ElementName=NameTextBox, Path=BorderBrush}" 
+                                     Margin="4 10 4 0" VerticalAlignment="Center">
                 <materialDesign:PackIcon.Style>
                     <Style TargetType="materialDesign:PackIcon">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -74,7 +84,14 @@
                     </Style>
                 </materialDesign:PackIcon.Style>
             </materialDesign:PackIcon>
-            <TextBox Text="{Binding ConfigFilePath,Mode=TwoWay}" Grid.Column="1" Grid.Row="1" materialDesign:HintAssist.Hint="Algorithm Properties File Path" materialDesign:HintAssist.IsFloating="True">
+            <TextBox Text="{Binding ConfigFilePath,Mode=TwoWay}"
+                     Grid.Column="1"
+                     Grid.Row="1"
+                     materialDesign:HintAssist.Hint="Algorithm Properties File Path"
+                     materialDesign:HintAssist.IsFloating="True"
+                     ToolTip="{Binding ConfigToolTip}"
+                     IsReadOnly="{Binding GraphFilePath, Converter={StaticResource NullToTrueConverter}}"
+                     >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                         <prism:InvokeCommandAction Command="{Binding TextFieldFocusedCommand}" CommandParameter="Config"/>
