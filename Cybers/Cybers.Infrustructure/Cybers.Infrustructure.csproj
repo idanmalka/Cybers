@@ -40,6 +40,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="controls\AlertDialog.xaml.cs">
+      <DependentUpon>AlertDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="controls\AlertDialogNotification.cs" />
+    <Compile Include="controls\AlertDialogViewModel.cs" />
     <Compile Include="converters\FriendsListToNumberJSONConverter.cs" />
     <Compile Include="converters\NullToBooleanConverter.cs" />
     <Compile Include="converters\NullToVisibilityConverter.cs" />
@@ -76,6 +81,12 @@
     <Reference Include="FSharpx.Core, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FSharpx.Core.1.7.3\lib\40\FSharpx.Core.dll</HintPath>
     </Reference>
+    <Reference Include="MaterialDesignColors, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignColors.1.1.3\lib\net45\MaterialDesignColors.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=2.3.0.823, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.2.3.0.823\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
@@ -106,6 +117,8 @@
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Wpf.6.3.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.XML" />
     <Reference Include="WindowsBase" />
     <Reference Include="YC.QuickGraph, Version=3.7.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\YC.QuickGraph.3.7.3\lib\net45\YC.QuickGraph.dll</HintPath>
@@ -131,6 +144,12 @@
     <Reference Include="YC.QuickGraphFS, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\YC.QuickGraph.3.7.3\lib\net45\YC.QuickGraphFS.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="controls\AlertDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,7 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AlgorithmModule.components"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:prism="http://prismlibrary.com/"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:controls="clr-namespace:Cybers.Infrustructure.controls;assembly=Cybers.Infrustructure"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
@@ -19,6 +22,27 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+    
+    <i:Interaction.Triggers>
+        <prism:InteractionRequestTrigger SourceObject="{Binding AlertDialogRequest, Mode=OneWay}">
+            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
+                <prism:PopupWindowAction.WindowStyle>
+                    <Style TargetType="Window">
+                        <Setter Property="BorderThickness" Value="2"/>
+                        <Setter Property="BorderBrush" Value="DarkBlue"/>
+                        <Setter Property="WindowStyle" Value="None"/>
+                        <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+                        <Setter Property="ResizeMode" Value="NoResize"/>
+                        <Setter Property="ShowInTaskbar" Value="False"/>
+                        <Setter Property="FontSize" Value="16"/>
+                    </Style>
+                </prism:PopupWindowAction.WindowStyle>
+                <prism:PopupWindowAction.WindowContent>
+                    <controls:AlertDialog/>
+                </prism:PopupWindowAction.WindowContent>
+            </prism:PopupWindowAction>
+        </prism:InteractionRequestTrigger>
+    </i:Interaction.Triggers>
 
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft">

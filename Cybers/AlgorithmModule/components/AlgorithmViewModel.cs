@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using AlgorithmModule.interfaces;
 using Cybers.Infrustructure;
+using Cybers.Infrustructure.controls;
 using Cybers.Infrustructure.interfaces;
 using Cybers.Infrustructure.models;
 using CybersDetectionAlgorithm;
 using Prism.Commands;
 using Prism.Events;
+using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
 using Prism.Regions;
 
@@ -28,7 +30,7 @@ namespace AlgorithmModule.components
         private readonly IEventAggregator _eventAggregator;
         private IEnumerable<User> _users;
         private CybersDetectionResults _results;
-        private IRegionManager _regionManager;
+        private readonly IRegionManager _regionManager;
 
         #endregion
 
@@ -47,6 +49,7 @@ namespace AlgorithmModule.components
         public List<string> DistributingAttributes { get; set; }
         public string GraphFilePath { get; set; }
         public int DistributingThreshold { get; set; }
+        public InteractionRequest<AlertDialogNotification> AlertDialogRequest { get; }
 
         #endregion
 
@@ -58,6 +61,7 @@ namespace AlgorithmModule.components
             TestCommand = new DelegateCommand(Test);
             NextCommand = new DelegateCommand(OnNextCommandPressed);
             _regionManager = regionManager;
+            AlertDialogRequest = new InteractionRequest<AlertDialogNotification>();
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<AlgorithmAttributesEvent>().Subscribe(obj =>
             {
@@ -93,7 +97,7 @@ namespace AlgorithmModule.components
 
         private void GoBack()
         {
-            _regionManager.Regions[RegionNames.MainContentRegion].NavigationService.Journal.GoBack();
+            RaiseConfirmation();
         }
 
         private void OnDistributingFinished(object sender, EventArgs e)
@@ -143,6 +147,18 @@ namespace AlgorithmModule.components
                 UsersSuspicionLevel = _results.UsersSuspicionLevel,
                 Partition = _results.Partition
             });
+        }
+
+        private void RaiseConfirmation()
+        {
+            AlertDialogRequest.Raise(new AlertDialogNotification { Content = "Are you sure?", Title = "Stop Algorithm" },
+                returned =>
+                {
+                    if (returned != null && returned.Confirmed)
+                    {
+                        _regionManager.Regions[RegionNames.MainContentRegion].NavigationService.Journal.GoBack();
+                    }
+                });
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
