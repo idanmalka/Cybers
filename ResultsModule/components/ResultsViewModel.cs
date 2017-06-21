@@ -73,6 +73,7 @@ namespace ResultsModule.components
         {
             var uri = new Uri("WelcomeView", UriKind.Relative);
             _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
+            _eventAggregator.GetEvent<KeepAliveEvent>().Publish();
         }
 
         private static ObservableCollection<ChartData> CreateChartData()

@@ -87,6 +87,20 @@ namespace ConfigurationModule.components
             ItemsDistribution = new ObservableCollection<UserAttribute>();
 
             ConfigToolTip = "Please load graph file first";
+
+            _eventAggregator.GetEvent<KeepAliveEvent>().Subscribe(() =>
+            {
+                KeepAlive = false;
+            });
+        }
+
+        private bool SaveConfigurationCanExecute()
+        {
+            return ItemsClustering.Any(item => item.IsSelected) || ItemsDistribution.Any(item => item.IsSelected);
+        }
+
+        private void OnSaveConfiguration()
+        {
         }
 
         private bool SaveConfigurationCanExecute()
