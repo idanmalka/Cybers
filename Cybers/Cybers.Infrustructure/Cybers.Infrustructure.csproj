@@ -59,6 +59,8 @@
     <Compile Include="models\AlgorithmResultsEventArgs.cs" />
     <Compile Include="models\IncorrectConfigurationFileException.cs" />
     <Compile Include="models\IncorrectUsersFileException.cs" />
+    <Compile Include="models\KeepAliveEvent.cs" />
+    <Compile Include="models\KeepAliveEventArgs.cs" />
     <Compile Include="models\UserAttribute.cs" />
     <Compile Include="models\Cluster.cs" />
     <Compile Include="models\Partition.cs" />
