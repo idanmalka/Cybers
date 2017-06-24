@@ -32,6 +32,9 @@ namespace CybersDetectionAlgorithm
         public event EventHandler InitializationFinished;
         public event EventHandler ClusteringFinished;
         public event EventHandler DistributingFinished;
+        public event EventHandler InitializationStarted;
+        public event EventHandler ClusteringStarted;
+        public event EventHandler DistributingStarted;
 
         #endregion
 
@@ -48,17 +51,17 @@ namespace CybersDetectionAlgorithm
 
         public CybersDetectionResults Execute()
         {
+            InitializationStarted?.Invoke(this,null);
             var graph = CreateClusteringGraph();
-
             InitializationFinished?.Invoke(this, null);
 
+            ClusteringStarted?.Invoke(this,null);
             var ilouvain = new ILouvain(graph);
             ilouvain.Execute();
-
             ClusteringFinished?.Invoke(this, null);
 
+            DistributingStarted?.Invoke(this,null);
             Dictionary<string, double> userSuspicionLevel = CreateUserSuspicionLevels(ilouvain.ILouvainExecutionResult);
-
             DistributingFinished?.Invoke(this, null);
 
             LatestRunResults = new CybersDetectionResults

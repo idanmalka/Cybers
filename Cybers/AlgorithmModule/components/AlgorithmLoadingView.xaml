@@ -9,7 +9,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:controls="clr-namespace:Cybers.Infrustructure.controls;assembly=Cybers.Infrustructure"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="600" d:DesignWidth="600">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -84,7 +84,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="32" Style="{StaticResource MaterialDesignDisplay1TextBlock}" FontSize="22" TextWrapping="Wrap" TextAlignment="Center">Please wait while the algotithm is running</TextBlock>
             <Button Command="{Binding TestCommand}" Grid.Column="0" Grid.Row="0">Test</Button>
-            <GroupBox Grid.Column="0" Grid.Row="1" Header="Initialization" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="16">
+            <GroupBox Grid.Column="0" Grid.Row="1" Header="Initializing" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="16">
                 <GroupBox.HeaderTemplate>
                     <DataTemplate>
                         <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding}"/>
@@ -133,7 +133,13 @@
                     </Image>
                 </Grid>
             </GroupBox>
-
+            <TextBlock 
+                Grid.Row="2" 
+                Grid.Column="0" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Top" 
+                Text="{Binding InitializingStatusText}"></TextBlock>
+            
             <GroupBox Grid.Column="1" Grid.Row="1" Header="Clustering" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="16">
                 <GroupBox.HeaderTemplate>
                     <DataTemplate>
@@ -184,6 +190,11 @@
                     </Image>
                 </Grid>
             </GroupBox>
+            <TextBlock Grid.Row="2" 
+                       Grid.Column="1" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Top" 
+                       Text="{Binding ClusteringStatusText}"></TextBlock>
 
             <GroupBox Grid.Column="2" Grid.Row="1" Header="Distributing" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="16">
                 <GroupBox.HeaderTemplate>
@@ -235,6 +246,12 @@
                     </Image>
                 </Grid>
             </GroupBox>
+            <TextBlock 
+                Grid.Row="2" 
+                Grid.Column="2" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Top" 
+                Text="{Binding DistributingStatusText}"></TextBlock>
 
             <GroupBox Grid.Column="3" Grid.Row="1" Header="Finalizing" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="16">
                 <GroupBox.HeaderTemplate>
@@ -286,6 +303,12 @@
                     </Image>
                 </Grid>
             </GroupBox>
+            <TextBlock 
+                Grid.Row="2" 
+                Grid.Column="3" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Top" 
+                Text="{Binding FinalizingStatusText}"></TextBlock>
 
             <!--<Button Command="{Binding NextCommand}" Grid.Column="3" Grid.Row="2" Content="Next">
                 <Button.Style>

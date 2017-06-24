@@ -146,7 +146,7 @@ namespace ILouvainLibrary
             foreach (var neighbour in _graph.AdjacentVertices(vertex))
             {
                 if (vertex.ClusterId == neighbour.ClusterId
-                    && !checkedClusters.Contains(neighbour.ClusterId)) continue;
+                    || checkedClusters.Contains(neighbour.ClusterId)) continue;
 
                 checkedClusters.Add(neighbour.ClusterId);
                 vertex.ClusterId = neighbour.ClusterId;

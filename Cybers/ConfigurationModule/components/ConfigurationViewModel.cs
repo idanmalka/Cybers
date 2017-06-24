@@ -162,6 +162,8 @@ namespace ConfigurationModule.components
                     {
                         case "Graph":
                             GraphFilePath = path;
+                            ItemsClustering.Clear();
+                            ItemsDistribution.Clear();
                             LoadAttributes(path).Subscribe(attribute =>
                             {
                                 var newAtt = new UserAttribute

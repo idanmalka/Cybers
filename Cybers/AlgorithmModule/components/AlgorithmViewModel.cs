@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using AlgorithmModule.interfaces;
 using Cybers.Infrustructure;
 using Cybers.Infrustructure.controls;
@@ -31,6 +32,10 @@ namespace AlgorithmModule.components
         private IEnumerable<User> _users;
         private CybersDetectionResults _results;
         private readonly IRegionManager _regionManager;
+        private string _initializingStatusText;
+        private string _clusteringStatusText;
+        private string _distributingStatusText;
+        private string _finalizingStatusText;
 
         #endregion
 
@@ -39,11 +44,6 @@ namespace AlgorithmModule.components
         public DelegateCommand GoBackCommand { get; }
         public DelegateCommand TestCommand { get; }
         public DelegateCommand NextCommand { get; }
-        public AlgorithmStep AlgStep
-        {
-            get => _algStep;
-            set => SetProperty(ref _algStep, value);
-        }
 
         public List<string> ClusteringAttributes { get; set; }
         public List<string> DistributingAttributes { get; set; }
@@ -51,6 +51,35 @@ namespace AlgorithmModule.components
         public int DistributingThreshold { get; set; }
         public InteractionRequest<AlertDialogNotification> AlertDialogRequest { get; }
 
+        public string InitializingStatusText
+        {
+            get => _initializingStatusText;
+            set => SetProperty(ref _initializingStatusText, value);
+        }
+
+        public string ClusteringStatusText
+        {
+            get => _clusteringStatusText;
+            set => SetProperty(ref _clusteringStatusText, value);
+        }
+
+        public string DistributingStatusText
+        {
+            get => _distributingStatusText;
+            set => SetProperty(ref _distributingStatusText, value);
+        }
+
+        public string FinalizingStatusText
+        {
+            get => _finalizingStatusText;
+            set => SetProperty(ref _finalizingStatusText, value); 
+        }
+
+        public AlgorithmStep AlgStep
+        {
+            get => _algStep;
+            set => SetProperty(ref _algStep, value);
+        }
         #endregion
 
         #region Methods
@@ -86,6 +115,10 @@ namespace AlgorithmModule.components
         {
             var algorithm = new CybersDetection(_users, ClusteringAttributes, DistributingAttributes, DistributingThreshold);
 
+            algorithm.InitializationStarted += (s,e) => InitializingStatusText = "Started: " + DateTime.Now;
+            algorithm.ClusteringStarted += (s, e) => ClusteringStatusText = "Started: " + DateTime.Now;
+            algorithm.DistributingStarted += (s, e) => DistributingStatusText = "Started: " + DateTime.Now;
+
             algorithm.InitializationFinished += OnAlgorithmInitializationFinished;
             algorithm.ClusteringFinished += OnClusteringFinished;
             algorithm.DistributingFinished += OnDistributingFinished;
@@ -100,19 +133,28 @@ namespace AlgorithmModule.components
             RaiseConfirmation();
         }
 
-        private void OnDistributingFinished(object sender, EventArgs e)
+        private void OnAlgorithmInitializationFinished(object sender, EventArgs e)
         {
-            AlgStep = AlgorithmStep.End;
+            AlgStep = AlgorithmStep.Clustering;
+            var str = InitializingStatusText;
+            str += "\n Ended: " + DateTime.Now;
+            InitializingStatusText = str;
         }
 
         private void OnClusteringFinished(object sender, EventArgs e)
         {
             AlgStep = AlgorithmStep.Distributing;
+            var str = ClusteringStatusText;
+            str += "\n Ended: " + DateTime.Now;
+            ClusteringStatusText = str;
         }
 
-        private void OnAlgorithmInitializationFinished(object sender, EventArgs e)
+        private void OnDistributingFinished(object sender, EventArgs e)
         {
-            AlgStep = AlgorithmStep.Clustering;
+            AlgStep = AlgorithmStep.End;
+            var str = DistributingStatusText;
+            str += "\n Ended: " + DateTime.Now;
+            DistributingStatusText = str;
         }
 
         private void Test()
