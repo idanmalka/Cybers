@@ -42,7 +42,6 @@ namespace AlgorithmModule.components
         #region Properties
 
         public DelegateCommand GoBackCommand { get; }
-        public DelegateCommand TestCommand { get; }
         public DelegateCommand NextCommand { get; }
 
         public List<string> ClusteringAttributes { get; set; }
@@ -87,7 +86,6 @@ namespace AlgorithmModule.components
         public AlgorithmViewModel(IEventAggregator eventAggregator, IRegionManager regionManager,IIOService ioService)
         {
             GoBackCommand = new DelegateCommand(GoBack);
-            TestCommand = new DelegateCommand(Test);
             NextCommand = new DelegateCommand(OnNextCommandPressed);
             _regionManager = regionManager;
             AlertDialogRequest = new InteractionRequest<AlertDialogNotification>();
@@ -155,28 +153,6 @@ namespace AlgorithmModule.components
             var str = DistributingStatusText;
             str += "\n Ended: " + DateTime.Now;
             DistributingStatusText = str;
-        }
-
-        private void Test()
-        {
-            switch (AlgStep)
-            {
-                case AlgorithmStep.Init:
-                    AlgStep = AlgorithmStep.Clustering;
-                    break;
-                case AlgorithmStep.Clustering:
-                    AlgStep = AlgorithmStep.Distributing;
-                    break;
-                case AlgorithmStep.Distributing:
-                    AlgStep = AlgorithmStep.Finish;
-                    break;
-                case AlgorithmStep.Finish:
-                    AlgStep = AlgorithmStep.End;
-                    break;
-                case AlgorithmStep.End:
-                    AlgStep = AlgorithmStep.Init;
-                    break;
-            }
         }
 
         private void OnNextCommandPressed()

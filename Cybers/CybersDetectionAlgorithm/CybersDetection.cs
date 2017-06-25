@@ -120,12 +120,19 @@ namespace CybersDetectionAlgorithm
                 userSuspicionLevel[user.Id] = 0;
 
             foreach (var cluster in partition.Clusters)
+            {
+                var clusterUsers = (from user in _users
+                    from clusterVerticy in cluster.Verticies
+                    where user.Id == clusterVerticy.Id
+                    select user).ToList();
+
                 foreach (var distributionAttribute in _distributionAttributes)
                 {
-                    var suspectedUsersByAttribute = IdentifyByDistribution(cluster, distributionAttribute);
+                    var suspectedUsersByAttribute = IdentifyByDistribution(clusterUsers, distributionAttribute);
                     foreach (var user in suspectedUsersByAttribute)
                         userSuspicionLevel[user.Id]++;
                 }
+            }
 
             //conversion to percentage
             foreach (var key in userSuspicionLevel.Keys.ToList())
@@ -135,15 +142,11 @@ namespace CybersDetectionAlgorithm
             return userSuspicionLevel;
         }
 
-        private IEnumerable<User> IdentifyByDistribution(Cluster cluster, string distributionAttribute)
+        private IEnumerable<User> IdentifyByDistribution(List<User> clusterUsers, string distributionAttribute)
         {
             var rarityMeasurementPerValue = new Dictionary<long, double>();
 
-            var clusterUsers = (from user in _users
-                                from clusterVerticy in cluster.Verticies
-                                where user.Id == clusterVerticy.Id
-                                select user).ToList();
-
+            //count how many users posses each value of the given attribute
             foreach (var user in clusterUsers)
             {
                 var value = user.Attributes[distributionAttribute];

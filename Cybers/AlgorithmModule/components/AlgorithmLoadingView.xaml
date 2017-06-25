@@ -82,8 +82,12 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="32" Style="{StaticResource MaterialDesignDisplay1TextBlock}" FontSize="22" TextWrapping="Wrap" TextAlignment="Center">Please wait while the algotithm is running</TextBlock>
-            <Button Command="{Binding TestCommand}" Grid.Column="0" Grid.Row="0">Test</Button>
+            <TextBlock Grid.ColumnSpan="4"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="32" Style="{StaticResource MaterialDesignDisplay1TextBlock}"
+                       FontSize="22" TextWrapping="Wrap"
+                       TextAlignment="Center">Please wait while the algotithm is running</TextBlock>
             <GroupBox Grid.Column="0" Grid.Row="1" Header="Initializing" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="16">
                 <GroupBox.HeaderTemplate>
                     <DataTemplate>
