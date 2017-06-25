@@ -58,6 +58,7 @@
     <Compile Include="models\AlgorithmResultsEvent.cs" />
     <Compile Include="models\AlgorithmResultsEventArgs.cs" />
     <Compile Include="models\IncorrectConfigurationFileException.cs" />
+    <Compile Include="models\IncorrectResultsFileException.cs" />
     <Compile Include="models\IncorrectUsersFileException.cs" />
     <Compile Include="models\KeepAliveEvent.cs" />
     <Compile Include="models\UserAttribute.cs" />

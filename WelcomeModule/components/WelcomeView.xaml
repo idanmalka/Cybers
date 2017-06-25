@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:WelcomeModule.components"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="600" d:DesignWidth="600">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -35,6 +35,12 @@
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Folder" VerticalAlignment="Center"/>
                         <TextBlock Margin="8 0 0 0" FontSize="18">LOAD CONFIGURATION</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding LoadPreviousResults}" Style="{StaticResource MaterialDesignFlatButton}" Margin="0 0 0 16">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ChartBar" VerticalAlignment="Center"/>
+                        <TextBlock Margin="8 0 0 0" FontSize="18">LOAD PREVIOUS RESULTS</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Style="{StaticResource MaterialDesignFlatButton}">

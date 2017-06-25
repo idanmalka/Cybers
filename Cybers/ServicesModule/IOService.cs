@@ -97,9 +97,44 @@ namespace ServicesModule
             return true;
         }
 
-        public bool ExportResultsToFile(List<UserSuspicion> usersSuspicionLevel, Partition partition)
+        public bool ExportResultsToFile(AlgorithmResultsEventArgs results)
         {
-            return true;
+            var configJson = JsonConvert.SerializeObject(results);
+
+            var dlg = new SaveFileDialog
+            {
+                FileName = "Cybers Detection Results",
+                DefaultExt = ".json",
+            };
+
+            // Show save file dialog box
+            var result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                string filename = dlg.FileName;
+                File.WriteAllText(filename, configJson);
+                return true;
+            }
+            return false;
+        }
+
+        public AlgorithmResultsEventArgs ImportPrevouseResultsFile(string path)
+        {
+            //try
+            //{
+            //    var resultsPath = File.ReadAllText(path);
+            //    var results = JsonConvert.DeserializeObject<AlgorithmResultsEventArgs>(resultsPath);
+
+            //    return results;
+            //}
+            //catch (Exception)
+            //{
+            //    throw new IncorrectResultsFileException();
+            //}
+            return new AlgorithmResultsEventArgs();
         }
     }
 }

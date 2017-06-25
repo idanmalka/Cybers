@@ -20,6 +20,7 @@ namespace Cybers.Infrustructure.models
         [JsonProperty(nameof(Id))]
         public string Id { get; set; }
 
+        [JsonIgnore]
         public List<User> FriendsList { get; set; }
 
         [JsonProperty(nameof(Verified))]

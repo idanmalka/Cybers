@@ -16,6 +16,7 @@ namespace Cybers.Infrustructure.interfaces
         AlgorithmAttributesEventArgs ReadConfigurationFromFile(string path);
         bool SaveConfigurationToJson(List<string> clusterList, List<string> distributionList, int threshold);
         bool ExportResultsToPajekFile(Partition results);
-        bool ExportResultsToFile(List<UserSuspicion> usersSuspicionLevel, Partition partition);
+        bool ExportResultsToFile(AlgorithmResultsEventArgs results);
+        AlgorithmResultsEventArgs ImportPrevouseResultsFile(string path);
     }
 }

@@ -34,11 +34,10 @@ namespace Cybers
         protected override void ConfigureModuleCatalog()
         {
             base.ConfigureModuleCatalog();
-
-            AddModuleToCatalog(typeof(AlgorithmModule.AlgorithmModule), InitializationMode.WhenAvailable);
+            AddModuleToCatalog(typeof(ServicesModule.ServicesModule), InitializationMode.WhenAvailable);
             AddModuleToCatalog(typeof(WelcomeModule.WelcomeModule), InitializationMode.WhenAvailable);
             AddModuleToCatalog(typeof(ConfigurationModule.ConfigurationModule), InitializationMode.WhenAvailable);
-            AddModuleToCatalog(typeof(ServicesModule.ServicesModule), InitializationMode.WhenAvailable);
+            AddModuleToCatalog(typeof(AlgorithmModule.AlgorithmModule), InitializationMode.WhenAvailable);
             AddModuleToCatalog(typeof(ResultsModule.ResultsModule),InitializationMode.WhenAvailable);
         }
 

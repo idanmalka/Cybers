@@ -39,6 +39,7 @@ namespace ResultsModule.components
         private string _selectedExportOption;
         private string _exportOptionDescription;
         private SnackbarMessageQueue _messageQueue;
+        private AlgorithmResultsEventArgs _exportResultArgs;
 
         #endregion
 
@@ -123,7 +124,8 @@ namespace ResultsModule.components
             DistributionData = CreateChartData();
             _eventAggregator.GetEvent<AlgorithmResultsEvent>().Subscribe(arg =>
             {
-                UsersSuspicionLevel = new ObservableCollection<UserSuspicion>(arg.UsersSuspicionLevel.Select(kvp => new UserSuspicion(kvp.Key, kvp.Value)).ToList());
+                _exportResultArgs = arg;
+                //UsersSuspicionLevel = new ObservableCollection<UserSuspicion>(arg?.UsersSuspicionLevel?.Select(kvp => new UserSuspicion(kvp.Key, kvp.Value)).ToList());
                 Partition = arg.Partition;
             });
         }
@@ -134,7 +136,7 @@ namespace ResultsModule.components
             switch (SelectedExportOption)
             {
                 case "Cyber_Detection":
-                    res = Task<bool>.Factory.StartNew(() => _ioService.ExportResultsToFile(UsersSuspicionLevel.ToList(), Partition)).Result;
+                    res = Task<bool>.Factory.StartNew(() => _ioService.ExportResultsToFile(_exportResultArgs)).Result;
                     break;
                 case "Pajek":
                     res = Task<bool>.Factory.StartNew(() => _ioService.ExportResultsToPajekFile(Partition)).Result;
