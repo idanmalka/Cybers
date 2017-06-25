@@ -116,7 +116,8 @@ namespace ConfigurationModule.components
             {
                 return _ioService.SaveConfigurationToJson(
                     ItemsClustering.Where(a => a.IsSelected).Select(a => a.Key).ToList(),
-                    ItemsDistribution.Where(a => a.IsSelected).Select(a => a.Key).ToList());
+                    ItemsDistribution.Where(a => a.IsSelected).Select(a => a.Key).ToList(), 
+                    _distributionThreshold);
             });
 
             var result = task.Result;
@@ -218,6 +219,7 @@ namespace ConfigurationModule.components
             {
                 var attributes = _ioService.ReadConfigurationFromFile(path);
 
+                DistributionThreshold = attributes.Threshold;
                 foreach (var cAttribute in attributes.ClustringAttributes)
                 {
                     var userAttribute = ItemsClustering.FirstOrDefault(a => a.Key == cAttribute);

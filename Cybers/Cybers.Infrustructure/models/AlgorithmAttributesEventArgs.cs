@@ -18,6 +18,8 @@ namespace Cybers.Infrustructure.models
         public List<string> DistributingAttributes { get; set; }
 
         public string GraphFilePath { get; set; }
+
+        [JsonProperty("threshold")]
         public int Threshold { get; set; }
     }
 }

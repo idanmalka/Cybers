@@ -14,6 +14,8 @@ namespace Cybers.Infrustructure.interfaces
         void OpenFileDialog(EventHandler<ServiceResult<string>> callback);
         IEnumerable<User> ReadUsersFromPath(string path);
         AlgorithmAttributesEventArgs ReadConfigurationFromFile(string path);
-        bool SaveConfigurationToJson(List<string> clusterList, List<string> distributionList);
+        bool SaveConfigurationToJson(List<string> clusterList, List<string> distributionList, int threshold);
+        bool ExportResultsToPajekFile(Partition results);
+        bool ExportResultsToFile(List<UserSuspicion> usersSuspicionLevel, Partition partition);
     }
 }

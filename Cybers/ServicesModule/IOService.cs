@@ -63,12 +63,13 @@ namespace ServicesModule
             }
         }
 
-        public bool SaveConfigurationToJson(List<string> clusterList, List<string> distributionList)
+        public bool SaveConfigurationToJson(List<string> clusterList, List<string> distributionList, int threshold)
         {
             var configJson = JsonConvert.SerializeObject(new AlgorithmAttributesEventArgs
             {
                 ClustringAttributes = clusterList,
-                DistributingAttributes = distributionList
+                DistributingAttributes = distributionList,
+                Threshold = threshold
             });
 
             var dlg = new SaveFileDialog
@@ -89,6 +90,16 @@ namespace ServicesModule
                 return true;
             }
             return false;
+        }
+
+        public bool ExportResultsToPajekFile(Partition results)
+        {
+            return true;
+        }
+
+        public bool ExportResultsToFile(List<UserSuspicion> usersSuspicionLevel, Partition partition)
+        {
+            return true;
         }
     }
 }

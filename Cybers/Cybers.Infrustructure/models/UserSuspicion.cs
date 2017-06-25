@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ResultsModule.models
+namespace Cybers.Infrustructure.models
 {
     public class UserSuspicion
     {
@@ -13,7 +13,7 @@ namespace ResultsModule.models
 
         public UserSuspicion()
         {
-            
+
         }
 
         public UserSuspicion(string key, double level)

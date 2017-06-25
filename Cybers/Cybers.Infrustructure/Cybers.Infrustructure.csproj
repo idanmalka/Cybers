@@ -64,6 +64,7 @@
     <Compile Include="models\Cluster.cs" />
     <Compile Include="models\Partition.cs" />
     <Compile Include="models\User.cs" />
+    <Compile Include="models\UserSuspicion.cs" />
     <Compile Include="ModuleBase.cs" />
     <Compile Include="RegionNames.cs" />
     <Compile Include="ServiceResult.cs" />
