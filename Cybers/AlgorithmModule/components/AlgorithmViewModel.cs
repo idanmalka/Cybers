@@ -49,6 +49,7 @@ namespace AlgorithmModule.components
         public string GraphFilePath { get; set; }
         public int DistributingThreshold { get; set; }
         public InteractionRequest<AlertDialogNotification> AlertDialogRequest { get; }
+        public bool KeepAlive { get; private set; } = true;
 
         public string InitializingStatusText
         {
@@ -90,6 +91,12 @@ namespace AlgorithmModule.components
             _regionManager = regionManager;
             AlertDialogRequest = new InteractionRequest<AlertDialogNotification>();
             _eventAggregator = eventAggregator;
+
+            _eventAggregator.GetEvent<KeepAliveEvent>().Subscribe(() =>
+            {
+                KeepAlive = false;
+            });
+
             _eventAggregator.GetEvent<AlgorithmAttributesEvent>().Subscribe(obj =>
             {
                 try
@@ -167,6 +174,7 @@ namespace AlgorithmModule.components
                 UsersSuspicionLevel = _results.UsersSuspicionLevel,
                 Partition = _results.Partition
             });
+            KeepAlive = false;
         }
 
         private void RaiseConfirmation()
@@ -177,6 +185,7 @@ namespace AlgorithmModule.components
                     if (returned != null && returned.Confirmed)
                     {
                         _regionManager.Regions[RegionNames.MainContentRegion].NavigationService.Journal.GoBack();
+                        KeepAlive = false;
                     }
                 });
         }
@@ -188,12 +197,12 @@ namespace AlgorithmModule.components
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
-            return true;
+            return KeepAlive;
         }
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-
+            
         }
 
         #endregion
