@@ -174,9 +174,9 @@ namespace AlgorithmModule.components
                 UsersSuspicionLevel = _results.UsersSuspicionLevel,
                 Partition = _results.Partition,
                 ClusteringAttributes = _results.ClusteringAttributes,
-                DistributionAttributes = _results.DistributionAttributes
+                DistributionAttributes = _results.DistributionAttributes,
+                AttributesRarityMeasurement = _results.AttributesRarityMeasurement
             });
-            KeepAlive = false;
         }
 
         private void RaiseConfirmation()
