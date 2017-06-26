@@ -197,14 +197,14 @@
             <TabItem Header="Export">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Row="0"
@@ -221,8 +221,16 @@
                               ItemsSource="{Binding ExportOptions}"
                               SelectedItem="{Binding SelectedExportOption}"></ComboBox>
                     
-                    <Button Grid.Column="2" Grid.Row="2" Command="{Binding ExportCommand}">Export</Button>
-                    <materialDesign:Snackbar Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" MessageQueue="{Binding MessageQueue}"/>
+                    <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
+                            <Button Command="{Binding ExportCommand}" Margin="16">Export</Button>
+                        </StackPanel>
+                        <materialDesign:Snackbar Grid.Row="1" MessageQueue="{Binding MessageQueue}"/>
+                    </Grid>
                 </Grid>
             </TabItem>
         </local:CustomTabControl>

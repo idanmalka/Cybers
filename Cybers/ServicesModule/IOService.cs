@@ -70,7 +70,7 @@ namespace ServicesModule
                 ClustringAttributes = clusterList,
                 DistributingAttributes = distributionList,
                 Threshold = threshold
-            });
+            }, Formatting.Indented);
 
             var dlg = new SaveFileDialog
             {
@@ -99,7 +99,7 @@ namespace ServicesModule
 
         public bool ExportResultsToFile(AlgorithmResultsEventArgs results)
         {
-            var configJson = JsonConvert.SerializeObject(results);
+            var configJson = JsonConvert.SerializeObject(results, Formatting.Indented);
 
             var dlg = new SaveFileDialog
             {
@@ -114,7 +114,7 @@ namespace ServicesModule
             if (result == true)
             {
                 // Save document
-                string filename = dlg.FileName;
+                var filename = dlg.FileName;
                 File.WriteAllText(filename, configJson);
                 return true;
             }

@@ -323,13 +323,12 @@ namespace ResultsModule.components
         {
             if (argName == nameof(SelectedClusterId))
             {
-
-                return;
+                
             }
 
             if (argName == nameof(SelectedAttribute))
             {
-                return;
+                
             }
            
         }
