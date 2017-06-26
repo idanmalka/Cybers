@@ -123,18 +123,17 @@ namespace ServicesModule
 
         public AlgorithmResultsEventArgs ImportPrevouseResultsFile(string path)
         {
-            //try
-            //{
-            //    var resultsPath = File.ReadAllText(path);
-            //    var results = JsonConvert.DeserializeObject<AlgorithmResultsEventArgs>(resultsPath);
+            try
+            {
+                var resultsPath = File.ReadAllText(path);
+                var results = JsonConvert.DeserializeObject<AlgorithmResultsEventArgs>(resultsPath);
 
-            //    return results;
-            //}
-            //catch (Exception)
-            //{
-            //    throw new IncorrectResultsFileException();
-            //}
-            return new AlgorithmResultsEventArgs();
+                return results;
+            }
+            catch (Exception)
+            {
+                throw new IncorrectResultsFileException();
+            }
         }
     }
 }

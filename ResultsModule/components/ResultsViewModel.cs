@@ -152,8 +152,6 @@ namespace ResultsModule.components
             ClusterIds = new ObservableCollection<string>();
             AttributeNames = new ObservableCollection<string>();
 
-            UsersSuspicionLevel = CreateData();
-            DistributionData = CreateChartData();
             _eventAggregator.GetEvent<AlgorithmResultsEvent>().Subscribe(arg =>
             {
                 _exportResultArgs = arg;
@@ -196,141 +194,34 @@ namespace ResultsModule.components
             KeepAlive = false;
         }
 
-        private static ObservableCollection<ChartData> CreateChartData()
-        {
-
-            return new ObservableCollection<ChartData>
-            {
-                new ChartData { Attribute = "2006", UsersPerAttribute = 55 },
-
-            };
-        }
-
-        private static ObservableCollection<UserSuspicion> CreateData()
-        {
-            return new ObservableCollection<UserSuspicion>
-            {
-                new UserSuspicion
-                {
-                    Key = "A",
-                    Level = 20
-                },
-                new UserSuspicion
-                {
-                    Key = "B",
-                    Level = 40
-                },
-                new UserSuspicion
-                {
-                    Key = "C",
-                    Level = 60
-                },
-                new UserSuspicion
-                {
-                    Key = "B",
-                    Level = 40
-                },
-                new UserSuspicion
-                {
-                    Key = "C",
-                    Level = 60
-                },
-                new UserSuspicion
-                {
-                    Key = "B",
-                    Level = 40
-                },
-                new UserSuspicion
-                {
-                    Key = "C",
-                    Level = 60
-                },
-                new UserSuspicion
-                {
-                    Key = "B",
-                    Level = 40
-                },
-                new UserSuspicion
-                {
-                    Key = "C",
-                    Level = 60
-                },
-                new UserSuspicion
-                {
-                    Key = "B",
-                    Level = 40
-                },
-                new UserSuspicion
-                {
-                    Key = "C",
-                    Level = 60
-                },
-                new UserSuspicion
-                {
-                    Key = "B",
-                    Level = 40
-                },
-                new UserSuspicion
-                {
-                    Key = "C",
-                    Level = 60
-                },
-                new UserSuspicion
-                {
-                    Key = "B",
-                    Level = 40
-                },
-                new UserSuspicion
-                {
-                    Key = "C",
-                    Level = 60
-                },
-                new UserSuspicion
-                {
-                    Key = "B",
-                    Level = 40
-                },
-                new UserSuspicion
-                {
-                    Key = "C",
-                    Level = 60
-                },
-                new UserSuspicion
-                {
-                    Key = "B",
-                    Level = 40
-                },
-                new UserSuspicion
-                {
-                    Key = "C",
-                    Level = 60
-                },
-                new UserSuspicion
-                {
-                    Key = "B",
-                    Level = 40
-                },
-                new UserSuspicion
-                {
-                    Key = "C",
-                    Level = 60
-                }
-
-            };
-        }
 
         private void OnChartDisplayChanged(string argValue, [CallerMemberName]string argName = null)
         {
-            if (argName == nameof(SelectedClusterId))
+//            if (argName == nameof(SelectedClusterId))
+//            {
+//                
+//            }
+//
+//            if (argName == nameof(SelectedAttribute))
+//            {
+//                
+//            }
+
+            try
             {
-                
+                var key = new KeyValuePair<string, string>(SelectedClusterId, SelectedAttribute);
+                var value = AttributeRarityMeasurement[key];
+                DistributionData = new ObservableCollection<ChartData>(value.Select(pair => new ChartData
+                {
+                    Attribute = pair.Key,
+                    UsersPerAttribute = pair.Value
+                }).ToList());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
 
-            if (argName == nameof(SelectedAttribute))
-            {
-                
-            }
-           
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

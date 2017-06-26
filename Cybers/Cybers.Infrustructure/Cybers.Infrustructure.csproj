@@ -48,7 +48,6 @@
     <Compile Include="converters\FriendsListToNumberJSONConverter.cs" />
     <Compile Include="converters\NullToBooleanConverter.cs" />
     <Compile Include="converters\NullToVisibilityConverter.cs" />
-    <Compile Include="converters\UserToIdConverter.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="interfaces\IIOService.cs" />
     <Compile Include="interfaces\IView.cs" />

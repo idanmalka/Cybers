@@ -20,6 +20,11 @@ namespace Cybers.Infrustructure.models
         [JsonProperty(nameof(Id))]
         public string Id { get; set; }
 
+        public int Age
+        {
+            set => AddAttribute(value / 10 * 10);
+        }
+
         [JsonIgnore]
         public List<User> FriendsList { get; set; }
 
