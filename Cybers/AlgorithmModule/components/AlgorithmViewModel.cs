@@ -172,7 +172,9 @@ namespace AlgorithmModule.components
             _eventAggregator.GetEvent<AlgorithmResultsEvent>().Publish(new AlgorithmResultsEventArgs
             {
                 UsersSuspicionLevel = _results.UsersSuspicionLevel,
-                Partition = _results.Partition
+                Partition = _results.Partition,
+                ClusteringAttributes = _results.ClusteringAttributes,
+                DistributionAttributes = _results.DistributionAttributes
             });
             KeepAlive = false;
         }

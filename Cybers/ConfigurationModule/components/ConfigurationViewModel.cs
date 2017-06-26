@@ -24,18 +24,18 @@ namespace ConfigurationModule.components
 
     public class ConfigurationViewModel : BindableBase, IConfigurationViewModel, INavigationAware
     {
+        #region Properties
+
         public DelegateCommand<string> TextFieldFocusedCommand { get; }
         public DelegateCommand NextCommand { get; }
         public DelegateCommand SaveConfigurationCommand { get; set; }
+        public bool KeepAlive { get; private set; } = true;
 
-        private SnackbarMessageQueue _messageQueue;
         public SnackbarMessageQueue MessageQueue
         {
             get => _messageQueue;
             set => SetProperty(ref _messageQueue, value);
         }
-
-        private bool _isNew;
         public bool IsNew
         {
             get => _isNew;
@@ -45,8 +45,6 @@ namespace ConfigurationModule.components
                 NextCommand.RaiseCanExecuteChanged();
             }
         }
-
-        private string _graphFilePath;
         public string GraphFilePath
         {
             get => _graphFilePath;
@@ -56,8 +54,6 @@ namespace ConfigurationModule.components
                 NextCommand.RaiseCanExecuteChanged();
             }
         }
-
-        private string _configFilePath;
         public string ConfigFilePath
         {
             get => _configFilePath;
@@ -67,18 +63,32 @@ namespace ConfigurationModule.components
                 NextCommand.RaiseCanExecuteChanged();
             }
         }
-
         public string ConfigToolTip
         {
             get => _configToolTip;
             set => SetProperty(ref _configToolTip, value);
         }
 
+        #endregion
+
+        #region Private Fields
+
+        private readonly IEventAggregator _eventAggregator;
         private readonly IRegionManager _regionManager;
         private readonly IIOService _ioService;
+
+        private SnackbarMessageQueue _messageQueue;
+        private bool _isNew;
+        private string _graphFilePath;
+        private string _configFilePath;
         private int _distributionThreshold;
-        private readonly IEventAggregator _eventAggregator;
         private string _configToolTip;
+
+        #endregion
+
+
+
+        #region Methods
 
         public ConfigurationViewModel(IRegionManager regionManager, IIOService ioService, IEventAggregator eventAggregator)
         {
@@ -89,14 +99,14 @@ namespace ConfigurationModule.components
 
             GoBackCommand = new DelegateCommand(GoBack);
             NextCommand = new DelegateCommand(Next, NextCanExecute);
-            SaveConfigurationCommand = new DelegateCommand(OnSaveConfiguration,SaveConfigurationCanExecute);
+            SaveConfigurationCommand = new DelegateCommand(OnSaveConfiguration, SaveConfigurationCanExecute);
 
             TextFieldFocusedCommand = new DelegateCommand<string>(OpenFileBrowser);
             ItemsClustering = new ObservableCollection<UserAttribute>();
             ItemsDistribution = new ObservableCollection<UserAttribute>();
 
             ConfigToolTip = "Please load graph file first";
-            
+
             MessageQueue = new SnackbarMessageQueue();
 
             _eventAggregator.GetEvent<KeepAliveEvent>().Subscribe(() =>
@@ -116,7 +126,7 @@ namespace ConfigurationModule.components
             {
                 return _ioService.SaveConfigurationToJson(
                     ItemsClustering.Where(a => a.IsSelected).Select(a => a.Key).ToList(),
-                    ItemsDistribution.Where(a => a.IsSelected).Select(a => a.Key).ToList(), 
+                    ItemsDistribution.Where(a => a.IsSelected).Select(a => a.Key).ToList(),
                     _distributionThreshold);
             });
 
@@ -234,7 +244,7 @@ namespace ConfigurationModule.components
                         userAttribute.IsSelected = true;
                 }
             }
-            catch(IncorrectConfigurationFileException)
+            catch (IncorrectConfigurationFileException)
             {
                 // ignored for now
             }
@@ -277,6 +287,8 @@ namespace ConfigurationModule.components
             set => SetProperty(ref _distributionThreshold, value);
         }
 
-        public bool KeepAlive { get; private set; } = true;
+
+
+        #endregion
     }
 }

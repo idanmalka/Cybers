@@ -11,6 +11,11 @@ namespace Cybers.Infrustructure.models
     {
         public List<Cluster> Clusters { get; set; }
 
+        public Partition()
+        {
+            
+        }
+
         public Partition(UndirectedGraph<User, Edge<User>> graph)
         {
             var clusters = new Dictionary<long, List<User>>();

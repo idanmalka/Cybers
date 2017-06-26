@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Cybers.Infrustructure;
@@ -40,6 +41,8 @@ namespace ResultsModule.components
         private string _exportOptionDescription;
         private SnackbarMessageQueue _messageQueue;
         private AlgorithmResultsEventArgs _exportResultArgs;
+        private string _selectedClusterId;
+        private string _selectedAttribute;
 
         #endregion
 
@@ -47,6 +50,13 @@ namespace ResultsModule.components
 
         public DelegateCommand GoToWelcomeScreenCommand { get; }
         public DelegateCommand ExportCommand { get; set; }
+
+        public Dictionary<KeyValuePair<string, string>, Dictionary<long, long>> AttributeRarityMeasurement { get; set; }
+
+        public ObservableCollection<string> ClusterIds { get; set; }
+        public ObservableCollection<string> AttributeNames { get; set; }
+
+        public bool KeepAlive { get; set; } = true;
 
         public SnackbarMessageQueue MessageQueue
         {
@@ -99,6 +109,26 @@ namespace ResultsModule.components
             }
         }
 
+        public string SelectedClusterId
+        {
+            get => _selectedClusterId;
+            set
+            {
+                _selectedClusterId = value;
+                OnChartDisplayChanged(value);
+            }
+        }
+
+        public string SelectedAttribute
+        {
+            get => _selectedAttribute;
+            set
+            {
+                _selectedAttribute = value;
+                OnChartDisplayChanged(value);
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -119,14 +149,23 @@ namespace ResultsModule.components
                 ExportOptions.Add(option.ToString());
             }
 
+            ClusterIds = new ObservableCollection<string>();
+            AttributeNames = new ObservableCollection<string>();
 
             UsersSuspicionLevel = CreateData();
             DistributionData = CreateChartData();
             _eventAggregator.GetEvent<AlgorithmResultsEvent>().Subscribe(arg =>
             {
                 _exportResultArgs = arg;
-                //UsersSuspicionLevel = new ObservableCollection<UserSuspicion>(arg?.UsersSuspicionLevel?.Select(kvp => new UserSuspicion(kvp.Key, kvp.Value)).ToList());
+                UsersSuspicionLevel = new ObservableCollection<UserSuspicion>(arg.UsersSuspicionLevel.Select(kvp => new UserSuspicion(kvp.Key, kvp.Value)).ToList());
                 Partition = arg.Partition;
+                AttributeRarityMeasurement = arg.AttributesRarityMeasurement;
+
+                foreach (var cluster in Partition.Clusters)
+                    ClusterIds.Add(cluster.Id.ToString());
+
+                foreach (var attribute in arg.DistributionAttributes)
+                    AttributeNames.Add(attribute);
             });
         }
 
@@ -144,8 +183,8 @@ namespace ResultsModule.components
             }
 
             if (res)
-              MessageQueue.Enqueue("Exported successfully");
-            
+                MessageQueue.Enqueue("Exported successfully");
+
         }
 
         private void GoToWelcomeScreen()
@@ -154,19 +193,16 @@ namespace ResultsModule.components
 
             var uri = new Uri("WelcomeView", UriKind.Relative);
             _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
+            KeepAlive = false;
         }
 
         private static ObservableCollection<ChartData> CreateChartData()
         {
+
             return new ObservableCollection<ChartData>
             {
-                new ChartData { Year = 2006, Value = 50.5 },
-                new ChartData { Year = 2008, Value = 20.0 },
-                new ChartData { Year = 2009, Value = 5.5  },
-                new ChartData { Year = 2010, Value = 12.5 },
-                new ChartData { Year = 2011, Value = 18.0 },
-                new ChartData { Year = 2012, Value = 22.0 },
-                new ChartData { Year = 2013, Value = 19.8 }
+                new ChartData { Attribute = "2006", UsersPerAttribute = 55 },
+
             };
         }
 
@@ -283,10 +319,24 @@ namespace ResultsModule.components
             };
         }
 
+        private void OnChartDisplayChanged(string argValue, [CallerMemberName]string argName = null)
+        {
+            if (argName == nameof(SelectedClusterId))
+            {
+
+                return;
+            }
+
+            if (argName == nameof(SelectedAttribute))
+            {
+                return;
+            }
+           
+        }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
-            return true;
+            return KeepAlive;
         }
 
         public void OnNavigatedFrom(NavigationContext navigationContext)

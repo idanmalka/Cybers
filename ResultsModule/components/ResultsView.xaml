@@ -9,7 +9,7 @@
              xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
              xmlns:visualizationToolkit="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="600" d:DesignWidth="600">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -120,22 +120,59 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
+                    
+                    <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
 
-                    <ComboBox Grid.Column="0" HorizontalAlignment="Right" Width="100" Margin="0, 0, 16, 16">
-                        <ComboBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel />
-                            </ItemsPanelTemplate>
-                        </ComboBox.ItemsPanel>
-                    </ComboBox>
+                        <StackPanel Grid.Column="0"
+                                    HorizontalAlignment="Center"
+                                    Orientation="Horizontal">
+                            <TextBlock Text="Cluster:"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0"></TextBlock>
+                            <ComboBox Width="80" 
+                                      VerticalAlignment="Center"
+                                      SelectedIndex="0"
+                                      ItemsSource="{Binding ClusterIds}"
+                                      SelectedItem="{Binding SelectedClusterId}">
+                                <ComboBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel />
+                                    </ItemsPanelTemplate>
+                                </ComboBox.ItemsPanel>
+                            </ComboBox>
+                        </StackPanel>
 
-                    <ComboBox Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Width="100" Margin="16, 0, 0, 16">
-                        <ComboBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel />
-                            </ItemsPanelTemplate>
-                        </ComboBox.ItemsPanel>
-                    </ComboBox>
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="left">
+                            <TextBlock Text="Attribute Name:"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0"></TextBlock>
+                            <ComboBox HorizontalAlignment="Left" 
+                                      Width="150"
+                                      VerticalAlignment="Center"
+                                      SelectedIndex="0"
+                                      ItemsSource="{Binding AttributeNames}"
+                                      SelectedItem="{Binding SelectedAttribute}">
+                                <ComboBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel />
+                                    </ItemsPanelTemplate>
+                                </ComboBox.ItemsPanel>
+                            </ComboBox>
+                        </StackPanel>
+                    </Grid>
+
+
+                    
+                    
 
                     <chartingToolkit:Chart Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Name="BarChart">
                         <chartingToolkit:Chart.LegendStyle>
@@ -144,8 +181,8 @@
                                 <Setter Property="Height" Value="0"/>
                             </Style>
                         </chartingToolkit:Chart.LegendStyle>
-                        <chartingToolkit:ColumnSeries DependentValuePath="Value" 
-                                                      IndependentValuePath="Year" 
+                        <chartingToolkit:ColumnSeries DependentValuePath="UsersPerAttribute" 
+                                                      IndependentValuePath="Attribute" 
                                                       ItemsSource="{Binding DistributionData}">
                             <chartingToolkit:ColumnSeries.DataPointStyle>
                                 <Style TargetType="chartingToolkit:ColumnDataPoint">

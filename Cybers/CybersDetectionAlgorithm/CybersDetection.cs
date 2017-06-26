@@ -18,6 +18,7 @@ namespace CybersDetectionAlgorithm
         private readonly IEnumerable<string> _clusteringAttributes;
         private readonly IEnumerable<string> _distributionAttributes;
         private readonly double _threshold;
+        private Dictionary<KeyValuePair<string, string>, Dictionary<long, long>> _attributesRarityMeasurement { get; set; }
 
         #endregion
 
@@ -47,6 +48,7 @@ namespace CybersDetectionAlgorithm
             _clusteringAttributes = clusteringAttributes;
             _distributionAttributes = distributionAttributes;
             _threshold = threshold;
+            _attributesRarityMeasurement = new Dictionary<KeyValuePair<string, string>, Dictionary<long, long>>();
         }
 
         public CybersDetectionResults Execute()
@@ -67,7 +69,10 @@ namespace CybersDetectionAlgorithm
             LatestRunResults = new CybersDetectionResults
             {
                 Partition = ilouvain.ILouvainExecutionResult,
-                UsersSuspicionLevel = userSuspicionLevel
+                UsersSuspicionLevel = userSuspicionLevel,
+                AttributesRarityMeasurement = _attributesRarityMeasurement,
+                ClusteringAttributes = _clusteringAttributes,
+                DistributionAttributes = _distributionAttributes
             };
 
             return LatestRunResults;
@@ -145,7 +150,7 @@ namespace CybersDetectionAlgorithm
         private IEnumerable<User> IdentifyByDistribution(List<User> clusterUsers, string distributionAttribute)
         {
             var rarityMeasurementPerValue = new Dictionary<long, double>();
-
+           
             //count how many users posses each value of the given attribute
             foreach (var user in clusterUsers)
             {
@@ -153,6 +158,15 @@ namespace CybersDetectionAlgorithm
                 if (rarityMeasurementPerValue.ContainsKey(value))
                     rarityMeasurementPerValue[value]++;
                 else rarityMeasurementPerValue[value] = 1;
+            }
+
+            //saving how many users in the cluster posses each value of the attribute
+            //as in: for each <clusterId,AttributeName> save the value of <AttributeValue,NumberOfUsers>
+            if (clusterUsers.Any())
+            {
+                var kvpkey = new KeyValuePair<string, string>(clusterUsers.First().ClusterId.ToString(), distributionAttribute);
+                var kvpValue = rarityMeasurementPerValue.Keys.ToDictionary(key => key, key => (long)rarityMeasurementPerValue[key]);
+                _attributesRarityMeasurement[kvpkey] = kvpValue;
             }
 
             //conversion to percentages
