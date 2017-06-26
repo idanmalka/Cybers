@@ -48,11 +48,7 @@ namespace ConfigurationModule.components
         public string GraphFilePath
         {
             get => _graphFilePath;
-            set
-            {
-                SetProperty(ref _graphFilePath, value);
-                NextCommand.RaiseCanExecuteChanged();
-            }
+            set => SetProperty(ref _graphFilePath, value);
         }
         public string ConfigFilePath
         {
@@ -139,8 +135,7 @@ namespace ConfigurationModule.components
 
         private bool NextCanExecute()
         {
-            return (IsNew || ConfigFilePath != null) && GraphFilePath != null;
-            //return true; //for now
+            return (IsNew || ConfigFilePath != null) && GraphFilePath != null && SaveConfigurationCanExecute();
         }
 
         private void Next()
@@ -181,14 +176,22 @@ namespace ConfigurationModule.components
                                 {
                                     Key = attribute
                                 };
-                                newAtt.PropertyChanged += (s, e) => { SaveConfigurationCommand.RaiseCanExecuteChanged(); };
+                                newAtt.PropertyChanged += (s, e) =>
+                                {
+                                    SaveConfigurationCommand.RaiseCanExecuteChanged();
+                                    NextCommand.RaiseCanExecuteChanged();
+                                };
                                 ItemsClustering.Add(newAtt);
 
                                 newAtt = new UserAttribute
                                 {
                                     Key = attribute
                                 };
-                                newAtt.PropertyChanged += (s, e) => { SaveConfigurationCommand.RaiseCanExecuteChanged(); };
+                                newAtt.PropertyChanged += (s, e) =>
+                                {
+                                    SaveConfigurationCommand.RaiseCanExecuteChanged();
+                                    NextCommand.RaiseCanExecuteChanged();
+                                };
                                 ItemsDistribution.Add(newAtt);
                             }, exception => //TODO : show AlertDialog 
                                 Console.WriteLine(exception.Message), () => ConfigToolTip = "Algorithm Properties File Path");
