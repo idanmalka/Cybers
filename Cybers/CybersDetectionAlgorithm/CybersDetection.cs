@@ -131,7 +131,7 @@ namespace CybersDetectionAlgorithm
 
                 foreach (var distributionAttribute in _distributionAttributes)
                 {
-                    var suspectedUsersByAttribute = IdentifyByDistribution(clusterUsers, distributionAttribute);
+                    var suspectedUsersByAttribute = IdentifyByDistribution(cluster.Id, clusterUsers, distributionAttribute);
                     foreach (var user in suspectedUsersByAttribute)
                         userSuspicionLevel[user.Id]++;
                 }
@@ -145,7 +145,7 @@ namespace CybersDetectionAlgorithm
             return userSuspicionLevel;
         }
 
-        private IEnumerable<User> IdentifyByDistribution(List<User> clusterUsers, string distributionAttribute)
+        private IEnumerable<User> IdentifyByDistribution(long clusterId, List<User> clusterUsers, string distributionAttribute)
         {
             var rarityMeasurementPerValue = new Dictionary<long, double>();
            
@@ -164,7 +164,7 @@ namespace CybersDetectionAlgorithm
             {
                 var kvpkey = new RarityKeyObject
                 {
-                    ClusterId = clusterUsers.First().ClusterId.ToString(),
+                    ClusterId = clusterId.ToString(),
                     AttributeName = distributionAttribute
                 };
 
