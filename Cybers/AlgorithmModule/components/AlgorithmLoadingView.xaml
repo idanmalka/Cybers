@@ -49,7 +49,7 @@
             <Button HorizontalAlignment="Center" Content="View Results" Command="{Binding NextCommand}" Margin="16 8 16 8">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                        <Setter Property="Visibility" Value="Visible"></Setter>
+                        <Setter Property="Visibility" Value="Hidden"></Setter>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding AlgStep}" Value="End">
                                 <Setter Property="Visibility" Value="Visible"></Setter>
