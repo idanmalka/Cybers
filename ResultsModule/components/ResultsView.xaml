@@ -152,7 +152,7 @@
                         <StackPanel Grid.Column="1"
                                     Orientation="Horizontal"
                                     HorizontalAlignment="left">
-                            <TextBlock Text="Attribute Name:"
+                            <TextBlock Text="AttributeValue Name:"
                                        VerticalAlignment="Center"
                                        Margin="0,0,10,0"></TextBlock>
                             <ComboBox HorizontalAlignment="Left" 
@@ -181,8 +181,8 @@
                                 <Setter Property="Height" Value="0"/>
                             </Style>
                         </chartingToolkit:Chart.LegendStyle>
-                        <chartingToolkit:ColumnSeries DependentValuePath="UsersPerAttribute" 
-                                                      IndependentValuePath="Attribute" 
+                        <chartingToolkit:ColumnSeries DependentValuePath="UsersPerAttributeValue" 
+                                                      IndependentValuePath="AttributeValue" 
                                                       ItemsSource="{Binding DistributionData}">
                             <chartingToolkit:ColumnSeries.DataPointStyle>
                                 <Style TargetType="chartingToolkit:ColumnDataPoint">

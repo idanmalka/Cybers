@@ -18,13 +18,13 @@ namespace CybersDetectionAlgorithm
         private readonly IEnumerable<string> _clusteringAttributes;
         private readonly IEnumerable<string> _distributionAttributes;
         private readonly double _threshold;
-        private Dictionary<KeyValuePair<string, string>, Dictionary<long, long>> _attributesRarityMeasurement { get; set; }
+        private Dictionary<RarityKeyObject, RarityValueObject> _attributesRarityMeasurement { get; set; }
 
         #endregion
 
         #region Public Properties
 
-        public CybersDetectionResults LatestRunResults { get; set; }
+        public AlgorithmResultsEventArgs LatestRunResults { get; set; }
 
         #endregion
 
@@ -48,10 +48,10 @@ namespace CybersDetectionAlgorithm
             _clusteringAttributes = clusteringAttributes;
             _distributionAttributes = distributionAttributes;
             _threshold = threshold;
-            _attributesRarityMeasurement = new Dictionary<KeyValuePair<string, string>, Dictionary<long, long>>();
+            _attributesRarityMeasurement = new Dictionary<RarityKeyObject, RarityValueObject>();
         }
 
-        public CybersDetectionResults Execute()
+        public void Execute()
         {
             InitializationStarted?.Invoke(this,null);
             var graph = CreateClusteringGraph();
@@ -66,7 +66,7 @@ namespace CybersDetectionAlgorithm
             Dictionary<string, double> userSuspicionLevel = CreateUserSuspicionLevels(ilouvain.ILouvainExecutionResult);
             DistributingFinished?.Invoke(this, null);
 
-            LatestRunResults = new CybersDetectionResults
+            LatestRunResults = new AlgorithmResultsEventArgs()
             {
                 Partition = ilouvain.ILouvainExecutionResult,
                 UsersSuspicionLevel = userSuspicionLevel,
@@ -74,8 +74,6 @@ namespace CybersDetectionAlgorithm
                 ClusteringAttributes = _clusteringAttributes,
                 DistributionAttributes = _distributionAttributes
             };
-
-            return LatestRunResults;
         }
 
         private UndirectedGraph<User, Edge<User>> CreateClusteringGraph()
@@ -164,8 +162,16 @@ namespace CybersDetectionAlgorithm
             //as in: for each <clusterId,AttributeName> save the value of <AttributeValue,NumberOfUsers>
             if (clusterUsers.Any())
             {
-                var kvpkey = new KeyValuePair<string, string>(clusterUsers.First().ClusterId.ToString(), distributionAttribute);
-                var kvpValue = rarityMeasurementPerValue.Keys.ToDictionary(key => key, key => (long)rarityMeasurementPerValue[key]);
+                var kvpkey = new RarityKeyObject
+                {
+                    ClusterId = clusterUsers.First().ClusterId.ToString(),
+                    AttributeName = distributionAttribute
+                };
+
+                var kvpValue = new RarityValueObject();
+                foreach (var key in rarityMeasurementPerValue.Keys)
+                    kvpValue[key] = (long) rarityMeasurementPerValue[key];
+
                 _attributesRarityMeasurement[kvpkey] = kvpValue;
             }
 

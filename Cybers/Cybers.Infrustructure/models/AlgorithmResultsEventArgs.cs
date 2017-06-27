@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cybers.Infrustructure.converters;
 using Newtonsoft.Json;
 
 namespace Cybers.Infrustructure.models
@@ -26,7 +27,8 @@ namespace Cybers.Infrustructure.models
          * Value: Dictionary<Attribute name, number of users that posses this value in the cluster>
          * */
         [JsonProperty(nameof(AttributesRarityMeasurement))]
-        public Dictionary<KeyValuePair<string, string>, Dictionary<long, long>> AttributesRarityMeasurement { get; set; }
+        [JsonConverter(typeof(RarityDictionaryJsonConverter))]
+        public Dictionary<RarityKeyObject, RarityValueObject> AttributesRarityMeasurement { get; set; }
 
 
     }
