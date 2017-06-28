@@ -51,7 +51,7 @@ namespace ResultsModule.components
         public DelegateCommand GoToWelcomeScreenCommand { get; }
         public DelegateCommand ExportCommand { get; set; }
 
-        public Dictionary<KeyValuePair<string, string>, Dictionary<long, long>> AttributeRarityMeasurement { get; set; }
+        public Dictionary<RarityKeyObject, RarityValueObject> AttributeRarityMeasurement { get; set; }
 
         public ObservableCollection<string> ClusterIds { get; set; }
         public ObservableCollection<string> AttributeNames { get; set; }
@@ -203,25 +203,28 @@ namespace ResultsModule.components
 
         private void OnChartDisplayChanged(string argValue, [CallerMemberName]string argName = null)
         {
-//            if (argName == nameof(SelectedClusterId))
-//            {
-//                
-//            }
-//
-//            if (argName == nameof(SelectedAttribute))
-//            {
-//                
-//            }
+            if (SelectedAttribute == null || SelectedClusterId == null) return;
 
             try
             {
-                var key = new KeyValuePair<string, string>(SelectedClusterId, SelectedAttribute);
-                var value = AttributeRarityMeasurement[key];
-                DistributionData = new ObservableCollection<ChartData>(value.Select(pair => new ChartData
+                var key = new RarityKeyObject();
+
+                foreach (var innerKey in AttributeRarityMeasurement.Keys)
+                    if (innerKey.ClusterId == SelectedClusterId && innerKey.AttributeName == SelectedAttribute)
+                        key = innerKey;
+                if (key.ClusterId == null || key.AttributeName == null) return;
+
+                var attributeValuesDictionary = AttributeRarityMeasurement[key];
+
+                DistributionData = new ObservableCollection<ChartData>();
+
+                foreach (var value in attributeValuesDictionary.Keys)
                 {
-                    Attribute = pair.Key,
-                    UsersPerAttribute = pair.Value
-                }).ToList());
+                    DistributionData.Add(new ChartData {
+                        AttributeValue = value,
+                        UsersPerAttributeValue = attributeValuesDictionary[value]
+                    });
+                }
             }
             catch (Exception e)
             {

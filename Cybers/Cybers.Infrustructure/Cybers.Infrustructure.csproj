@@ -45,9 +45,9 @@
     </Compile>
     <Compile Include="controls\AlertDialogNotification.cs" />
     <Compile Include="controls\AlertDialogViewModel.cs" />
-    <Compile Include="converters\FriendsListToNumberJSONConverter.cs" />
     <Compile Include="converters\NullToBooleanConverter.cs" />
     <Compile Include="converters\NullToVisibilityConverter.cs" />
+    <Compile Include="converters\RarityDictionaryJsonConverter.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="interfaces\IIOService.cs" />
     <Compile Include="interfaces\IView.cs" />
@@ -61,6 +61,8 @@
     <Compile Include="models\IncorrectResultsFileException.cs" />
     <Compile Include="models\IncorrectUsersFileException.cs" />
     <Compile Include="models\KeepAliveEvent.cs" />
+    <Compile Include="models\RarityKeyObject.cs" />
+    <Compile Include="models\RarityValueObject.cs" />
     <Compile Include="models\UserAttribute.cs" />
     <Compile Include="models\Cluster.cs" />
     <Compile Include="models\Partition.cs" />

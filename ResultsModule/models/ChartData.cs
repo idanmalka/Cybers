@@ -8,7 +8,7 @@ namespace ResultsModule.models
 {
     public class ChartData
     {
-        public long Attribute { get; set; }
-        public long UsersPerAttribute { get; set; }
+        public long AttributeValue { get; set; }
+        public long UsersPerAttributeValue { get; set; }
     }
 }

@@ -30,7 +30,7 @@ namespace AlgorithmModule.components
         private AlgorithmStep _algStep = AlgorithmStep.Init;
         private readonly IEventAggregator _eventAggregator;
         private IEnumerable<User> _users;
-        private CybersDetectionResults _results;
+        private AlgorithmResultsEventArgs _results;
         private readonly IRegionManager _regionManager;
         private string _initializingStatusText;
         private string _clusteringStatusText;
@@ -169,14 +169,7 @@ namespace AlgorithmModule.components
             var uri = new Uri(typeof(ResultsModule.components.ResultsView).FullName, UriKind.Relative);
             _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
 
-            _eventAggregator.GetEvent<AlgorithmResultsEvent>().Publish(new AlgorithmResultsEventArgs
-            {
-                UsersSuspicionLevel = _results.UsersSuspicionLevel,
-                Partition = _results.Partition,
-                ClusteringAttributes = _results.ClusteringAttributes,
-                DistributionAttributes = _results.DistributionAttributes,
-                AttributesRarityMeasurement = _results.AttributesRarityMeasurement
-            });
+            _eventAggregator.GetEvent<AlgorithmResultsEvent>().Publish(_results);
         }
 
         private void RaiseConfirmation()
