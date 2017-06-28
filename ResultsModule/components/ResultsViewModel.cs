@@ -173,16 +173,22 @@ namespace ResultsModule.components
             switch (SelectedExportOption)
             {
                 case "Cyber_Detection":
-                    res = Task<bool>.Factory.StartNew(() => _ioService.ExportResultsToFile(_exportResultArgs)).Result;
+                {
+                    var task = Task.Run(() => _ioService.ExportResultsToFile(_exportResultArgs));
+                    task.Wait();
+                    res = task.Result;
+                }
                     break;
                 case "Pajek":
-                    res = Task<bool>.Factory.StartNew(() => _ioService.ExportResultsToPajekFile(Partition)).Result;
+                {
+                    var task = Task.Run(() => _ioService.ExportResultsToPajekFile(Partition));
+                    task.Wait();
+                    res = task.Result;
+                }
                     break;
             }
 
-            if (res)
-                MessageQueue.Enqueue("Exported successfully");
-
+            MessageQueue.Enqueue(res ? "Exported successfully" : "Export Failed");
         }
 
         private void GoToWelcomeScreen()

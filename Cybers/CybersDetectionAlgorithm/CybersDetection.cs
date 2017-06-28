@@ -89,8 +89,8 @@ namespace CybersDetectionAlgorithm
                 {
                     Id = user.Id,
                     ClusterId = user.ClusterId,
-                    FriendsIds = user.FriendsIds
-                    
+                    FriendsIds = user.FriendsIds,
+                    Index = user.Index
                 };
 
                 foreach (var clusteringAttribute in _clusteringAttributes)

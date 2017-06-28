@@ -94,7 +94,42 @@ namespace ServicesModule
 
         public bool ExportResultsToPajekFile(Partition results)
         {
-            return true;
+            try
+            {
+                var users = results.Clusters.SelectMany(cluster => cluster.Verticies).OrderBy(user => user.Index).ToList();
+                var textNetwork = new StringBuilder();
+                var textCluster = new StringBuilder();
+                textNetwork.AppendLine($"*Vertices {users.Count}");
+                textCluster.AppendLine($"*Vertices {users.Count}");
+                users.ForEach(user => textNetwork.AppendLine($"{user.Index + 1}"));
+                textNetwork.AppendLine("*Edges");
+                users.ForEach(user => user.FriendsIds.ForEach(i => textNetwork.AppendLine($"{user.Index+1} {i+1}")));
+                var minClusterId = results.Clusters.Min(cluster => cluster.Id);
+                users.ForEach(user => textCluster.AppendLine($"{user.ClusterId + 1 - minClusterId}"));
+                var dlg = new SaveFileDialog
+                {
+                    FileName = "Cybers_Detection"
+                };
+
+                // Show save file dialog box
+                var result = dlg.ShowDialog();
+
+                // Process save file dialog box results
+                if (result == true)
+                {
+                    // Save document
+                    var network = dlg.FileName + ".net";
+                    var cluster = dlg.FileName + ".clu";
+                    File.WriteAllText(network, textNetwork.ToString());
+                    File.WriteAllText(cluster, textCluster.ToString());
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public bool ExportResultsToFile(AlgorithmResultsEventArgs results)

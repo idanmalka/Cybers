@@ -90,6 +90,7 @@ namespace Cybers.Infrustructure.models
             //
         }
 
-         
+        [JsonProperty("Index")]
+        public int Index { get; set; }
     }
 }

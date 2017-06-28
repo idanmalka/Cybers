@@ -118,7 +118,7 @@ namespace ConfigurationModule.components
 
         private void OnSaveConfiguration()
         {
-            var task = Task<bool>.Factory.StartNew(() =>
+            var task = Task.Run(() =>
             {
                 return _ioService.SaveConfigurationToJson(
                     ItemsClustering.Where(a => a.IsSelected).Select(a => a.Key).ToList(),
@@ -126,6 +126,7 @@ namespace ConfigurationModule.components
                     _distributionThreshold);
             });
 
+            task.Wait();
             var result = task.Result;
             if (result)
             {

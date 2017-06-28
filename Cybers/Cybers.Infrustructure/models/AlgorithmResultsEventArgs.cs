@@ -27,7 +27,5 @@ namespace Cybers.Infrustructure.models
          * */
         [JsonProperty(nameof(AttributesRarityMeasurement))]
         public Dictionary<KeyValuePair<string, string>, Dictionary<long, long>> AttributesRarityMeasurement { get; set; }
-
-
     }
 }
