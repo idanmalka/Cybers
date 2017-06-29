@@ -12,20 +12,20 @@ namespace Cybers.Infrustructure.models
     public class Graph<T> where T : IEquatable<T>
     {
 
-        private readonly Dictionary<T, List<T>> _adjacencyMatrix;
+        private readonly Dictionary<T, Dictionary<T, bool>> _adjacencyMatrix;
         private int _numEdges;
 
         public Graph()
         {
-            _adjacencyMatrix = new Dictionary<T, List<T>>();
+            _adjacencyMatrix = new Dictionary<T, Dictionary<T, bool>>();
         }
 
         public Graph(Graph<T> g)
         {
-            _adjacencyMatrix = new Dictionary<T, List<T>>();
+            _adjacencyMatrix = new Dictionary<T, Dictionary<T, bool>>();
             foreach (var ilist in g._adjacencyMatrix)
             {
-                _adjacencyMatrix[ilist.Key] = new List<T>(ilist.Value);
+                _adjacencyMatrix[ilist.Key] = new Dictionary<T, bool>(ilist.Value);
             }
             _numEdges = g._numEdges;
         }
@@ -54,10 +54,10 @@ namespace Cybers.Infrustructure.models
             _numEdges += 1;
         }
 
-        private void AddDirectedEdge(T node1, T node2)
+        private void AddDirectedEdge(T vertex1, T vertex2)
         {
-            var ilist = EnsureIncidenceList(node1);
-            ilist.Add(node2);
+            var ilist = EnsureIncidenceList(vertex1);
+            ilist[vertex2] = true;
         }
 
         public void SetEdge(T vertex1, T vertex2)
@@ -73,15 +73,15 @@ namespace Cybers.Infrustructure.models
         private void SetDirectedEdge(T vertex1, T vertex2)
         {
             var ilist = EnsureIncidenceList(vertex1);
-            ilist.Add(vertex2);
+            ilist[vertex2] = true;
         }
 
-        private List<T> EnsureIncidenceList(T vertex)
+        private Dictionary<T, bool> EnsureIncidenceList(T vertex)
         {
-            List<T> ilist;
+            Dictionary<T, bool> ilist;
             if (!_adjacencyMatrix.TryGetValue(vertex, out ilist))
             {
-                ilist = _adjacencyMatrix[vertex] = new List<T>();
+                ilist = _adjacencyMatrix[vertex] = new Dictionary<T, bool>();
             }
             return ilist;
         }
@@ -91,7 +91,9 @@ namespace Cybers.Infrustructure.models
         /// </summary>
         public int NumberOfEdges => _numEdges;
 
-        public List<T> AdjacentVertices(T vertex) => _adjacencyMatrix[vertex];
+        public List<T> AdjacentVertices(T vertex) => _adjacencyMatrix[vertex].Keys.ToList();
+
+        public bool IsAdjacentVertices(T vertex1, T vertex2) => _adjacencyMatrix[vertex1][vertex2];
 
         /// <summary>
         /// Computes the degree of a vertex, as the number of incident edges.
@@ -116,7 +118,7 @@ namespace Cybers.Infrustructure.models
                 {
                     foreach (var entry2 in entry1.Value)
                     {
-                        yield return new Edge<T>(entry1.Key, entry2);
+                        yield return new Edge<T>(entry1.Key, entry2.Key);
                     }
                 }
             }
@@ -129,12 +131,12 @@ namespace Cybers.Infrustructure.models
         /// <returns>An enumeration of incident edges.</returns>
         public IEnumerable<Edge<T>> IncidentEdges(T node)
         {
-            List<T> incidence;
+            Dictionary<T, bool> incidence;
             if (_adjacencyMatrix.TryGetValue(node, out incidence))
             {
                 foreach (var entry in incidence)
                 {
-                    yield return new Edge<T>(node, entry);
+                    yield return new Edge<T>(node, entry.Key);
                 }
             }
         }
