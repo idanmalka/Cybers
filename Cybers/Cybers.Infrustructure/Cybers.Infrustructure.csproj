@@ -57,6 +57,8 @@
     <Compile Include="models\AlgorithmAttributesEventArgs.cs" />
     <Compile Include="models\AlgorithmResultsEvent.cs" />
     <Compile Include="models\AlgorithmResultsEventArgs.cs" />
+    <Compile Include="models\Edge.cs" />
+    <Compile Include="models\Graph.cs" />
     <Compile Include="models\IncorrectConfigurationFileException.cs" />
     <Compile Include="models\IncorrectResultsFileException.cs" />
     <Compile Include="models\IncorrectUsersFileException.cs" />

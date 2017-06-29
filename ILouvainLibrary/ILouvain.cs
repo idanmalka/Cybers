@@ -12,7 +12,7 @@ namespace ILouvainLibrary
 {
     public class ILouvain
     {
-        private readonly UndirectedGraph<User, Edge<User>> _graph;
+        private readonly Graph<User> _graph;
         private readonly long _twoM;
         private readonly long _twoN;
         private readonly long N;
@@ -24,11 +24,11 @@ namespace ILouvainLibrary
         public Partition ILouvainExecutionResult { get; set; }
 
 
-        public ILouvain(UndirectedGraph<User, Edge<User>> graph)
+        public ILouvain(Graph<User> graph)
         {
             _graph = graph;
-            _twoM = 2 * _graph.EdgeCount;
-            N = _graph.VertexCount;
+            _twoM = 2 * _graph.NumberOfEdges;
+            N = _graph.Vertices.Count();
             _twoN = 2 * N;
             _vertices = graph.Vertices.ToList();
 
@@ -38,8 +38,7 @@ namespace ILouvainLibrary
 
             foreach (var v1 in _vertices)
                 foreach (var v2 in _vertices)
-                    //if (_adjacency[v1.Index][v2.Index] == 0 && v1.FriendsIndexs.Contains(v2.Index))
-                    if (v1.FriendsIndexs.Contains(v2.Index))
+                    if (_adjacency[v1.Index][v2.Index] == 0 && v1.FriendsIndexs.Contains(v2.Index))
                     {
                         _adjacency[v1.Index][v2.Index] = 1;
                         _adjacency[v2.Index][v1.Index] = 1;
@@ -55,7 +54,7 @@ namespace ILouvainLibrary
                 _auclideanDistance[index] = new double[N];
             foreach (var v1 in _vertices)
                 foreach (var v2 in _vertices)
-                    //if ((int)_auclideanDistance[v1.Index][v2.Index] == 0)
+                    if ((int)_auclideanDistance[v1.Index][v2.Index] == 0)
                     {
                         var distance = CalculateEuclideanDistance(v1, v2);
                         _auclideanDistance[v1.Index][v2.Index] = distance;

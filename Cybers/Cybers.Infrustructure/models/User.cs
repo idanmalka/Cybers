@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Cybers.Infrustructure.models
 {
-    public class User
+    public class User : IEquatable<User>
     {
         private List<int> _friendsIndexs;
         public Dictionary<string, long> Attributes { get; } = new Dictionary<string, long>();
@@ -93,5 +93,10 @@ namespace Cybers.Infrustructure.models
 
         [JsonProperty("Index")]
         public int Index { get; set; }
+
+        public bool Equals(User other)
+        {
+            return other != null && Index == other.Index;
+        }
     }
 }

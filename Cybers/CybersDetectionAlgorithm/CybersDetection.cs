@@ -76,9 +76,9 @@ namespace CybersDetectionAlgorithm
             };
         }
 
-        private UndirectedGraph<User, Edge<User>> CreateClusteringGraph()
+        private Graph<User> CreateClusteringGraph()
         {
-            var graph = new UndirectedGraph<User, Edge<User>>();
+            var graph = new Graph<User>();
             var clusteringUsers = new List<User>();
 
             foreach (var user in _users) //create all users for the graph containing only clustering attributes
@@ -111,7 +111,7 @@ namespace CybersDetectionAlgorithm
 
             foreach (var graphVertex in graph.Vertices) //create edges between clustering users in the graph
                 foreach (var friend in graphVertex.FriendsList)
-                    graph.AddEdge(new Edge<User>(graphVertex, friend));
+                    graph.AddEdge(graphVertex, friend);
 
             return graph;
         }

@@ -16,7 +16,7 @@ namespace Cybers.Infrustructure.models
             
         }
 
-        public Partition(UndirectedGraph<User, Edge<User>> graph)
+        public Partition(Graph<User> graph)
         {
             var clusters = new Dictionary<long, List<User>>();
             Clusters = new List<Cluster>();
