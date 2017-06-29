@@ -18,8 +18,10 @@ namespace ILouvainLibrary
         private readonly long N;
         private readonly List<User> _vertices;
         private readonly Dictionary<long, List<User>> _adjacentVertices;
+        private readonly Dictionary<long, double> _verticesInertia;
         private readonly int[][] _adjacency;
         private readonly double[][] _auclideanDistance;
+        private double _qinertia;
 
         public Partition ILouvainExecutionResult { get; set; }
 
@@ -31,11 +33,11 @@ namespace ILouvainLibrary
             N = _graph.Vertices.Count();
             _twoN = 2 * N;
             _vertices = graph.Vertices.ToList();
+            _qinertia = CalculateInertia();
 
             _adjacency = new int[N][];
             for (var index = 0; index < N; index++)
                 _adjacency[index] = new int[N];
-
             foreach (var v1 in _vertices)
                 foreach (var v2 in _vertices)
                     if (_adjacency[v1.Index][v2.Index] == 0 && v1.FriendsIndexs.Contains(v2.Index))
@@ -61,6 +63,10 @@ namespace ILouvainLibrary
                         _auclideanDistance[v2.Index][v2.Index] = distance;
                     }
 
+            _verticesInertia = new Dictionary<long, double>();
+            foreach (var vertex in _vertices)
+                _verticesInertia[vertex.Index] = CalculateInertia(vertex);
+            
         }
 
         public void Execute()
@@ -113,7 +119,8 @@ namespace ILouvainLibrary
         private double CalculateInertia()
         {
             var gUser = CalculateCenterOfGravity();
-            return CalculateInertia(gUser);
+            var sum = _vertices.Sum(vertex => CalculateEuclideanDistance(gUser, vertex));
+            return sum;
         }
 
         private double CalculateInertia(User v)
@@ -137,9 +144,9 @@ namespace ILouvainLibrary
 
         private double CalculateQinertiaInner(User v1, User v2)
         {
-            var inertiaV1 = CalculateInertia(v1);
-            var inertiaV2 = CalculateInertia(v2);
-            var inertia = CalculateInertia();
+            var inertiaV1 = _verticesInertia[v1.Index];
+            var inertiaV2 = _verticesInertia[v2.Index];
+            var inertia = _qinertia;
             var euclideanDistance = _auclideanDistance[v1.Index][v2.Index];
             return inertiaV1 * inertiaV2 / Math.Pow(_twoN * inertia, 2) - euclideanDistance / (_twoN * inertia);
         }
