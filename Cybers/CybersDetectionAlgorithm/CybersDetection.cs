@@ -87,7 +87,7 @@ namespace CybersDetectionAlgorithm
                 {
                     Id = user.Id,
                     ClusterId = user.ClusterId,
-                    FriendsIds = user.FriendsIds,
+                    FriendsIndexs = user.FriendsIndexs,
                     Index = user.Index
                 };
 
@@ -101,7 +101,7 @@ namespace CybersDetectionAlgorithm
             {
                 var friendsDictionary = new Dictionary<string, User>();
 
-                foreach (var friendId in clusteringUser.FriendsIds)
+                foreach (var friendId in clusteringUser.FriendsIndexs)
                     friendsDictionary[friendId.ToString()] = clusteringUsers[friendId];
 
                 clusteringUser.FriendsList = friendsDictionary.Values.ToList();

@@ -13,7 +13,7 @@ namespace Cybers.Infrustructure.models
 {
     public class User
     {
-        private List<int> _friendsIds;
+        private List<int> _friendsIndexs;
         public Dictionary<string, long> Attributes { get; } = new Dictionary<string, long>();
         public long ClusterId { get; set; }
 
@@ -41,13 +41,14 @@ namespace Cybers.Infrustructure.models
         }
 
 
-        [JsonProperty(nameof(FriendsIds))]
-        public List<int> FriendsIds
+        //[JsonProperty(nameof(FriendsIndexs))]
+        [JsonProperty("FriendsIds")]
+        public List<int> FriendsIndexs
         {
-            get => _friendsIds;
+            get => _friendsIndexs;
             set
             {
-                _friendsIds = value;
+                _friendsIndexs = value;
                 NumberOfFriends = value.Count;
             }
         }
