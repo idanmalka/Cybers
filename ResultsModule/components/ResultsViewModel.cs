@@ -229,14 +229,6 @@ namespace ResultsModule.components
 
                 DistributionData = new ObservableCollection<ChartData>();
 
-                //                foreach (var value in attributeValuesDictionary.Keys)
-                //                {
-                //                    DistributionData.Add(new ChartData {
-                //                        AttributeValue = CoulmnNameFromData(value, key.AttributeName),
-                //                        UsersPerAttributeValue = attributeValuesDictionary[value]
-                //                    });
-                //                }
-                //DistributionData = new ObservableCollection<ChartData>(DistributionData.OrderBy(data => data.AttributeValue));
                 attributeValuesDictionary.Keys.Select(value => new ChartData
                 {
                     AttributeValue = CoulmnNameFromData(value, key.AttributeName),

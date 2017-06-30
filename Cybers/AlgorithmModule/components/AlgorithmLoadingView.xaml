@@ -314,7 +314,7 @@
                 VerticalAlignment="Top" 
                 Text="{Binding FinalizingStatusText}"></TextBlock>
 
-            <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">
+            <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Bottom" Margin="10">
                 <Run Text="Number of clusters: "></Run>
                 <Run Text="{Binding NumberOfClusters}"></Run>
             </TextBlock>
