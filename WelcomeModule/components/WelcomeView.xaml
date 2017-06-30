@@ -43,7 +43,7 @@
                         <TextBlock Margin="8 0 0 0" FontSize="18">LOAD PREVIOUS RESULTS</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Style="{StaticResource MaterialDesignFlatButton}">
+                <Button Style="{StaticResource MaterialDesignFlatButton}" Command="{Binding ShowAboutView}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Script" VerticalAlignment="Center"/>
                         <TextBlock Margin="8 0 0 0" FontSize="18">ABOUT</TextBlock>

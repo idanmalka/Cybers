@@ -18,6 +18,8 @@ namespace WelcomeModule.components
     {
         public DelegateCommand<string> NavigateToConfigView { get; }
         public DelegateCommand LoadPreviousResults { get; }
+        public DelegateCommand ShowAboutView { get; set; }
+        public DelegateCommand GoBackCommand { get; set; }
 
         private readonly IRegionManager _regionManager;
         private readonly IIOService _ioService;
@@ -30,6 +32,19 @@ namespace WelcomeModule.components
             _eventAggregator = eventAggregator;
             NavigateToConfigView = new DelegateCommand<string>(Navigate);
             LoadPreviousResults = new DelegateCommand(OnLoadPreviousResults);
+            ShowAboutView = new DelegateCommand(OnShowAboutView);
+            GoBackCommand = new DelegateCommand(GoBack);
+        }
+
+        private void GoBack()
+        {
+            _regionManager.Regions[RegionNames.MainContentRegion].NavigationService.Journal.GoBack();
+        }
+
+        private void OnShowAboutView()
+        {
+            var uri = new Uri(typeof(AboutView).FullName, UriKind.Relative);
+            _regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
         }
 
         private void OnLoadPreviousResults()

@@ -30,6 +30,7 @@ namespace WelcomeModule
             Container.RegisterType<IWelcomeView, WelcomeView>();
             Container.RegisterType<IWelcomeViewModel, WelcomeViewModel>();
             Container.RegisterTypeForNavigation<WelcomeView>();
+            Container.RegisterTypeForNavigation<AboutView>();
         }
     }
 }
