@@ -36,7 +36,7 @@ namespace CybersDetectionAlgorithm
         public event EventHandler InitializationStarted;
         public event EventHandler ClusteringStarted;
         public event EventHandler DistributingStarted;
-
+        public event EventHandler RunDataUpdate;
         #endregion
 
         #region Methods
@@ -55,10 +55,11 @@ namespace CybersDetectionAlgorithm
         {
             InitializationStarted?.Invoke(this,null);
             var graph = CreateClusteringGraph();
+            var ilouvain = new ILouvain(graph);
+            ilouvain.DataUpdateEvent += (s,e) => RunDataUpdate?.Invoke(this,e);
             InitializationFinished?.Invoke(this, null);
 
             ClusteringStarted?.Invoke(this,null);
-            var ilouvain = new ILouvain(graph);
             ilouvain.Execute();
             ClusteringFinished?.Invoke(this, null);
 

@@ -314,19 +314,10 @@
                 VerticalAlignment="Top" 
                 Text="{Binding FinalizingStatusText}"></TextBlock>
 
-            <!--<Button Command="{Binding NextCommand}" Grid.Column="3" Grid.Row="2" Content="Next">
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                        <Setter Property="Visibility" Value="Visible"></Setter>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding AlgStep}" Value="End">
-                                <Setter Property="Visibility" Value="Visible"></Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>-->
-
+            <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">
+                <Run Text="Number of clusters: "></Run>
+                <Run Text="{Binding NumberOfClusters}"></Run>
+            </TextBlock>
         </Grid>
     </DockPanel>
 </UserControl>

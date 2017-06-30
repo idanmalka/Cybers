@@ -23,6 +23,10 @@ namespace ILouvainLibrary
         private readonly double[][] _auclideanDistance;
         private double _qinertia;
 
+        private long _numberOfClusters;
+        private Dictionary<long, long> _clustersUsersCount;
+
+        public event EventHandler DataUpdateEvent;
         public Partition ILouvainExecutionResult { get; set; }
 
 
@@ -34,6 +38,7 @@ namespace ILouvainLibrary
             _twoN = 2 * N;
             _vertices = graph.Vertices.ToList();
             _qinertia = CalculateInertia();
+            _clustersUsersCount = new Dictionary<long, long>();
 
             _adjacency = new int[N][];
             for (var index = 0; index < N; index++)
@@ -72,6 +77,11 @@ namespace ILouvainLibrary
         public void Execute()
         {
             CreateDiscretePartition();
+            DataUpdateEvent?.Invoke(this, new AlgorithmRunDataUpdateEventArgs
+            {
+                ClustersUsersCount = _clustersUsersCount
+            });
+            _numberOfClusters = N;
             var qqPlusAnterior = 0.0;
             do
             {
@@ -82,7 +92,15 @@ namespace ILouvainLibrary
                     dirty = false;
                     foreach (var vertex in _vertices)
                     {
+                        var oldClusterId = vertex.ClusterId;
                         vertex.ClusterId = FindNeighborClusterMaximizingQQplusGain(vertex, ref qqPlusAnterior, ref dirty);
+                        if (vertex.ClusterId == oldClusterId) continue;
+                        _clustersUsersCount[oldClusterId]--;
+                        _clustersUsersCount[vertex.ClusterId]++;
+                        DataUpdateEvent?.Invoke(this, new AlgorithmRunDataUpdateEventArgs
+                        {
+                            ClustersUsersCount = _clustersUsersCount
+                        });
                     }
                 } while (dirty);
             } while (CalculateQQplus() > qqPlusAnterior);
@@ -204,7 +222,10 @@ namespace ILouvainLibrary
         private void CreateDiscretePartition()
         {
             for (var i = 0; i < N; i++)
+            {
                 _vertices[i].ClusterId = i;
+                _clustersUsersCount[i] = 1;
+            }
 
         }
     }
