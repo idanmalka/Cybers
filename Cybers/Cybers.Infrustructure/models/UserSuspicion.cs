@@ -10,16 +10,18 @@ namespace Cybers.Infrustructure.models
     {
         public string Key { get; set; }
         public double Level { get; set; }
+        public long ClusterId { get; set; }
 
         public UserSuspicion()
         {
 
         }
 
-        public UserSuspicion(string key, double level)
+        public UserSuspicion(string key, double level, long cId)
         {
             Key = key;
             Level = level;
+            ClusterId = cId;
         }
 
     }

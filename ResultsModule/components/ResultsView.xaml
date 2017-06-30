@@ -96,10 +96,17 @@
                                         </Border>
                                     </DataGridTextColumn.Header>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Binding="{Binding Level}">
+                                <DataGridTextColumn Binding="{Binding Level, StringFormat={}{0:#,#.00}}">
                                     <DataGridTextColumn.Header>
                                         <Border Background="Transparent" Padding="6 0 6 0" HorizontalAlignment="Center">
                                             <TextBlock Text="Suspicion Percent"></TextBlock>
+                                        </Border>
+                                    </DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Binding="{Binding ClusterId}">
+                                    <DataGridTextColumn.Header>
+                                        <Border Background="Transparent" Padding="6 0 6 0" HorizontalAlignment="Center">
+                                            <TextBlock Text="Cluster ID"></TextBlock>
                                         </Border>
                                     </DataGridTextColumn.Header>
                                 </DataGridTextColumn>

@@ -64,7 +64,7 @@ namespace CybersDetectionAlgorithm
             ClusteringFinished?.Invoke(this, null);
 
             DistributingStarted?.Invoke(this,null);
-            Dictionary<string, double> userSuspicionLevel = CreateUserSuspicionLevels(ilouvain.ILouvainExecutionResult);
+            List<UserSuspicion> userSuspicionLevel = CreateUserSuspicionLevels(ilouvain.ILouvainExecutionResult);
             DistributingFinished?.Invoke(this, null);
 
             LatestRunResults = new AlgorithmResultsEventArgs()
@@ -117,11 +117,15 @@ namespace CybersDetectionAlgorithm
             return graph;
         }
 
-        private Dictionary<string, double> CreateUserSuspicionLevels(Partition partition)
+        private List<UserSuspicion> CreateUserSuspicionLevels(Partition partition)
         {
+            var userCluster = new Dictionary<string, long>();
             var userSuspicionLevel = new Dictionary<string, double>();
             foreach (var user in _users)
+            {
                 userSuspicionLevel[user.Id] = 0;
+                userCluster[user.Id] = -1;
+            }
 
             foreach (var cluster in partition.Clusters)
             {
@@ -134,7 +138,10 @@ namespace CybersDetectionAlgorithm
                 {
                     var suspectedUsersByAttribute = IdentifyByDistribution(cluster.Id, clusterUsers, distributionAttribute);
                     foreach (var user in suspectedUsersByAttribute)
+                    {
                         userSuspicionLevel[user.Id]++;
+                        userCluster[user.Id] = cluster.Id;
+                    }
                 }
             }
 
@@ -142,8 +149,22 @@ namespace CybersDetectionAlgorithm
             foreach (var key in userSuspicionLevel.Keys.ToList())
                 userSuspicionLevel[key] = (userSuspicionLevel[key] / _distributionAttributes.Count()) * 100;
 
+            var userSuspicions = new List<UserSuspicion>();
+            foreach (var user in _users)
+            {
+                if (userSuspicionLevel[user.Id] > 0)
+                {
+                    userSuspicions.Add(new UserSuspicion
+                    {
+                        Key = user.Index.ToString(),
+                        Level = userSuspicionLevel[user.Id],
+                        ClusterId = userCluster[user.Id]
+                    });
+                }
 
-            return userSuspicionLevel;
+            }
+
+            return userSuspicions;
         }
 
         private IEnumerable<User> IdentifyByDistribution(long clusterId, List<User> clusterUsers, string distributionAttribute)
