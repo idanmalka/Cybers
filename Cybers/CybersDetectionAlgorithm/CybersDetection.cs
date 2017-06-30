@@ -53,17 +53,17 @@ namespace CybersDetectionAlgorithm
 
         public void Execute()
         {
-            InitializationStarted?.Invoke(this,null);
+            InitializationStarted?.Invoke(this, null);
             var graph = CreateClusteringGraph();
             var ilouvain = new ILouvain(graph);
-            ilouvain.DataUpdateEvent += (s,e) => RunDataUpdate?.Invoke(this,e);
+            ilouvain.DataUpdateEvent += (s, e) => RunDataUpdate?.Invoke(this, e);
             InitializationFinished?.Invoke(this, null);
 
-            ClusteringStarted?.Invoke(this,null);
+            ClusteringStarted?.Invoke(this, null);
             ilouvain.Execute();
             ClusteringFinished?.Invoke(this, null);
 
-            DistributingStarted?.Invoke(this,null);
+            DistributingStarted?.Invoke(this, null);
             List<UserSuspicion> userSuspicionLevel = CreateUserSuspicionLevels(ilouvain.ILouvainExecutionResult);
             DistributingFinished?.Invoke(this, null);
 
@@ -129,10 +129,24 @@ namespace CybersDetectionAlgorithm
 
             foreach (var cluster in partition.Clusters)
             {
-                var clusterUsers = (from user in _users
-                    from clusterVerticy in cluster.Verticies
-                    where user.Id == clusterVerticy.Id
-                    select user).ToList();
+
+                //var clusterUsers = (from user in _users
+                //    from clusterVerticy in cluster.Verticies
+                //    where user.Id == clusterVerticy.Id
+                //    select user).ToList();
+
+                var clusterUsers = new List<User>();
+                foreach (var user in _users)
+                    foreach (var clusterVerticy in cluster.Verticies)
+                    {
+                        if (user.Id != clusterVerticy.Id) continue;
+                        user.ClusterId = clusterVerticy.ClusterId;
+                        clusterUsers.Add(user);
+                        break;
+                    }
+
+
+
 
                 foreach (var distributionAttribute in _distributionAttributes)
                 {
@@ -143,6 +157,8 @@ namespace CybersDetectionAlgorithm
                         userCluster[user.Id] = cluster.Id;
                     }
                 }
+
+                cluster.Verticies = clusterUsers;
             }
 
             //conversion to percentage
@@ -170,7 +186,7 @@ namespace CybersDetectionAlgorithm
         private IEnumerable<User> IdentifyByDistribution(long clusterId, List<User> clusterUsers, string distributionAttribute)
         {
             var rarityMeasurementPerValue = new Dictionary<long, double>();
-           
+
             //count how many users posses each value of the given attribute
             foreach (var user in clusterUsers)
             {
@@ -192,7 +208,7 @@ namespace CybersDetectionAlgorithm
 
                 var kvpValue = new RarityValueObject();
                 foreach (var key in rarityMeasurementPerValue.Keys)
-                    kvpValue[key] = (long) rarityMeasurementPerValue[key];
+                    kvpValue[key] = (long)rarityMeasurementPerValue[key];
 
                 _attributesRarityMeasurement[kvpkey] = kvpValue;
             }

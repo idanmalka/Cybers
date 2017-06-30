@@ -182,6 +182,8 @@ namespace ResultsModule.components
 
         private void OnShowUserDetails(UserSuspicion obj)
         {
+            if (obj == null) return;
+
             var user = Partition.Clusters.First(c => c.Id == obj.ClusterId).Verticies.First(u => u.Index.ToString() == obj.Key);
 
             var userDetailView = new UserDetails(new UserDetailsViewModel(user));
