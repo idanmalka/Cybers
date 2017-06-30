@@ -36,6 +36,7 @@ namespace AlgorithmModule.components
         private string _clusteringStatusText;
         private string _distributingStatusText;
         private string _finalizingStatusText;
+        private long _numberOfClusters;
 
         #endregion
 
@@ -80,6 +81,13 @@ namespace AlgorithmModule.components
             get => _algStep;
             set => SetProperty(ref _algStep, value);
         }
+
+        public long NumberOfClusters
+        {
+            get => _numberOfClusters;
+            set => SetProperty(ref _numberOfClusters, value);
+        }
+
         #endregion
 
         #region Methods
@@ -128,10 +136,18 @@ namespace AlgorithmModule.components
             algorithm.ClusteringFinished += OnClusteringFinished;
             algorithm.DistributingFinished += OnDistributingFinished;
 
+            algorithm.RunDataUpdate += (s, e) =>
+            {
+                var clustersUsersCount = ((AlgorithmRunDataUpdateEventArgs) e).ClustersUsersCount;
+                var numberOfClusters = clustersUsersCount.Count(d => d.Value != 0);
+                Application.Current.Dispatcher.Invoke(() => NumberOfClusters = numberOfClusters);
+            };
+
             algorithm.Execute();
 
             _results = algorithm.LatestRunResults;
         }
+
 
         private void GoBack()
         {
