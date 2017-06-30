@@ -183,7 +183,7 @@
                             </Style>
                         </chartingToolkit:Chart.LegendStyle>
                         <chartingToolkit:ColumnSeries DependentValuePath="UsersPerAttributeValue" 
-                                                      IndependentValuePath="AttributeValue" 
+                                                      IndependentValuePath="AttributeValue"
                                                       ItemsSource="{Binding DistributionData}">
                             <chartingToolkit:ColumnSeries.DataPointStyle>
                                 <Style TargetType="chartingToolkit:ColumnDataPoint">
@@ -191,6 +191,9 @@
                                 </Style>
                             </chartingToolkit:ColumnSeries.DataPointStyle>
                         </chartingToolkit:ColumnSeries>
+                        <chartingToolkit:Chart.Axes>
+                            <chartingToolkit:LinearAxis Orientation="Y" Minimum="0" Interval="{Binding IntervalBySelectedAttribute}"/>
+                        </chartingToolkit:Chart.Axes>
                     </chartingToolkit:Chart>
                 </Grid>
 

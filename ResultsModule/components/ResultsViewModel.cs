@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,6 +45,7 @@ namespace ResultsModule.components
         private AlgorithmResultsEventArgs _exportResultArgs;
         private string _selectedClusterId;
         private string _selectedAttribute;
+        private int _intervalBySelectedAttribute;
 
         #endregion
 
@@ -62,6 +65,12 @@ namespace ResultsModule.components
         {
             get => _messageQueue;
             set => SetProperty(ref _messageQueue, value);
+        }
+
+        public int IntervalBySelectedAttribute
+        {
+            get => _intervalBySelectedAttribute;
+            set => SetProperty(ref _intervalBySelectedAttribute, value);
         }
 
         public ObservableCollection<ChartData> DistributionData
@@ -216,21 +225,46 @@ namespace ResultsModule.components
 
                 var attributeValuesDictionary = AttributeRarityMeasurement[key];
 
+                IntervalBySelectedAttribute = (int) attributeValuesDictionary.UsersPerValue.Values.Average();
+
                 DistributionData = new ObservableCollection<ChartData>();
 
-                foreach (var value in attributeValuesDictionary.Keys)
+                //                foreach (var value in attributeValuesDictionary.Keys)
+                //                {
+                //                    DistributionData.Add(new ChartData {
+                //                        AttributeValue = CoulmnNameFromData(value, key.AttributeName),
+                //                        UsersPerAttributeValue = attributeValuesDictionary[value]
+                //                    });
+                //                }
+                //DistributionData = new ObservableCollection<ChartData>(DistributionData.OrderBy(data => data.AttributeValue));
+                attributeValuesDictionary.Keys.Select(value => new ChartData
                 {
-                    DistributionData.Add(new ChartData {
-                        AttributeValue = value,
-                        UsersPerAttributeValue = attributeValuesDictionary[value]
+                    AttributeValue = CoulmnNameFromData(value, key.AttributeName),
+                    UsersPerAttributeValue = attributeValuesDictionary[value]
+                }).OrderBy(data => data.AttributeValue).ToObservable().SubscribeOn(Scheduler.Default).ObserveOnDispatcher()
+                .Subscribe(data =>
+                    {
+                        DistributionData.Add(data);
                     });
-                }
+
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
 
+        }
+
+        private string CoulmnNameFromData(long value, string keyAttributeName)
+        {
+            switch (keyAttributeName)
+            {
+                case nameof(User.Gender):
+                    return value == 1 ? "Male" : "Female";
+                case nameof(User.CreationDate):
+                    return value.ToString().Substring(2, 2);
+            }
+            return value.ToString();
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

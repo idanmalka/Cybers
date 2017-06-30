@@ -13,7 +13,7 @@ namespace Cybers.Infrustructure.models
 {
     public class User : IEquatable<User>
     {
-        private List<int> _friendsIndexs;
+        private List<User> _friendsList;
         public Dictionary<string, long> Attributes { get; } = new Dictionary<string, long>();
         public long ClusterId { get; set; }
 
@@ -26,7 +26,15 @@ namespace Cybers.Infrustructure.models
         }
 
         [JsonIgnore]
-        public List<User> FriendsList { get; set; }
+        public List<User> FriendsList
+        {
+            get => _friendsList;
+            set
+            {
+                _friendsList = value;
+                NumberOfFriends = value.Count;
+            }
+        }
 
         [JsonProperty(nameof(Verified))]
         public bool Verified
@@ -43,19 +51,17 @@ namespace Cybers.Infrustructure.models
 
         //[JsonProperty(nameof(FriendsIndexs))]
         [JsonProperty("FriendsIds")]
-        public List<int> FriendsIndexs
-        {
-            get => _friendsIndexs;
-            set
-            {
-                _friendsIndexs = value;
-                NumberOfFriends = value.Count;
-            }
-        }
+        public List<int> FriendsIndexs { get; set; }
 
+        [JsonIgnore]
         public int NumberOfFriends
         {
             set => AddAttribute(value);
+        }
+
+        public string Gender
+        {
+            set => AddAttribute(value.Equals("male") ? 1 : 0);
         }
 
         //[JsonProperty(nameof(Address))]
@@ -68,7 +74,7 @@ namespace Cybers.Infrustructure.models
         [JsonProperty(nameof(PostsNumber))]
         public int PostsNumber
         {
-            set => AddAttribute(value);
+            set => AddAttribute(value / 100 * 100);
         }
 
         [JsonProperty(nameof(CreationDate))]
