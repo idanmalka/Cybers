@@ -23,7 +23,6 @@ namespace ILouvainLibrary
         private readonly double[][] _auclideanDistance;
         private double _qinertia;
 
-        private long _numberOfClusters;
         private Dictionary<long, long> _clustersUsersCount;
 
         public event EventHandler DataUpdateEvent;
@@ -40,38 +39,11 @@ namespace ILouvainLibrary
             _qinertia = CalculateInertia();
             _clustersUsersCount = new Dictionary<long, long>();
 
-            _adjacency = new int[N][];
-            for (var index = 0; index < N; index++)
-                _adjacency[index] = new int[N];
-            foreach (var v1 in _vertices)
-                foreach (var v2 in _vertices)
-                    if (_adjacency[v1.Index][v2.Index] == 0 && v1.FriendsIndexs.Contains(v2.Index))
-                    {
-                        _adjacency[v1.Index][v2.Index] = 1;
-                        _adjacency[v2.Index][v1.Index] = 1;
-                    }
+            _adjacency = BuildAdjacencyMatrix(_vertices);
+            _adjacentVertices = BuildAdjacentVerticesList(_vertices);
+            _auclideanDistance = BuildAuclideanDistancesMatrix(_vertices);
+            _verticesInertia = BuildInertiaMatrix(_vertices);
 
-
-            _adjacentVertices = new Dictionary<long, List<User>>();
-            foreach (var vertex in _vertices)
-                _adjacentVertices[vertex.Index] = _graph.AdjacentVertices(vertex).ToList();
-
-            _auclideanDistance = new double[N][];
-            for (var index = 0; index < N; index++)
-                _auclideanDistance[index] = new double[N];
-            foreach (var v1 in _vertices)
-                foreach (var v2 in _vertices)
-                    if ((int)_auclideanDistance[v1.Index][v2.Index] == 0)
-                    {
-                        var distance = CalculateEuclideanDistance(v1, v2);
-                        _auclideanDistance[v1.Index][v2.Index] = distance;
-                        _auclideanDistance[v2.Index][v2.Index] = distance;
-                    }
-
-            _verticesInertia = new Dictionary<long, double>();
-            foreach (var vertex in _vertices)
-                _verticesInertia[vertex.Index] = CalculateInertia(vertex);
-            
         }
 
         public void Execute()
@@ -81,7 +53,6 @@ namespace ILouvainLibrary
             {
                 ClustersUsersCount = _clustersUsersCount
             });
-            _numberOfClusters = N;
             var qqPlusAnterior = 0.0;
             do
             {
@@ -108,6 +79,41 @@ namespace ILouvainLibrary
             ILouvainExecutionResult = new Partition(_graph);
         }
 
+        private Dictionary<long, double> BuildInertiaMatrix(List<User> vertices)
+        {
+            var verticesInertia = new Dictionary<long, double>();
+            foreach (var vertex in vertices)
+                verticesInertia[vertex.Index] = CalculateInertia(vertex);
+
+            return verticesInertia;
+        }
+
+        private double[][] BuildAuclideanDistancesMatrix(List<User> vertices)
+        {
+            var auclideanDistance = new double[N][];
+            for (var index = 0; index < N; index++)
+                auclideanDistance[index] = new double[N];
+            foreach (var v1 in vertices)
+                foreach (var v2 in vertices)
+                    if ((int)auclideanDistance[v1.Index][v2.Index] == 0)
+                    {
+                        var distance = CalculateEuclideanDistance(v1, v2);
+                        auclideanDistance[v1.Index][v2.Index] = distance;
+                        auclideanDistance[v2.Index][v2.Index] = distance;
+                    }
+
+            return auclideanDistance;
+        }
+
+        private Dictionary<long, List<User>> BuildAdjacentVerticesList(List<User> vertices)
+        {
+            var adjecentVerticeDict = new Dictionary<long, List<User>>();
+            foreach (var vertex in vertices)
+                adjecentVerticeDict[vertex.Index] = _graph.AdjacentVertices(vertex).ToList();
+
+            return adjecentVerticeDict;
+        }
+
         private double CalculateEuclideanDistance(User u1, User u2)
         {
             double distance = 0;
@@ -118,6 +124,22 @@ namespace ILouvainLibrary
                 distance += Math.Pow(val1 - val2, 2);
             }
             return distance;
+        }
+
+        private int[][] BuildAdjacencyMatrix(List<User> vertices)
+        {
+            var adjacency = new int[N][];
+            for (var index = 0; index < N; index++)
+                adjacency[index] = new int[N];
+            foreach (var v1 in vertices)
+                foreach (var v2 in vertices)
+                    if (adjacency[v1.Index][v2.Index] == 0 && v1.FriendsIndexs.Contains(v2.Index))
+                    {
+                        adjacency[v1.Index][v2.Index] = 1;
+                        adjacency[v2.Index][v1.Index] = 1;
+                    }
+
+            return adjacency;
         }
 
         private User CalculateCenterOfGravity()
