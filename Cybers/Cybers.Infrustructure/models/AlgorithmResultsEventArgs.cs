@@ -11,7 +11,7 @@ namespace Cybers.Infrustructure.models
     public class AlgorithmResultsEventArgs
     {
         [JsonProperty(nameof(UsersSuspicionLevel))]
-        public Dictionary<string, double> UsersSuspicionLevel { get; set; }
+        public List<UserSuspicion> UsersSuspicionLevel { get; set; }
 
         [JsonProperty(nameof(Partition))]
         public Partition Partition { get; set; }

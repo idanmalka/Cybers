@@ -199,7 +199,13 @@ namespace ConfigurationModule.components
                             break;
                         case "Config":
                             ConfigFilePath = path;
-                            LoadExistingConfiguration(path);
+                            LoadExistingConfiguration(path).Subscribe(attribute =>
+                            {
+                                attribute.IsSelected = true;
+                            }, exception =>
+                            {
+                                //TODO : show AlertDialog 
+                            });
                             break;
                     }
                 });
@@ -227,31 +233,36 @@ namespace ConfigurationModule.components
             }).SubscribeOn(Scheduler.Default).ObserveOnDispatcher();
         }
 
-        private void LoadExistingConfiguration(string path)
+        private IObservable<UserAttribute> LoadExistingConfiguration(string path)
         {
-            try
+            return Observable.Create<UserAttribute>(observer =>
             {
-                var attributes = _ioService.ReadConfigurationFromFile(path);
-
-                DistributionThreshold = attributes.Threshold;
-                foreach (var cAttribute in attributes.ClustringAttributes)
+                try
                 {
-                    var userAttribute = ItemsClustering.FirstOrDefault(a => a.Key == cAttribute);
-                    if (userAttribute != null)
-                        userAttribute.IsSelected = true;
-                }
+                    var attributes = _ioService.ReadConfigurationFromFile(path);
+                    DistributionThreshold = attributes.Threshold;
+                    foreach (var cAttribute in attributes.ClustringAttributes)
+                    {
+                        var userAttribute = ItemsClustering.FirstOrDefault(a => a.Key == cAttribute);
+                        if (userAttribute != null)
+                            observer.OnNext(userAttribute);
+                    }
 
-                foreach (var dAttribute in attributes.DistributingAttributes)
-                {
-                    var userAttribute = ItemsDistribution.FirstOrDefault(a => a.Key == dAttribute);
-                    if (userAttribute != null)
-                        userAttribute.IsSelected = true;
+                    foreach (var dAttribute in attributes.DistributingAttributes)
+                    {
+                        var userAttribute = ItemsDistribution.FirstOrDefault(a => a.Key == dAttribute);
+                        if (userAttribute != null)
+                            observer.OnNext(userAttribute);
+
+                    }
+                    observer.OnCompleted();
                 }
-            }
-            catch (IncorrectConfigurationFileException)
-            {
-                // ignored for now
-            }
+                catch (Exception e)
+                {
+                    observer.OnError(e);
+                }
+                return Disposable.Empty;
+            }).SubscribeOn(Scheduler.Default).ObserveOnDispatcher();
         }
 
         public DelegateCommand GoBackCommand { get; }

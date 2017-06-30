@@ -164,7 +164,7 @@ namespace ResultsModule.components
             _eventAggregator.GetEvent<AlgorithmResultsEvent>().Subscribe(arg =>
             {
                 _exportResultArgs = arg;
-                UsersSuspicionLevel = new ObservableCollection<UserSuspicion>(arg.UsersSuspicionLevel.Select(kvp => new UserSuspicion(kvp.Key, kvp.Value)).ToList());
+                UsersSuspicionLevel = new ObservableCollection<UserSuspicion>(arg.UsersSuspicionLevel);
                 Partition = arg.Partition;
                 AttributeRarityMeasurement = arg.AttributesRarityMeasurement;
 
