@@ -19,7 +19,7 @@ namespace ILouvainLibrary
         private readonly List<User> _vertices;
         private readonly Dictionary<long, List<User>> _adjacentVertices;
         private readonly Dictionary<long, double> _verticesInertia;
-        private readonly int[][] _adjacency;
+//        private readonly int[][] _adjacency;
         private readonly double[][] _auclideanDistance;
         private double _qinertia;
 
@@ -35,16 +35,16 @@ namespace ILouvainLibrary
             _vertices = graph.Vertices.ToList();
             _qinertia = CalculateInertia();
 
-            _adjacency = new int[N][];
-            for (var index = 0; index < N; index++)
-                _adjacency[index] = new int[N];
-            foreach (var v1 in _vertices)
-                foreach (var v2 in _vertices)
-                    if (_adjacency[v1.Index][v2.Index] == 0 && v1.FriendsIndexs.Contains(v2.Index))
-                    {
-                        _adjacency[v1.Index][v2.Index] = 1;
-                        _adjacency[v2.Index][v1.Index] = 1;
-                    }
+//            _adjacency = new int[N][];
+//            for (var index = 0; index < N; index++)
+//                _adjacency[index] = new int[N];
+//            foreach (var v1 in _vertices)
+//                foreach (var v2 in _vertices)
+//                    if (_adjacency[v1.Index][v2.Index] == 0 && v1.FriendsIndexs.Contains(v2.Index))
+//                    {
+//                        _adjacency[v1.Index][v2.Index] = 1;
+//                        _adjacency[v2.Index][v1.Index] = 1;
+//                    }
 
 
             _adjacentVertices = new Dictionary<long, List<User>>();
@@ -167,7 +167,7 @@ namespace ILouvainLibrary
                     {
                         var kv1 = v1.Attributes[nameof(v1.NumberOfFriends)];
                         var kv2 = v2.Attributes[nameof(v2.NumberOfFriends)];
-                        sum += _adjacency[v1.Index][v2.Index] - kv1 * kv2 / _twoM;
+                        sum += (_graph.IsAdjacentVertices(v1, v2) ? 1 : 0) - kv1 * kv2 / _twoM;
                     }
                 }
             }
