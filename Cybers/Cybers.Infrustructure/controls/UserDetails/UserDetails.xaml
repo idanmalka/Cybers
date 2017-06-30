@@ -1,0 +1,46 @@
+﻿<Window x:Class="Cybers.Infrustructure.controls.UserDetails.UserDetails"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Cybers.Infrustructure.controls.UserDetails"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             Height="370" Width="350">
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBlock}" x:Key="HeaderStyle">
+            <Style.Setters>
+                <Setter Property="Foreground" Value="BlueViolet"></Setter>
+                <Setter Property="FontWeight" Value="Bold"></Setter>
+                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+            </Style.Setters>
+        </Style>
+        <Style TargetType="{x:Type TextBlock}" x:Key="ContentStyle">
+            <Style.Setters>
+                <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+
+    <GroupBox Header="User Details" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="16">
+        <GroupBox.HeaderTemplate>
+            <DataTemplate>
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Account" Height="32" Width="32" VerticalAlignment="Center" />
+                    <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding}"/>
+                </StackPanel>
+            </DataTemplate>
+        </GroupBox.HeaderTemplate>
+
+        <ListBox ItemsSource="{Binding User.Attributes}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <UniformGrid Columns="2">
+                        <TextBlock Width="120" Text="{Binding Key}" Style="{StaticResource HeaderStyle}"></TextBlock>
+                        <TextBlock Text="{Binding Value}" Style="{StaticResource ContentStyle}"></TextBlock>
+                    </UniformGrid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </GroupBox>
+</Window>

@@ -7,7 +7,9 @@ using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Cybers.Infrustructure;
+using Cybers.Infrustructure.controls.UserDetails;
 using Cybers.Infrustructure.interfaces;
 using Cybers.Infrustructure.models;
 using MaterialDesignThemes.Wpf;
@@ -53,6 +55,7 @@ namespace ResultsModule.components
 
         public DelegateCommand GoToWelcomeScreenCommand { get; }
         public DelegateCommand ExportCommand { get; set; }
+        public DelegateCommand<UserSuspicion> ShowUserDetailsCommand { get; set; }
 
         public Dictionary<RarityKeyObject, RarityValueObject> AttributeRarityMeasurement { get; set; }
 
@@ -146,6 +149,7 @@ namespace ResultsModule.components
         {
             GoToWelcomeScreenCommand = new DelegateCommand(GoToWelcomeScreen);
             ExportCommand = new DelegateCommand(OnExportToFile);
+            ShowUserDetailsCommand = new DelegateCommand<UserSuspicion>(OnShowUserDetails);
             _eventAggregator = eventAggregator;
             _regionManager = regionManager;
             _ioService = ioService;
@@ -174,6 +178,14 @@ namespace ResultsModule.components
                 foreach (var attribute in arg.DistributionAttributes)
                     AttributeNames.Add(attribute);
             });
+        }
+
+        private void OnShowUserDetails(UserSuspicion obj)
+        {
+            var user = Partition.Clusters.First(c => c.Id == obj.ClusterId).Verticies.First(u => u.Index.ToString() == obj.Key);
+
+            var userDetailView = new UserDetails(new UserDetailsViewModel(user));
+            userDetailView.ShowDialog();
         }
 
         private void OnExportToFile()

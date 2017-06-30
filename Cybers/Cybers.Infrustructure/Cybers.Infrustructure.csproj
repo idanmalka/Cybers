@@ -45,6 +45,10 @@
     </Compile>
     <Compile Include="controls\AlertDialogNotification.cs" />
     <Compile Include="controls\AlertDialogViewModel.cs" />
+    <Compile Include="controls\UserDetails\UserDetails.xaml.cs">
+      <DependentUpon>UserDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="controls\UserDetails\UserDetailsViewModel.cs" />
     <Compile Include="converters\NullToBooleanConverter.cs" />
     <Compile Include="converters\NullToVisibilityConverter.cs" />
     <Compile Include="converters\RarityDictionaryJsonConverter.cs" />
@@ -155,6 +159,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="controls\AlertDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="controls\UserDetails\UserDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
