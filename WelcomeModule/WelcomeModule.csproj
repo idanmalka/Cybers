@@ -77,6 +77,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="components\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="components\WelcomeBottomToolbarView.xaml.cs">
       <DependentUpon>WelcomeBottomToolbarView.xaml</DependentUpon>
     </Compile>
@@ -113,6 +116,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="components\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="components\WelcomeBottomToolbarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -131,6 +138,9 @@
       <Project>{79992E29-00A1-4791-B33B-3D9A5AAF2488}</Project>
       <Name>Cybers.Infrustructure</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\about.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
