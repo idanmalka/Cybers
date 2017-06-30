@@ -40,7 +40,7 @@
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Examine Results</TextBlock>
                 </DockPanel>
             </materialDesign:ColorZone>
-   
+
         </StackPanel>
 
         <local:CustomTabControl Background="Transparent">
@@ -117,11 +117,12 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="212*"/>
+                        <ColumnDefinition Width="85*"/>
+                        <ColumnDefinition Width="297*"/>
                     </Grid.ColumnDefinitions>
-                    
-                    <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+
+                    <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50"></RowDefinition>
                         </Grid.RowDefinitions>
@@ -171,10 +172,10 @@
                     </Grid>
 
 
-                    
-                    
 
-                    <chartingToolkit:Chart Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Name="BarChart">
+
+
+                    <chartingToolkit:Chart Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Name="BarChart">
                         <chartingToolkit:Chart.LegendStyle>
                             <Style TargetType="visualizationToolkit:Legend">
                                 <Setter Property="Width" Value="0"/>
@@ -192,7 +193,7 @@
                         </chartingToolkit:ColumnSeries>
                     </chartingToolkit:Chart>
                 </Grid>
-                
+
             </TabItem>
             <TabItem Header="Export">
                 <Grid>
@@ -220,7 +221,7 @@
                               SelectedIndex="0"
                               ItemsSource="{Binding ExportOptions}"
                               SelectedItem="{Binding SelectedExportOption}"></ComboBox>
-                    
+
                     <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>

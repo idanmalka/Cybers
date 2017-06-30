@@ -59,6 +59,7 @@ namespace Cybers.Infrustructure.models
         }
 
         //[JsonProperty(nameof(Address))]
+        [JsonIgnore]
         public Address Address
         {
             set => AddAttribute(value.Code);
@@ -73,11 +74,7 @@ namespace Cybers.Infrustructure.models
         [JsonProperty(nameof(CreationDate))]
         public DateTime CreationDate
         {
-            set
-            {
-                var now = new TimeSpan(DateTime.Today.Ticks).TotalMilliseconds;
-                AddAttribute((long)(now - value.Millisecond));
-            }
+            set => AddAttribute(value.Year);
         }
 
         private void AddAttribute(long value = 0, [CallerMemberName] string propertyName = null)

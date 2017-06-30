@@ -26,6 +26,10 @@ namespace Cybers.Infrustructure.models
             foreach (var ilist in g._adjacencyMatrix)
             {
                 _adjacencyMatrix[ilist.Key] = new Dictionary<T, bool>(ilist.Value);
+                foreach (var ilist2 in g._adjacencyMatrix)
+                {
+                    _adjacencyMatrix[ilist.Key][ilist2.Key] = ilist.Key.Equals(ilist2.Key);
+                }
             }
             _numEdges = g._numEdges;
         }
