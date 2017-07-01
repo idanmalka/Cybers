@@ -22,6 +22,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <TextBlock HorizontalAlignment="Center" Margin="32" Style="{StaticResource MaterialDesignDisplay1TextBlock}" TextWrapping="Wrap" TextAlignment="Center">Welcome to Detecting Cyber Users in Social Networks</TextBlock>
             <StackPanel Margin="32 0 32 0" Grid.Row="0"  VerticalAlignment="Center" Grid.RowSpan="2">
@@ -50,6 +51,7 @@
                     </StackPanel>
                 </Button>
             </StackPanel>
+            <materialDesign:Snackbar Grid.Row="2" MessageQueue="{Binding MessageQueue}"/>
         </Grid>
     </DockPanel>
 </UserControl>

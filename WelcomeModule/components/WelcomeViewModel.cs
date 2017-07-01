@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Cybers.Infrustructure;
 using Cybers.Infrustructure.interfaces;
 using Cybers.Infrustructure.models;
+using MaterialDesignThemes.Wpf;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -21,9 +22,16 @@ namespace WelcomeModule.components
         public DelegateCommand ShowAboutView { get; set; }
         public DelegateCommand GoBackCommand { get; set; }
 
+        public SnackbarMessageQueue MessageQueue
+        {
+            get => _messageQueue;
+            set => SetProperty(ref _messageQueue, value);
+        }
+
         private readonly IRegionManager _regionManager;
         private readonly IIOService _ioService;
         private readonly IEventAggregator _eventAggregator;
+        private SnackbarMessageQueue _messageQueue;
 
         public WelcomeViewModel(IRegionManager regionManager, IIOService ioService, IEventAggregator eventAggregator)
         {
@@ -34,6 +42,8 @@ namespace WelcomeModule.components
             LoadPreviousResults = new DelegateCommand(OnLoadPreviousResults);
             ShowAboutView = new DelegateCommand(OnShowAboutView);
             GoBackCommand = new DelegateCommand(GoBack);
+
+            MessageQueue = new SnackbarMessageQueue();
         }
 
         private void GoBack()
@@ -52,10 +62,17 @@ namespace WelcomeModule.components
             _ioService?.OpenFileDialog((sender, result) =>
             {
                 var path = result.Object;
-                var args = _ioService.ImportPrevouseResultsFile(path);
+                try
+                {
+                    var args = _ioService.ImportPrevouseResultsFile(path);
 
-                NavigateToResultsView();
-                _eventAggregator.GetEvent<AlgorithmResultsEvent>().Publish(args);
+                    NavigateToResultsView();
+                    _eventAggregator.GetEvent<AlgorithmResultsEvent>().Publish(args);
+                }
+                catch (IncorrectResultsFileException e)
+                {
+                    MessageQueue.Enqueue("Error loading results file");
+                }
 
             });
 

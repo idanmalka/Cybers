@@ -194,8 +194,13 @@ namespace ConfigurationModule.components
                                     NextCommand.RaiseCanExecuteChanged();
                                 };
                                 ItemsDistribution.Add(newAtt);
-                            }, exception => //TODO : show AlertDialog 
-                                Console.WriteLine(exception.Message), () => ConfigToolTip = "Algorithm Properties File Path");
+                            }, exception =>
+                                {
+                                    MessageQueue.Enqueue("Failed to import graph file");
+                                    GraphFilePath = null;
+                                    Console.WriteLine(exception.Message);
+                                }
+                                , () => ConfigToolTip = "Algorithm Properties File Path");
                             break;
                         case "Config":
                             ConfigFilePath = path;
@@ -204,7 +209,8 @@ namespace ConfigurationModule.components
                                 attribute.IsSelected = true;
                             }, exception =>
                             {
-                                //TODO : show AlertDialog 
+                                MessageQueue.Enqueue("Failed to import Configuration file");
+                                ConfigFilePath = null;
                             });
                             break;
                     }
