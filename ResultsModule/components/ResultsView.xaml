@@ -90,27 +90,27 @@
                                   CanUserResizeRows="False"
                                   AutoGenerateColumns="False">
                             <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectionChanged">
+                                <i:EventTrigger EventName="MouseUp">
                                     <i:InvokeCommandAction Command="{Binding ShowUserDetailsCommand}"
                                                            CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Key}">
+                                <DataGridTextColumn Binding="{Binding Key}" IsReadOnly="True">
                                     <DataGridTextColumn.Header>
                                         <Border Background="Transparent" Padding="6 0 6 0" HorizontalAlignment="Center">
                                             <TextBlock Text="User ID"></TextBlock>
                                         </Border>
                                     </DataGridTextColumn.Header>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Binding="{Binding Level, StringFormat={}{0:#,#.00}}">
+                                <DataGridTextColumn Binding="{Binding Level, StringFormat={}{0:#,#.00}}" IsReadOnly="True">
                                     <DataGridTextColumn.Header>
                                         <Border Background="Transparent" Padding="6 0 6 0" HorizontalAlignment="Center">
                                             <TextBlock Text="Suspicion Percent"></TextBlock>
                                         </Border>
                                     </DataGridTextColumn.Header>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Binding="{Binding ClusterId}">
+                                <DataGridTextColumn Binding="{Binding ClusterId}" IsReadOnly="True">
                                     <DataGridTextColumn.Header>
                                         <Border Background="Transparent" Padding="6 0 6 0" HorizontalAlignment="Center">
                                             <TextBlock Text="Cluster ID"></TextBlock>
