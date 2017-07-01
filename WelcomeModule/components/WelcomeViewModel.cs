@@ -69,7 +69,7 @@ namespace WelcomeModule.components
                     NavigateToResultsView();
                     _eventAggregator.GetEvent<AlgorithmResultsEvent>().Publish(args);
                 }
-                catch (IncorrectResultsFileException e)
+                catch (IncorrectResultsFileException)
                 {
                     MessageQueue.Enqueue("Error loading results file");
                 }
