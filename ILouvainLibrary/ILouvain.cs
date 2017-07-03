@@ -13,6 +13,7 @@ namespace ILouvainLibrary
     public class ILouvain
     {
         private readonly Graph<User> _graph;
+        private readonly IEnumerable<string> _clusteringAttributes;
         private readonly long _twoM;
         private readonly long _twoN;
         private readonly long N;
@@ -29,9 +30,10 @@ namespace ILouvainLibrary
         public Partition ILouvainExecutionResult { get; set; }
 
 
-        public ILouvain(Graph<User> graph)
+        public ILouvain(Graph<User> graph, IEnumerable<string> clusteringAttributes)
         {
             _graph = graph;
+            _clusteringAttributes = clusteringAttributes;
             _twoM = 2 * _graph.NumberOfEdges;
             N = _graph.Vertices.Count();
             _twoN = 2 * N;
@@ -117,7 +119,7 @@ namespace ILouvainLibrary
         private double CalculateEuclideanDistance(User u1, User u2)
         {
             double distance = 0;
-            foreach (var key in u1.Attributes.Keys)
+            foreach (var key in _clusteringAttributes)
             {
                 var val1 = u1.Attributes[key];
                 var val2 = u2.Attributes[key];
@@ -144,10 +146,9 @@ namespace ILouvainLibrary
 
         private User CalculateCenterOfGravity()
         {
-            var attr = _vertices.First().Attributes.Keys;
             var gUser = new User();
 
-            foreach (var key in attr)
+            foreach (var key in _clusteringAttributes)
             {
                 var sum = _vertices.Sum(vertex => vertex.Attributes[key]);
                 gUser.Attributes[key] = sum / N;

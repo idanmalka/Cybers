@@ -55,7 +55,7 @@ namespace CybersDetectionAlgorithm
         {
             InitializationStarted?.Invoke(this, null);
             var graph = CreateClusteringGraph();
-            var ilouvain = new ILouvain(graph);
+            var ilouvain = new ILouvain(graph,_clusteringAttributes);
             ilouvain.DataUpdateEvent += (s, e) => RunDataUpdate?.Invoke(this, e);
             InitializationFinished?.Invoke(this, null);
 
