@@ -53,9 +53,10 @@ namespace CybersDetectionAlgorithm
 
         public void Execute()
         {
+
             InitializationStarted?.Invoke(this, null);
             var graph = CreateClusteringGraph();
-            var ilouvain = new ILouvain(graph);
+            var ilouvain = new ILouvain(graph, _clusteringAttributes);
             ilouvain.DataUpdateEvent += (s, e) => RunDataUpdate?.Invoke(this, e);
             InitializationFinished?.Invoke(this, null);
 
@@ -112,7 +113,8 @@ namespace CybersDetectionAlgorithm
 
             foreach (var graphVertex in graph.Vertices) //create edges between clustering users in the graph
                 foreach (var friend in graphVertex.FriendsList)
-                    graph.AddEdge(graphVertex, friend);
+                    if (!graph.IsAdjacentVertices(graphVertex, friend))
+                        graph.AddEdge(graphVertex, friend);
 
             return graph;
         }

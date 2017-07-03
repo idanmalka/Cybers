@@ -14,8 +14,25 @@ namespace Cybers.Infrustructure.models
     public class User : IEquatable<User>
     {
         private List<User> _friendsList;
+        private int _clusterId;
         public Dictionary<string, long> Attributes { get; } = new Dictionary<string, long>();
-        public long ClusterId { get; set; }
+
+        public int ClusterId
+        {
+            get => _clusterId;
+            set
+            {
+                _clusterId = value;
+                if (ContainedUsers.Count != 0)
+                    foreach (var containedUser in ContainedUsers)
+                    {
+                        containedUser.ClusterId = value;
+                    }
+            }
+        }
+
+        [JsonIgnore]
+        public List<User> ContainedUsers { get; set; } = new List<User>();
 
         [JsonProperty(nameof(Id))]
         public string Id { get; set; }

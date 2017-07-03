@@ -10,8 +10,11 @@ namespace Cybers.Infrustructure.models
 {
     public class Cluster
     {
-        public IEnumerable<User> Verticies { get; set; }
+        public List<User> Verticies { get; set; }
         public long Id { get; set; }
-        public IEnumerable<long> Neighbores { get; set; }
+        public List<int> NeighboursIds { get; set; }
+
+        [JsonIgnore]
+        public List<User> Neighbours { get; set; }
     }
 }

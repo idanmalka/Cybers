@@ -31,16 +31,38 @@ namespace ServicesModule
             {
                 var usersJson = File.ReadAllText(path);
                 var users = JsonConvert.DeserializeObject<List<User>>(usersJson);
+
+                var friendShipDict = new Dictionary<int,List<int>>();
+                
                 foreach (var user in users)
                 {
-                    var friendsDictionary = new Dictionary<string, User>();
+                    var userIndex = user.Index;
+                    if (!friendShipDict.ContainsKey(userIndex))
+                        friendShipDict[userIndex] = new List<int>();
 
-                    foreach (var userFriendIndex in user.FriendsIndexs)
-                        if (user.Index != userFriendIndex)
+                    foreach (var friendIndex in user.FriendsIndexs.Distinct()) //syncronize friendsLists
+                    {
+                        friendShipDict[userIndex].Add(friendIndex);
+
+                        if (friendShipDict.ContainsKey(friendIndex))
+                            friendShipDict[friendIndex].Add(userIndex);
+
+                        else
+                        {
+                            friendShipDict[friendIndex] = new List<int> { userIndex };
+                        }
+                        
+                    }
+
+                    var friendsDictionary = new Dictionary<string, User>(); //add friends to friendsList
+
+                    foreach (var userFriendIndex in friendShipDict[userIndex])
+                        if (userIndex != userFriendIndex)
                             friendsDictionary[userFriendIndex.ToString()] = users[userFriendIndex];
 
                     user.FriendsList = friendsDictionary.Values.ToList();
                 }
+
                 return users;
             }
             catch (Exception)
