@@ -40,7 +40,7 @@ namespace ServicesModule
                     if (!friendShipDict.ContainsKey(userIndex))
                         friendShipDict[userIndex] = new List<int>();
 
-                    foreach (var friendIndex in user.FriendsIndexs.Distinct()) //syncronize friendsLists
+                    foreach (var friendIndex in user.FriendsIndexs.Distinct().Where(i => i != userIndex)) //syncronize friendsLists
                     {
                         friendShipDict[userIndex].Add(friendIndex);
 

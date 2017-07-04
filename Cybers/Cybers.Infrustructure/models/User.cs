@@ -15,7 +15,7 @@ namespace Cybers.Infrustructure.models
     {
         private List<User> _friendsList;
         private int _clusterId;
-        public Dictionary<string, long> Attributes { get; } = new Dictionary<string, long>();
+        public Dictionary<string, double> Attributes { get; } = new Dictionary<string, double>();
 
         public int ClusterId
         {

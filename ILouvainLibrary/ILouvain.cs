@@ -12,6 +12,9 @@ namespace ILouvainLibrary
 {
     public class ILouvain
     {
+
+        #region Private Fields
+
         private Graph<User> _graph;
         private readonly IEnumerable<string> _clusteringAttributes;
         private long _twoM;
@@ -24,18 +27,23 @@ namespace ILouvainLibrary
         private int[][] _adjacency;
         private double[][] _auclideanDistance;
         private double _qinertia;
-        private Dictionary<long, int> _usersCluster;
         private Dictionary<long, long> _clustersUsersCount;
         private Partition _partition;
         private User _gUser;
 
+        #endregion
+
+        #region Properties
+
         public event EventHandler DataUpdateEvent;
         public Partition ILouvainExecutionResult { get; set; }
 
+        #endregion
+
+        #region Methods
 
         public ILouvain(Graph<User> graph, IEnumerable<string> clusteringAttributes)
         {
-            _usersCluster = new Dictionary<long, int>();
             _graph = graph;
             _clusteringAttributes = clusteringAttributes;
             _twoM = 2 * _graph.NumberOfEdges;
@@ -44,10 +52,10 @@ namespace ILouvainLibrary
             _vertices = graph.Vertices.ToList();
             _originalUsers = graph.Vertices.ToList();
             InitCenterOfGravityUser();
-            _adjacency = BuildAdjacencyMatrix(_vertices);
+            _adjacency = BuildAdjacencyMatrix(_vertices,_graph);
             _adjacentVertices = BuildAdjacentVerticesList(_vertices);
             _auclideanDistance = BuildAuclideanDistancesMatrix(_vertices);
-            _qinertia = CalculateInertia(_gUser);
+            _qinertia = CalculateInertia(_gUser,_vertices);
             _verticesInertia = BuildInertiaMatrix(_vertices);
             _clustersUsersCount = new Dictionary<long, long>();
 
@@ -93,7 +101,7 @@ namespace ILouvainLibrary
                     _graph = fusionMatrixAdjRes.Item1;
                     _adjacency = fusionMatrixAdjRes.Item2;
                     _auclideanDistance = FusionMatrixInertia(_auclideanDistance, _graph);
-                    _qinertia = CalculateInertia(_gUser);
+                    _qinertia = CalculateInertia(_gUser,_vertices);
                     _verticesInertia = BuildInertiaMatrix(_vertices);
                     _clustersUsersCount = new Dictionary<long, long>();
                     CreateDiscretePartition();
@@ -106,11 +114,73 @@ namespace ILouvainLibrary
             ILouvainExecutionResult = _partition;
         }
 
+        private int FindNeighborClusterMaximizingQQplusGain(User vertex, ref double qqPlusAnertior, ref bool dirty)
+        {
+            var anteriorClusterId = vertex.ClusterId;
+            var newClusterId = vertex.ClusterId;
+            var checkedClusters = new HashSet<long>();
+
+            foreach (var neighbour in _adjacentVertices[vertex.Index])
+            {
+                if (vertex.ClusterId == neighbour.ClusterId
+                    || checkedClusters.Contains(neighbour.ClusterId)) continue;
+
+                checkedClusters.Add(neighbour.ClusterId);
+                vertex.ClusterId = neighbour.ClusterId;
+                var qqPlusNew = CalculateQQplus();
+                if (qqPlusAnertior < qqPlusNew)
+                {
+                    qqPlusAnertior = qqPlusNew;
+                    newClusterId = neighbour.ClusterId;
+                    dirty = true;
+                }
+                vertex.ClusterId = anteriorClusterId;
+            }
+            return newClusterId;
+        }
+
+        private void InitCenterOfGravityUser()
+        {
+            var attr = _clusteringAttributes;
+            _gUser = new User();
+
+            foreach (var key in attr)
+            {
+                var sum = _vertices.Sum(vertex => vertex.Attributes[key]);
+                _gUser.Attributes[key] = sum / N;
+            }
+            _gUser.Index = N;
+        }
+
+        private double[][] BuildAuclideanDistancesMatrix(List<User> vertices)
+        {
+            var auclideanDistance = new double[N + 1][];
+            for (var index = 0; index < N + 1; index++)
+                auclideanDistance[index] = new double[N + 1];
+            foreach (var v1 in vertices)
+            {
+                var distanceToCenter = CalculateEuclideanDistance(v1, _gUser);
+                auclideanDistance[v1.Index][_gUser.Index] = distanceToCenter;
+                auclideanDistance[_gUser.Index][v1.Index] = distanceToCenter;
+
+                foreach (var v2 in vertices)
+                    if ((int)auclideanDistance[v1.Index][v2.Index] == 0)
+                    {
+                        var distance = CalculateEuclideanDistance(v1, v2);
+                        auclideanDistance[v1.Index][v2.Index] = distance;
+                        auclideanDistance[v2.Index][v1.Index] = distance;
+                    }
+            }
+
+            return auclideanDistance;
+        }
+
         private Tuple<Graph<User>, int[][]> FusionMatrixAdjacency(int[][] adjacency, Partition partition)
         {
             var newGraph = new Graph<User>();
             var newUsersList = new List<User>();
             N = partition.Clusters.Count;
+            //create new vertex for each cluster to replace all the contained users in a single one 
             for (var i = 0; i < N; i++)
             {
                 var cluster = partition.Clusters[i];
@@ -125,6 +195,7 @@ namespace ILouvainLibrary
                 newUsersList.Add(clusterUser);
             }
 
+            //connect the new vertices in the new graph
             foreach (var cluster in partition.Clusters)
             {
                 var v1 = newUsersList[(int)cluster.Id];
@@ -137,13 +208,30 @@ namespace ILouvainLibrary
                 }
             }
 
-            var newAdjacency = BuildAdjacencyMatrix(newUsersList);
+            //create new adjacenct matrix according to the new graph, and update constant data global fields for optimization 
             _twoM = 2 * newGraph.NumberOfEdges;
             _twoN = 2 * N;
             _vertices = newUsersList;
             _gUser.Index = N;
+            var newAdjacency = BuildAdjacencyMatrix(newUsersList, newGraph);
             return new Tuple<Graph<User>, int[][]>(newGraph, newAdjacency);
 
+        }
+
+        private int[][] BuildAdjacencyMatrix(List<User> vertices, Graph<User> graph)
+        {
+            var adjacency = new int[N][];
+            for (var index = 0; index < N; index++)
+                adjacency[index] = new int[N];
+            foreach (var v1 in vertices)
+            foreach (var v2 in vertices)
+                if (adjacency[v1.Index][v2.Index] == 0 && graph.IsAdjacentVertices(v1, v2))
+                {
+                    adjacency[v1.Index][v2.Index] = 1;
+                    adjacency[v2.Index][v1.Index] = 1;
+                }
+
+            return adjacency;
         }
 
         private double[][] FusionMatrixInertia(double[][] auclideanDistance, Graph<User> graph)
@@ -151,7 +239,8 @@ namespace ILouvainLibrary
             var newAuclidean = new double[N + 1][];
             for (var i = 0; i < N + 1; i++)
                 newAuclidean[i] = new double[N + 1];
-
+            
+            //create new inertia matrix and update the values for all clusters and for the center of gravity
             foreach (var vertex in graph.Vertices)
             {
                 var centerSum = CalculateNewAuclideanToCenter(vertex, auclideanDistance);
@@ -192,33 +281,13 @@ namespace ILouvainLibrary
         {
             var verticesInertia = new Dictionary<long, double>();
             foreach (var vertex in vertices)
-                verticesInertia[vertex.Index] = CalculateInertia(vertex);
+                verticesInertia[vertex.Index] = CalculateInertia(vertex,vertices);
 
             return verticesInertia;
         }
 
-        private double[][] BuildAuclideanDistancesMatrix(List<User> vertices)
-        {
-            var auclideanDistance = new double[N + 1][];
-            for (var index = 0; index < N + 1; index++)
-                auclideanDistance[index] = new double[N + 1];
-            foreach (var v1 in vertices)
-            {
-                var distanceToCenter = CalculateEuclideanDistance(v1, _gUser);
-                auclideanDistance[v1.Index][_gUser.Index] = distanceToCenter;
-                auclideanDistance[_gUser.Index][v1.Index] = distanceToCenter;
-
-                foreach (var v2 in vertices)
-                    if ((int)auclideanDistance[v1.Index][v2.Index] == 0)
-                    {
-                        var distance = CalculateEuclideanDistance(v1, v2);
-                        auclideanDistance[v1.Index][v2.Index] = distance;
-                        auclideanDistance[v2.Index][v1.Index] = distance;
-                    }
-            }
-
-            return auclideanDistance;
-        }
+        private double CalculateInertia(User v, List<User> vertices)
+            => vertices.Sum(vertex => _auclideanDistance[v.Index][vertex.Index]);
 
         private Dictionary<long, List<User>> BuildAdjacentVerticesList(List<User> vertices)
         {
@@ -231,7 +300,7 @@ namespace ILouvainLibrary
 
         private double CalculateEuclideanDistance(User u1, User u2)
         {
-            double distance = 0;
+            var distance = 0.0;
             foreach (var key in _clusteringAttributes)
             {
                 var val1 = u1.Attributes[key];
@@ -240,38 +309,6 @@ namespace ILouvainLibrary
             }
             return distance;
         }
-
-        private int[][] BuildAdjacencyMatrix(List<User> vertices)
-        {
-            var adjacency = new int[N][];
-            for (var index = 0; index < N; index++)
-                adjacency[index] = new int[N];
-            foreach (var v1 in vertices)
-                foreach (var v2 in vertices)
-                    if (adjacency[v1.Index][v2.Index] == 0 && _graph.IsAdjacentVertices(v1,v2))
-                    {
-                        adjacency[v1.Index][v2.Index] = 1;
-                        adjacency[v2.Index][v1.Index] = 1;
-                    }
-
-            return adjacency;
-        }
-
-        private void InitCenterOfGravityUser()
-        {
-            var attr = _clusteringAttributes;
-            _gUser = new User();
-
-            foreach (var key in attr)
-            {
-                var sum = _vertices.Sum(vertex => vertex.Attributes[key]);
-                _gUser.Attributes[key] = sum / N;
-            }
-            _gUser.Index = N;
-        }
-
-        private double CalculateInertia(User v)
-            => _vertices.Sum(vertex => _auclideanDistance[v.Index][vertex.Index]);
 
         private double CalculateQinertia()
         {
@@ -286,16 +323,16 @@ namespace ILouvainLibrary
                         sum += CalculateQinertiaInner(v1, v2);
                 }
 
-            return sum;
+            return double.IsNaN(sum) ? 0 : sum;
         }
 
         private double CalculateQinertiaInner(User v1, User v2)
         {
             var inertiaV1 = _verticesInertia[v1.Index];
             var inertiaV2 = _verticesInertia[v2.Index];
-            var inertia = _qinertia;
+            var inertia = _qinertia;                    //if the vertices in the graph are identicle the inertia is 0, which displays NaN and does not fuze vertices into the same cluster
             var euclideanDistance = _auclideanDistance[v1.Index][v2.Index];
-            return inertiaV1 * inertiaV2 / Math.Pow(_twoN * inertia, 2) - euclideanDistance / (_twoN * inertia);
+            return (inertiaV1 * inertiaV2 / Math.Pow(_twoN * inertia, 2)) - (euclideanDistance / (_twoN * inertia));
         }
 
         private static bool Kroncker(long c1, long c2) => c1 == c2;
@@ -312,41 +349,17 @@ namespace ILouvainLibrary
 
                     if (Kroncker(v1.ClusterId, v2.ClusterId))
                     {
-                        var kv1 = _graph.AdjacentVertices(v1).Count;
-                        var kv2 = _graph.AdjacentVertices(v2).Count;
+                        double kv1 = _graph.AdjacentVertices(v1).Count;
+                        double kv2 = _graph.AdjacentVertices(v2).Count;
                         sum += _adjacency[v1.Index][v2.Index] - kv1 * kv2 / _twoM;
                     }
                 }
             }
-            return sum / _twoM;
+            var res = sum / _twoM;
+            return double.IsNaN(res) ? 0 : res;
         }
 
         private double CalculateQQplus() => CalculateQinertia() + CalculateQng();
-
-        private int FindNeighborClusterMaximizingQQplusGain(User vertex, ref double qqPlusAnertior, ref bool dirty)
-        {
-            var anteriorClusterId = vertex.ClusterId;
-            var newClusterId = vertex.ClusterId;
-            var checkedClusters = new HashSet<long>();
-
-            foreach (var neighbour in _adjacentVertices[vertex.Index])
-            {
-                if (vertex.ClusterId == neighbour.ClusterId
-                    || checkedClusters.Contains(neighbour.ClusterId)) continue;
-
-                checkedClusters.Add(neighbour.ClusterId);
-                vertex.ClusterId = neighbour.ClusterId;
-                var qqPlusNew = CalculateQQplus();
-                if (qqPlusAnertior < qqPlusNew)
-                {
-                    qqPlusAnertior = qqPlusNew;
-                    newClusterId = neighbour.ClusterId;
-                    dirty = true;
-                }
-                vertex.ClusterId = anteriorClusterId;
-            }
-            return newClusterId;
-        }
 
         private void CreateDiscretePartition()
         {
@@ -354,9 +367,11 @@ namespace ILouvainLibrary
             {
                 _vertices[i].ClusterId = i;
                 _clustersUsersCount[i] = 1;
-                _usersCluster[i] = i;
             }
 
         }
+
+        #endregion
+
     }
 }

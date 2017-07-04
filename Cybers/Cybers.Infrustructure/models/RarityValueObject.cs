@@ -11,12 +11,12 @@ namespace Cybers.Infrustructure.models
     public class RarityValueObject
     {
         [JsonProperty(nameof(UsersPerValue))]
-        public Dictionary<long, long> UsersPerValue = new Dictionary<long, long>();
+        public Dictionary<double, long> UsersPerValue = new Dictionary<double, long>();
 
         [JsonIgnore]
-        public Dictionary<long, long>.KeyCollection Keys => UsersPerValue.Keys;
+        public Dictionary<double, long>.KeyCollection Keys => UsersPerValue.Keys;
 
-        public long this[long key]
+        public long this[double key]
         {
             set => UsersPerValue[key] = value;
             get => UsersPerValue[key];

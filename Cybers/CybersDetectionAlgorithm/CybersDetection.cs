@@ -187,7 +187,7 @@ namespace CybersDetectionAlgorithm
 
         private IEnumerable<User> IdentifyByDistribution(long clusterId, List<User> clusterUsers, string distributionAttribute)
         {
-            var rarityMeasurementPerValue = new Dictionary<long, double>();
+            var rarityMeasurementPerValue = new Dictionary<double, double>();
 
             //count how many users posses each value of the given attribute
             foreach (var user in clusterUsers)

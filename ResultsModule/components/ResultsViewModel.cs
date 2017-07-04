@@ -261,7 +261,7 @@ namespace ResultsModule.components
 
         }
 
-        private string CoulmnNameFromData(long value, string keyAttributeName)
+        private string CoulmnNameFromData(double value, string keyAttributeName)
         {
             switch (keyAttributeName)
             {

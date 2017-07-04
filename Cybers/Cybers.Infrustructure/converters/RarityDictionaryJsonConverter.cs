@@ -14,7 +14,7 @@ namespace Cybers.Infrustructure.converters
         {
             var obj = (Dictionary<RarityKeyObject, RarityValueObject>) value;
 
-            var parsingDictionary = new Dictionary<string,Dictionary<long,long>>();
+            var parsingDictionary = new Dictionary<string, Dictionary<double, long>>();
 
             foreach (var objKey in obj.Keys)
             {
@@ -27,7 +27,7 @@ namespace Cybers.Infrustructure.converters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var obj = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<long, long>>>(reader.Value as string);
+            var obj = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<double, long>>>(reader.Value as string);
             var parsedDictionary = new Dictionary<RarityKeyObject, RarityValueObject>();
 
             foreach (var objKey in obj.Keys)
