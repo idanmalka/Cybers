@@ -74,7 +74,7 @@ namespace ILouvainLibrary
                         var oldClusterId = vertex.ClusterId;
                         vertex.ClusterId = FindNeighborClusterMaximizingQQplusGain(vertex, ref qqPlusCurrent, ref dirty);
                         if (vertex.ClusterId == oldClusterId) continue;
-                        Console.WriteLine($"cluster {oldClusterId} moving to {vertex.ClusterId}, new qqplus {qqPlusCurrent}");
+                        Console.WriteLine($"vertex {vertex.Index} moving from cluster {oldClusterId} to {vertex.ClusterId}, new qqplus {qqPlusCurrent}");
 
                         //updating and raising update event
                         _clustersUsersCount[oldClusterId]--;
@@ -122,7 +122,7 @@ namespace ILouvainLibrary
                 checkedClusters.Add(neighbour.ClusterId);
                 vertex.ClusterId = neighbour.ClusterId;
                 var qqPlusNew = CalculateQQplus();
-                Console.WriteLine($"cluster {anteriorClusterId} checking {neighbour.ClusterId}, old qqplus {qqPlusAnertior} new qqplus {qqPlusNew}");
+                Console.WriteLine($"vertex {vertex.Index} from cluster {anteriorClusterId} checking {neighbour.ClusterId}, old qqplus {qqPlusAnertior} new qqplus {qqPlusNew}");
                 if (qqPlusAnertior < qqPlusNew)
                 {
                     qqPlusAnertior = qqPlusNew;
