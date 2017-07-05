@@ -37,6 +37,7 @@ namespace AlgorithmModule.components
         private string _distributingStatusText;
         private string _finalizingStatusText;
         private long _numberOfClusters;
+        private SubscriptionToken _subscribetoken;
 
         #endregion
 
@@ -105,7 +106,7 @@ namespace AlgorithmModule.components
                 KeepAlive = false;
             });
 
-            _eventAggregator.GetEvent<AlgorithmAttributesEvent>().Subscribe(obj =>
+            _subscribetoken = _eventAggregator.GetEvent<AlgorithmAttributesEvent>().Subscribe(obj =>
             {
                 try
                 {
@@ -213,7 +214,7 @@ namespace AlgorithmModule.components
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            
+            _eventAggregator.GetEvent<AlgorithmAttributesEvent>().Unsubscribe(_subscribetoken);
         }
 
         #endregion

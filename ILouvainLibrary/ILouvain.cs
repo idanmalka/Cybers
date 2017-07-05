@@ -59,8 +59,10 @@ namespace ILouvainLibrary
             });
             var qqPlusAnterior = 0.0;
             var end = false;
+            int iteration = 0;
             do
             {
+                Console.WriteLine($"start iteration: {iteration}");
                 var qqPlusCurrent = CalculateQQplus();
                 bool dirty;
                 do
@@ -72,6 +74,7 @@ namespace ILouvainLibrary
                         var oldClusterId = vertex.ClusterId;
                         vertex.ClusterId = FindNeighborClusterMaximizingQQplusGain(vertex, ref qqPlusCurrent, ref dirty);
                         if (vertex.ClusterId == oldClusterId) continue;
+                        Console.WriteLine($"cluster {oldClusterId} moving to {vertex.ClusterId}, new qqplus {qqPlusCurrent}");
 
                         //updating and raising update event
                         _clustersUsersCount[oldClusterId]--;
@@ -82,7 +85,8 @@ namespace ILouvainLibrary
                         });
                     }
                 } while (dirty);
-
+                Console.WriteLine($"End iteration: {iteration}");
+                iteration++;
                 if (qqPlusCurrent > qqPlusAnterior)
                 {
                     qqPlusAnterior = qqPlusCurrent;
@@ -100,7 +104,7 @@ namespace ILouvainLibrary
                 }
                 else end = true;
             } while (!end);
-            
+            Console.WriteLine("End");
             ILouvainExecutionResult = new Partition(_originalUsers); 
         }
 
@@ -118,6 +122,7 @@ namespace ILouvainLibrary
                 checkedClusters.Add(neighbour.ClusterId);
                 vertex.ClusterId = neighbour.ClusterId;
                 var qqPlusNew = CalculateQQplus();
+                Console.WriteLine($"cluster {anteriorClusterId} checking {neighbour.ClusterId}, old qqplus {qqPlusAnertior} new qqplus {qqPlusNew}");
                 if (qqPlusAnertior < qqPlusNew)
                 {
                     qqPlusAnertior = qqPlusNew;
