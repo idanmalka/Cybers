@@ -125,27 +125,27 @@ namespace CybersDetectionAlgorithm
             var userSuspicionLevel = new Dictionary<string, double>();
             foreach (var user in _users)
             {
-                userSuspicionLevel[user.Id] = 0;
-                userCluster[user.Id] = -1;
+                userSuspicionLevel[user.Index.ToString()] = 0;
+                userCluster[user.Index.ToString()] = -1;
             }
 
             foreach (var cluster in partition.Clusters)
             {
 
-                //var clusterUsers = (from user in _users
-                //    from clusterVerticy in cluster.Verticies
-                //    where user.Id == clusterVerticy.Id
-                //    select user).ToList();
+                var clusterUsers = (from user in _users
+                                    from clusterVerticy in cluster.Verticies
+                                    where user.Index == clusterVerticy.Index
+                                    select user).ToList();
 
-                var clusterUsers = new List<User>();
-                foreach (var user in _users)
-                    foreach (var clusterVerticy in cluster.Verticies)
-                    {
-                        if (user.Id != clusterVerticy.Id) continue;
-                        user.ClusterId = clusterVerticy.ClusterId;
-                        clusterUsers.Add(user);
-                        break;
-                    }
+                //var clusterUsers = new List<User>();
+                //foreach (var user in _users)
+                //    foreach (var clusterVerticy in cluster.Verticies)
+                //    {
+                //        if (user.Id != clusterVerticy.Id) continue;
+                //        user.ClusterId = clusterVerticy.ClusterId;
+                //        clusterUsers.Add(user);
+                //        break;
+                //    }
 
 
 
@@ -155,8 +155,8 @@ namespace CybersDetectionAlgorithm
                     var suspectedUsersByAttribute = IdentifyByDistribution(cluster.Id, clusterUsers, distributionAttribute);
                     foreach (var user in suspectedUsersByAttribute)
                     {
-                        userSuspicionLevel[user.Id]++;
-                        userCluster[user.Id] = cluster.Id;
+                        userSuspicionLevel[user.Index.ToString()]++;
+                        userCluster[user.Index.ToString()] = cluster.Id;
                     }
                 }
 
@@ -170,13 +170,13 @@ namespace CybersDetectionAlgorithm
             var userSuspicions = new List<UserSuspicion>();
             foreach (var user in _users)
             {
-                if (userSuspicionLevel[user.Id] > 0)
+                if (userSuspicionLevel[user.Index.ToString()] > 0)
                 {
                     userSuspicions.Add(new UserSuspicion
                     {
                         Key = user.Index.ToString(),
-                        Level = userSuspicionLevel[user.Id],
-                        ClusterId = userCluster[user.Id]
+                        Level = userSuspicionLevel[user.Index.ToString()],
+                        ClusterId = userCluster[user.Index.ToString()]
                     });
                 }
 

@@ -15,7 +15,8 @@ namespace ILouvainLibrary
 
         #region Private Fields
 
-        private Graph<User> _graph;                               
+        private Graph<User> _graph;
+        private Graph<User> _oldGraph;
         private int[][] _adjacency;
         private double[][] _auclideanDistance;
         private readonly IEnumerable<string> _clusteringAttributes;
@@ -57,13 +58,12 @@ namespace ILouvainLibrary
             {
                 ClustersUsersCount = _clustersUsersCount
             });
-            var qqPlusAnterior = 0.0;
             var end = false;
+            var qqPlusAnterior = 0.0;
             int iteration = 0;
             do
             {
                 Console.WriteLine($"start iteration: {iteration}");
-                var qqPlusCurrent = CalculateQQplus();
                 bool dirty;
                 do
                 {
@@ -72,9 +72,9 @@ namespace ILouvainLibrary
                     {
                         //finding best neighbour community for the vertex to be in
                         var oldClusterId = vertex.ClusterId;
-                        vertex.ClusterId = FindNeighborClusterMaximizingQQplusGain(vertex, ref qqPlusCurrent, ref dirty);
+                        vertex.ClusterId = FindNeighborClusterMaximizingQQplusGain(vertex, ref dirty);
                         if (vertex.ClusterId == oldClusterId) continue;
-                        Console.WriteLine($"vertex {vertex.Index} moving from cluster {oldClusterId} to {vertex.ClusterId}, new qqplus {qqPlusCurrent}");
+                        Console.WriteLine($"vertex {vertex.Index} moving from cluster {oldClusterId} to {vertex.ClusterId}");
 
                         //updating and raising update event
                         _clustersUsersCount[oldClusterId]--;
@@ -86,18 +86,20 @@ namespace ILouvainLibrary
                     }
                 } while (dirty);
                 Console.WriteLine($"End iteration: {iteration}");
+                var newqqp = CalculateQQplus();
+                Console.WriteLine($"new QQ+ : {newqqp}");
                 iteration++;
-                if (qqPlusCurrent > qqPlusAnterior)
+                if (newqqp > qqPlusAnterior)
                 {
-                    qqPlusAnterior = qqPlusCurrent;
+                    qqPlusAnterior = newqqp;
                     var partition = new Partition(_graph);
-
+                    _oldGraph = _graph;
                     var fusionMatrixAdjRes = FusionMatrixAdjacency(_adjacency, partition);
                     _graph = fusionMatrixAdjRes.Item1;
                     _adjacency = fusionMatrixAdjRes.Item2;
 
                     _auclideanDistance = FusionMatrixInertia(_auclideanDistance, _graph);
-                    _qinertia = CalculateInertia(_gUser,_graph.Vertices);
+                    _qinertia = CalculateInertia(_gUser, _graph.Vertices);
                     _verticesInertia = BuildInertiaMatrix(_graph.Vertices);
 
                     CreateDiscretePartition();
@@ -105,15 +107,15 @@ namespace ILouvainLibrary
                 else end = true;
             } while (!end);
             Console.WriteLine("End");
-            ILouvainExecutionResult = new Partition(_originalUsers); 
+            ILouvainExecutionResult = new Partition(_originalUsers);
         }
 
-        private int FindNeighborClusterMaximizingQQplusGain(User vertex, ref double qqPlusAnertior, ref bool dirty)
+        private int FindNeighborClusterMaximizingQQplusGain(User vertex, ref bool dirty)
         {
             var anteriorClusterId = vertex.ClusterId;
             var newClusterId = vertex.ClusterId;
             var checkedClusters = new HashSet<long>();
-
+            var maxqinertia = CalculateQinertia();
             foreach (var neighbour in _graph.AdjacentVertices(vertex))
             {
                 if (vertex.ClusterId == neighbour.ClusterId
@@ -121,11 +123,12 @@ namespace ILouvainLibrary
 
                 checkedClusters.Add(neighbour.ClusterId);
                 vertex.ClusterId = neighbour.ClusterId;
-                var qqPlusNew = CalculateQQplus();
-                Console.WriteLine($"vertex {vertex.Index} from cluster {anteriorClusterId} checking {neighbour.ClusterId}, old qqplus {qqPlusAnertior} new qqplus {qqPlusNew}");
-                if (qqPlusAnertior < qqPlusNew)
+                var newqinertia = CalculateQinertia();
+                //var qqPlusNew = CalculateQQplus();
+                Console.WriteLine($"vertex {vertex.Index} from cluster {anteriorClusterId} checking {neighbour.ClusterId}, old Qinertia {maxqinertia} new Qinertia {newqinertia}");
+                if (newqinertia - maxqinertia > 0)
                 {
-                    qqPlusAnertior = qqPlusNew;
+                    maxqinertia = newqinertia;
                     newClusterId = neighbour.ClusterId;
                     dirty = true;
                 }
@@ -160,8 +163,8 @@ namespace ILouvainLibrary
                 var distanceToCenter = CalculateEuclideanDistance(v1, _gUser);
                 auclideanDistance[v1.Index][_gUser.Index] = distanceToCenter;
                 auclideanDistance[_gUser.Index][v1.Index] = distanceToCenter;
-
-                foreach (var v2 in vertices)
+                var v1neighbours = graph.AdjacentVertices(v1);
+                foreach (var v2 in v1neighbours)
                     if ((int)auclideanDistance[v1.Index][v2.Index] == 0)
                     {
                         var distance = CalculateEuclideanDistance(v1, v2);
@@ -221,12 +224,12 @@ namespace ILouvainLibrary
             for (var index = 0; index < n; index++)
                 adjacency[index] = new int[n];
             foreach (var v1 in vertices)
-            foreach (var v2 in vertices)
-                if (adjacency[v1.Index][v2.Index] == 0 && graph.IsAdjacentVertices(v1, v2))
-                {
-                    adjacency[v1.Index][v2.Index] = 1;
-                    adjacency[v2.Index][v1.Index] = 1;
-                }
+                foreach (var v2 in vertices)
+                    if (adjacency[v1.Index][v2.Index] == 0 && graph.IsAdjacentVertices(v1, v2))
+                    {
+                        adjacency[v1.Index][v2.Index] = 1;
+                        adjacency[v2.Index][v1.Index] = 1;
+                    }
 
             return adjacency;
         }
@@ -237,7 +240,7 @@ namespace ILouvainLibrary
             var newAuclidean = new double[n + 1][];
             for (var i = 0; i < n + 1; i++)
                 newAuclidean[i] = new double[n + 1];
-            
+
             //create new inertia matrix and update the values for all clusters and for the center of gravity
             foreach (var vertex in graph.Vertices)
             {
@@ -265,10 +268,15 @@ namespace ILouvainLibrary
             var sum = 0.0;
 
             foreach (var formerUser in vertex.ContainedUsers)
-                foreach (var formerNeighbour in neighbour.ContainedUsers)
+            {
+                var formerNeighbours =
+                    neighbour.ContainedUsers.Where(user => formerUser.FriendsIndexs.Contains(user.Index)).ToList();
+                var n = _oldGraph.AdjacentVertices(formerUser).Where(u => u.ClusterId == neighbour.ClusterId);
+                foreach (var formerNeighbour in formerNeighbours)
                 {
                     sum += auclideanDistance[formerUser.Index][formerNeighbour.Index];
                 }
+            }
 
             return sum;
 
@@ -279,7 +287,7 @@ namespace ILouvainLibrary
         {
             var verticesInertia = new Dictionary<long, double>();
             foreach (var vertex in vertices)
-                verticesInertia[vertex.Index] = CalculateInertia(vertex,vertices);
+                verticesInertia[vertex.Index] = CalculateInertia(vertex, vertices);
 
             return verticesInertia;
         }

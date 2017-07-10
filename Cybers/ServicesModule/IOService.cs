@@ -50,6 +50,7 @@ namespace ServicesModule
                         else
                         {
                             friendShipDict[friendIndex] = new List<int> { userIndex };
+                            users[friendIndex].FriendsIndexs.Add(userIndex);
                         }
                         
                     }

@@ -28,7 +28,6 @@ namespace Cybers.Infrustructure.models
                 else clustersTemp.Add(vertex.ClusterId, new List<User> { vertex });
 
             //create new clusters according to the dictionary 
-            //Clusters = clustersTemp.Select(c => new Cluster {Id = c.Key, Verticies = c.Value}).ToList();
             for (int i = 0; i < clustersTemp.Count; i++)
             {
                 var cluster = new Cluster
@@ -73,7 +72,6 @@ namespace Cybers.Infrustructure.models
                 else clustersTemp.Add(vertex.ClusterId, new List<User> { vertex });
 
             //create new clusters according to the dictionary 
-            //Clusters = clustersTemp.Select(c => new Cluster {Id = c.Key, Verticies = c.Value}).ToList();
             for (int i = 0; i < clustersTemp.Count; i++)
             {
                 var cluster = new Cluster
