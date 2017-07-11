@@ -60,6 +60,7 @@ namespace ILouvainLibrary
             });
             var end = false;
             var qqPlusAnterior = 0.0;
+            var qqPlusCurrent = 0.0;
             int iteration = 0;
             do
             {
@@ -72,7 +73,7 @@ namespace ILouvainLibrary
                     {
                         //finding best neighbour community for the vertex to be in
                         var oldClusterId = vertex.ClusterId;
-                        vertex.ClusterId = FindNeighborClusterMaximizingQQplusGain(vertex, ref dirty);
+                        vertex.ClusterId = FindNeighborClusterMaximizingQQplusGain(vertex, ref qqPlusCurrent, ref dirty);
                         if (vertex.ClusterId == oldClusterId) continue;
                         Console.WriteLine($"vertex {vertex.Index} moving from cluster {oldClusterId} to {vertex.ClusterId}");
 
@@ -86,12 +87,12 @@ namespace ILouvainLibrary
                     }
                 } while (dirty);
                 Console.WriteLine($"End iteration: {iteration}");
-                var newqqp = CalculateQQplus();
-                Console.WriteLine($"new QQ+ : {newqqp}");
+                //var newqqp = CalculateQQplus();
                 iteration++;
-                if (newqqp > qqPlusAnterior)
+                if (qqPlusCurrent > qqPlusAnterior)
                 {
-                    qqPlusAnterior = newqqp;
+                    qqPlusAnterior = qqPlusCurrent;
+                    Console.WriteLine($"new QQ+ : {qqPlusCurrent}");
                     var partition = new Partition(_graph);
                     _oldGraph = _graph;
                     var fusionMatrixAdjRes = FusionMatrixAdjacency(_adjacency, partition);
@@ -110,7 +111,7 @@ namespace ILouvainLibrary
             ILouvainExecutionResult = new Partition(_originalUsers);
         }
 
-        private int FindNeighborClusterMaximizingQQplusGain(User vertex, ref bool dirty)
+        private int FindNeighborClusterMaximizingQQplusGain(User vertex, ref double qqPlusCurrent, ref bool dirty)
         {
             var anteriorClusterId = vertex.ClusterId;
             var newClusterId = vertex.ClusterId;
@@ -124,10 +125,11 @@ namespace ILouvainLibrary
                 checkedClusters.Add(neighbour.ClusterId);
                 vertex.ClusterId = neighbour.ClusterId;
                 var newqinertia = CalculateQinertia();
-                //var qqPlusNew = CalculateQQplus();
+                var qqPlusNew = newqinertia + CalculateQng();
                 Console.WriteLine($"vertex {vertex.Index} from cluster {anteriorClusterId} checking {neighbour.ClusterId}, old Qinertia {maxqinertia} new Qinertia {newqinertia}");
-                if (newqinertia - maxqinertia > 0)
+                if (qqPlusCurrent < qqPlusNew && newqinertia - maxqinertia >= 0)
                 {
+                    qqPlusCurrent = qqPlusNew;
                     maxqinertia = newqinertia;
                     newClusterId = neighbour.ClusterId;
                     dirty = true;
@@ -163,8 +165,8 @@ namespace ILouvainLibrary
                 var distanceToCenter = CalculateEuclideanDistance(v1, _gUser);
                 auclideanDistance[v1.Index][_gUser.Index] = distanceToCenter;
                 auclideanDistance[_gUser.Index][v1.Index] = distanceToCenter;
-                var v1neighbours = graph.AdjacentVertices(v1);
-                foreach (var v2 in v1neighbours)
+                //var v1neighbours = graph.AdjacentVertices(v1);
+                foreach (var v2 in vertices)
                     if ((int)auclideanDistance[v1.Index][v2.Index] == 0)
                     {
                         var distance = CalculateEuclideanDistance(v1, v2);
@@ -330,7 +332,7 @@ namespace ILouvainLibrary
             double twoN = 2 * _graph.NumberOfVertices;
             var inertiaV1 = _verticesInertia[v1.Index];
             var inertiaV2 = _verticesInertia[v2.Index];
-            var inertia = _qinertia;                    //if the vertices in the graph are identicle the inertia is 0, which displays NaN and does not fuze vertices into the same cluster
+            var inertia = _qinertia == 0 ? 1 : _qinertia;                    //if the vertices in the graph are identicle the inertia is 0, which displays NaN and does not fuze vertices into the same cluster
             var euclideanDistance = _auclideanDistance[v1.Index][v2.Index];
             return (inertiaV1 * inertiaV2 / Math.Pow(twoN * inertia, 2)) - (euclideanDistance / (twoN * inertia));
         }
