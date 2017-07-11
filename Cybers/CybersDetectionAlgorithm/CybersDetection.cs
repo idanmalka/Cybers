@@ -103,8 +103,8 @@ namespace CybersDetectionAlgorithm
             {
                 var friendsDictionary = new Dictionary<string, User>();
 
-                foreach (var friendId in clusteringUser.FriendsIndexs)
-                    friendsDictionary[friendId.ToString()] = clusteringUsers[friendId];
+                foreach (var friendIndex in clusteringUser.FriendsIndexs)
+                    friendsDictionary[friendIndex.ToString()] = clusteringUsers[friendIndex];
 
                 clusteringUser.FriendsList = friendsDictionary.Values.ToList();
 
@@ -113,7 +113,6 @@ namespace CybersDetectionAlgorithm
 
             foreach (var graphVertex in graph.Vertices) //create edges between clustering users in the graph
                 foreach (var friend in graphVertex.FriendsList)
-                    if (!graph.IsAdjacentVertices(graphVertex, friend))
                         graph.AddEdge(graphVertex, friend);
 
             return graph;
