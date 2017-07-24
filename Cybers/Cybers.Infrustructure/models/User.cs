@@ -62,7 +62,7 @@ namespace Cybers.Infrustructure.models
         [JsonProperty(nameof(Groups))]
         public int Groups
         {
-            set => AddAttribute(value);
+            set => AddAttribute(value/ 10 * 10);
         }
 
 
@@ -91,7 +91,7 @@ namespace Cybers.Infrustructure.models
         [JsonProperty(nameof(PostsNumber))]
         public int PostsNumber
         {
-            set => AddAttribute(value / 100 * 100);
+            set => AddAttribute(value / 10 * 10);
         }
 
         [JsonProperty(nameof(CreationDate))]

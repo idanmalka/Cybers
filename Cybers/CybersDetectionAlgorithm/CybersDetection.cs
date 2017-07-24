@@ -215,7 +215,7 @@ namespace CybersDetectionAlgorithm
             }
 
             //conversion to percentages
-            var valuesCount = rarityMeasurementPerValue.Count;
+            var valuesCount = clusterUsers.Count; //rarityMeasurementPerValue.Sum(kvp => kvp.Value);
             foreach (var key in rarityMeasurementPerValue.Keys.ToList())
                 rarityMeasurementPerValue[key] = (rarityMeasurementPerValue[key] / valuesCount) * 100;
 
