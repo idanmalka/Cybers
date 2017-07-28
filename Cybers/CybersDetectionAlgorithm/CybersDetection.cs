@@ -131,20 +131,20 @@ namespace CybersDetectionAlgorithm
             foreach (var cluster in partition.Clusters)
             {
 
-                var clusterUsers = (from user in _users
-                                    from clusterVerticy in cluster.Verticies
-                                    where user.Index == clusterVerticy.Index
-                                    select user).ToList();
+                //var clusterUsers = (from user in _users
+                //                    from clusterVerticy in cluster.Verticies
+                //                    where user.Index == clusterVerticy.Index
+                //                    select user).ToList();
 
-                //var clusterUsers = new List<User>();
-                //foreach (var user in _users)
-                //    foreach (var clusterVerticy in cluster.Verticies)
-                //    {
-                //        if (user.Id != clusterVerticy.Id) continue;
-                //        user.ClusterId = clusterVerticy.ClusterId;
-                //        clusterUsers.Add(user);
-                //        break;
-                //    }
+                var clusterUsers = new List<User>();
+                foreach (var user in _users)
+                    foreach (var clusterVerticy in cluster.Verticies)
+                    {
+                        if (user.Index != clusterVerticy.Index) continue;
+                        user.ClusterId = clusterVerticy.ClusterId;
+                        clusterUsers.Add(user);
+                        break;
+                    }
 
 
 
