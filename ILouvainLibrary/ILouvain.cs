@@ -89,7 +89,7 @@ namespace ILouvainLibrary
                 Console.WriteLine($"End iteration: {iteration}");
                 //var newqqp = CalculateQQplus();
                 iteration++;
-                if (qqPlusCurrent > qqPlusAnterior)
+                if (qqPlusCurrent - qqPlusCurrent > 0)
                 {
                     qqPlusAnterior = qqPlusCurrent;
                     Console.WriteLine($"new QQ+ : {qqPlusCurrent}");
@@ -127,7 +127,7 @@ namespace ILouvainLibrary
                 var newqinertia = CalculateQinertia();
                 var qqPlusNew = newqinertia + CalculateQng();
                 Console.WriteLine($"vertex {vertex.Index} from cluster {anteriorClusterId} checking {neighbour.ClusterId}, old Qinertia {maxqinertia} new Qinertia {newqinertia}");
-                if (qqPlusCurrent < qqPlusNew && newqinertia - maxqinertia >= 0)
+                if (qqPlusNew - qqPlusCurrent > 0 && newqinertia - maxqinertia > 0)
                 {
                     qqPlusCurrent = qqPlusNew;
                     maxqinertia = newqinertia;
