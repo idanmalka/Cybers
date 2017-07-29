@@ -128,6 +128,7 @@ namespace ServicesModule
                 users.ForEach(user => textNetwork.AppendLine($"{user.Index + 1}"));
                 textNetwork.AppendLine("*Edges");
                 users.ForEach(user => user.FriendsIndexs.ForEach(i => textNetwork.AppendLine($"{user.Index + 1} {i + 1}")));
+                users.ForEach(user => textCluster.AppendLine($"{user.ClusterId + 1}"));
                 var dlg = new SaveFileDialog
                 {
                     FileName = "Cybers_Detection"
